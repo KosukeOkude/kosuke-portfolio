@@ -1,0 +1,79 @@
+---
+// Astro標準機能の読み込み
+import { Picture } from 'astro:assets';
+
+//写真の読み込み
+import heroBackgroundImage from '@/assets/images/hero-background-img.jpg';
+import heroProfileImage from '@/assets/images/hero-profile-img.jpg';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+
+
+---
+
+<!-- <section class="hero relative min-h-screen">
+  <div class="hero__media absolute inset-0">
+      <div class="hero__overlay absolute inset-0 z-10 bg-black/30"></div>
+      <Picture
+      src={heroBackgroundImage}
+      formats={['avif', 'webp']}
+      quality="80"
+      layout="full-width"
+      fit="cover"
+      position="center"
+      alt="草原のススキに囲まれ、草の上に立つ少女と空一面に広がる雲が印象的な背景画像"
+      class="w-full h-full object-cover"
+    />
+    </div>
+
+
+</section> -->
+
+<BackgroundSection image={heroBackgroundImage} alt="草原のススキに囲まれ、草の上に立つ少女と空一面に広がる雲が印象的な背景画像">
+
+  <div class="hero__content layout-offset-top layout-padding-x relative z-20 flex min-h-screen flex-col items-center justify-center">
+    <Picture
+      src={heroProfileImage}
+      formats={['avif' , 'webp']}
+      alt="青空を背景にカメラを手にジャンプする男性写真家のプロフィール画像"
+      width={480}
+      height={520}
+      layout="constrained"
+      fit="cover"
+      position="center"
+      class:list={[
+        "w-[280px] h-[320px]",
+        "md:w-[380px] md:h-[420px]",
+        "lg:w-[480px] lg:h-[520px]",
+        "object-cover",
+        "rounded-xl"
+      ]}
+    />
+    <h2
+      class:list={[
+        "hero__name",
+        "font-accent font-bold",
+        "pt-4",
+        "text-[var(--color-white)]",
+        "text-4xl",
+        "md:text-5xl",
+        "lg:text-7xl",
+      ]}
+    >
+      KOSUKE OKUDE
+    </h2>
+
+    <p
+      class:list={[
+        "hero__title",
+        "font-accent font-bold",
+        "pt-2",
+        "text-[var(--color-white)]",
+        "text-lg",
+        "md:text-2xl",
+        "lg:text-4xl",
+      ]}
+    >
+      PHOTOGRAPHER
+    </p>
+  </div>
+</BackgroundSection>

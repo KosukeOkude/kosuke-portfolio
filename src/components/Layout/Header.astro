@@ -1,0 +1,38 @@
+---
+import MainNav from "@/components/Layout/MainNav.astro";
+import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro"
+---
+
+<header
+  id="header"
+  class:list={[
+    "header",
+    "fixed top-0 left-0 w-full z-50",
+  ]}
+>
+  <div
+    class:list={[
+      "max-w-[1680px] mx-auto w-full", // 中身だけ最大1680pxで中央寄せ
+      "px-5 py-4 md:px-10 lg:px-20",            // パディング
+      "flex justify-between items-center", // レイアウト
+    ]}
+  >
+    <h1>
+      <a
+        href="/"
+        class:list={[
+          "header__logo",
+          "text-black text-xl",
+          "font-accent font-bold leading-tight",
+        ]}
+      >
+        OKUDE KOSUKE
+      </a>
+    </h1>
+
+    <nav class="header__nav" aria-label="メインナビゲーション">
+      <MainNav />
+      <HamburgerMenu />
+    </nav>
+  </div>
+</header>

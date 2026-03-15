@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+/* merriweatherはBoldでしか使用しませんが一応400もここにコメントアウトします。 */
+/* @import "@fontsource/merriweather/400.css"; */
+@import '@fontsource/merriweather/700.css';
+@import '@fontsource/public-sans/400.css';
+@import '@fontsource/public-sans/700.css';
+
+/* ページ内の共通パーツです。 */
+
+:root {
+  --font-base: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-accent: 'Merriweather', Georgia, 'Times New Roman', serif;
+  --color-light-black: #111111;
+  --color-white: #ffffff;
+  --header-height: 72px;
+}
+
+.font-accent {
+  font-family: var(--font-accent);
+}
+
+.font-body {
+  font-family: var(--font-accent);
+}
+
+/* 本文ベース */
+body {
+  font-family: var(--font-base);
+  line-height: 1.6;
+  color: var(--color-light-black);
+}
+
+/* 段落やリストは body の値を継承 */
+a,
+p,
+li {
+  line-height: inherit;
+}
+
+/* 1. 本文用（body / p / 小さめテキスト） */
+body,
+p,
+.small-text {
+  letter-spacing: 0.03em;
+}
+
+/* 2. 見出し用（h2, h3, セクションタイトル） */
+h2,
+h3,
+.section-title {
+  letter-spacing: 0.02em;
+}
+
+/* 3. タイトル・ロゴ用（h1 / サイトロゴ） */
+h1,
+.site-logo,
+.header__logo {
+  letter-spacing: 0.04em; /* Merriweather なら 0.04〜0.05em くらいがちょうどよいゾーン */
+}
+
+/* 共通パディング（横方向） */
+.layout-padding-x {
+  padding-inline: 20px;
+}
+
+@media (min-width: 768px) {
+  .layout-padding-x {
+    padding-inline: 80px;
+  }
+}
+.layout-offset-top {
+  padding-top: var(--header-height);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+.hamburger-menu {
+  position: relative;
+}
+.hamburger-menu .hamburger-menu__list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  /* 背景・パディングなど */
+}
+.hamburger-menu.isOpen .hamburger-menu__list {
+  display: flex;
+}
+/* PC 以上: 80px */
+/* @media (min-width: 1024px) {
+  main {
+    padding-inline: 80px;
+  }
+} */
+/*
+プレフィックス	条件 (画面幅)	説明
+なし	0px 以上	モバイル（ベース）
+sm:	640px 以上	小さめタブレット〜
+md:	768px 以上	タブレット〜
+lg:	1024px 以上	小さめノート PC〜
+xl:	1280px 以上	一般的なフル HD 手前〜
+2xl:	1536px 以上	広めのデスクトップ〜 */

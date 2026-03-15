@@ -1,0 +1,21 @@
+---
+interface Props {
+    title:string;
+}
+
+const {title} = Astro.props;
+---
+
+
+<div class="w-fit">
+    <h2
+    class="font-accent font-bold text-[32px] md:text-[48px] tracking-wider text-[var(--color-white)] inline-block mb-4"
+  >
+    {title}
+  </h2>
+  <p
+    class="font-accent tracking-wide text-[var(--color-white)] md:text-[18px] hidden min-[390px]:block min-[390px]:text-[14px] tracking-wider"
+  >
+  <slot/>
+  </p>
+</div>

@@ -1,0 +1,42 @@
+---
+import { navItems } from "@/data/nav";
+import hamburgerIcon from "@/assets/images/hamburger.svg"
+---
+
+
+<div id="hamburger-wrapper" class="hamburger-menu md:hidden w-10 h-10 flex items-center justify-center">
+  <button
+    id="hamburger-button"
+    type="button"
+    class="hamburger-menu__button"
+    aria-expanded="false"
+    aria-controls="hamburger-nav"
+    aria-label="メニューを開く"
+  >
+    <img
+      + src={hamburgerIcon.src}
+      alt="クリック式のメニュー画像"
+      width="24"
+      height="18"
+      class="hamburger-menu__icon"
+    />
+  </button>
+  <nav id="hamburger-nav" aria-label="モバイルメニュー">
+    <ul class="hamburger-menu__list flex flex-col gap-4 hidden">
+      {navItems.map((item) => (
+        <li><a href={item.href}>{item.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+
+<script>
+  const btn = document.getElementById('hamburger-button');
+  const wrapper = document.getElementById('hamburger-wrapper');
+  btn?.addEventListener('click' , () => {
+  const isOpen = wrapper?.classList.toggle('isOpen');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  btn.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
+  })
+</script>

@@ -1,0 +1,13 @@
+---
+import { navItems } from "@/data/nav"
+---
+
+
+
+<nav class="hidden md:flex gap-6" aria-label="メインナビゲーション">
+    <ul class="flex gap-6 font-bold text-base">
+      {navItems.map((item) => (
+        <li><a class="" href={item.href}>{item.label}</a></li>
+      ))}
+    </ul>
+</nav>

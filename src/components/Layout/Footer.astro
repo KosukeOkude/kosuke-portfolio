@@ -1,0 +1,46 @@
+---
+import backToTopArrowIcon from "@/assets/images/backToTopArrow.svg"
+---
+
+
+<footer class="hidden"
+>
+  <div
+    class:list={[
+      "max-w-[1680px] mx-auto w-full",
+      "px-5 py-4 md:px-10 lg:px-20",
+      "flex justify-between items-center",
+    ]}
+  >
+    <small>© {new Date().getFullYear()} Okude Kosuke.</small>
+
+    {/* md 以上: テキストリンク */}
+    <a
+      href="#header"
+      class:list={[
+        "hidden md:inline",
+        "text-sm",
+      ]}
+    >
+      Back to top
+    </a>
+
+    {/* モバイル: 画像ボタン */}
+    <a
+      href="#header"
+      class:list={[
+        "md:hidden",
+        "w-10 h-10",
+        "flex items-center justify-center",
+      ]}
+      aria-label="ページの先頭へ戻る"
+    >
+      <img
+        src={backToTopArrowIcon.src}
+        alt=""
+        width="24"
+        height="24"
+      />
+    </a>
+  </div>
+</footer>

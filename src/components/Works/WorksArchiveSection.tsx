@@ -1,0 +1,63 @@
+import { useMemo, useState } from "react";
+import type{ FC } from 'react';
+import type { WorkForClient } from "@/data/works";
+import { WorksCardSlider } from "@/components/Works/WorksCardSlider";
+import { WorksCategories } from "@/components/Works/WorksCategories";
+
+interface WorksArchiveSectionProps{
+    works:WorkForClient[];
+}
+
+export const WorksArchiveSection: FC<WorksArchiveSectionProps> = ({ works }) => {
+    const [selectedCategory, setSelectedCategory] = useState<'All' | string>('All');
+
+    // work.category から一意なカテゴリを抽出し、先頭に 'All' を追加
+    const allCategories = useMemo(() => {
+        const catSet = new Set<string>();
+        for( const work of works){
+            catSet.add(work.category);
+        }
+        return ['All', ...catSet];
+    }, [works])
+
+    function filterByCategory(works: WorkForClient[],category: string): WorkForClient[]{
+        return category === 'All' ? works : works.filter((w) => w.category === category);
+    }
+
+    function sortWorks(works: WorkForClient[], sortOrder: 'date-desc' | 'date-asc' = 'date-desc'):WorkForClient[]{
+        return [...works].sort((a, b) => {
+            //降順ソート
+            if(sortOrder === 'date-desc'){
+                return a.date > b.date ? -1 : a.date < b.date ? 1 : 0
+            }
+            //昇順ソート
+            if(sortOrder === 'date-asc'){
+                return a.date < b.date ? -1 : a.date > b.date ? 1 : 0
+            }
+            return 0;
+        })
+    }
+
+    const SORT_ORDER = 'date-desc' as const;
+    const filteredWorks = useMemo(() => {
+        const filtered = filterByCategory(works,selectedCategory);
+        return sortWorks(filtered, SORT_ORDER);
+    },[works, selectedCategory])
+
+  return (
+    <>
+        {/* フィルタボタン（後で WorksCategories に切り出し可） */}
+        
+        <WorksCategories
+        categories={allCategories}
+        selectedCategory={selectedCategory}
+        onSelect={setSelectedCategory}/>
+        <p className="text-xs md:text-sm text-white/60 mb-4">
+            上下スクロールで作品が流れます
+        </p>
+        <section aria-label="Works archive" className="space-y-4">
+          <WorksCardSlider works={filteredWorks}/>
+        </section>
+    </>
+  );
+}

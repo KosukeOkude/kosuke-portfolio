@@ -1,0 +1,34 @@
+---
+// レイアウトのラッパー + 背景 + オーバーレイ + 中身のスロット
+import {Picture} from 'astro:assets';
+
+interface Props {
+    image:ImageMetadata;
+    alt:string;
+}
+const {image,alt} = Astro.props;
+---
+
+
+
+
+<section class="relative">
+    <!-- オーバーレイ -->
+    <div class="absolute inset-0 -z-10 bg-black/50"></div>
+    <!-- 背景画像 -->
+    <div class="absolute inset-0 -z-20">
+        <Picture
+        src={image}
+        formats={['avif', 'webp']}
+        quality="80"
+        layout="full-width"
+        fit="cover"
+        position="center"
+        alt={alt}
+        class="w-full h-full object-cover"
+      />
+      </div>
+    </div>
+    <!-- 各セクションのメインコンテンツ -->
+        <slot />
+</section>

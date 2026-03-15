@@ -1,0 +1,182 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Picture } from 'astro:assets';
+
+import { getAllWorks,getWorkBySlug } from '@/data/works';
+
+
+export const getStaticPaths = (() => {
+  const works = getAllWorks();
+    return works.map((work) => ({
+      params:{ slug: work.slug}
+    }));
+}) satisfies GetStaticPaths;
+
+const {slug} = Astro.params;
+const work = getWorkBySlug(slug as string);
+
+if(!work){
+  throw new Error(`Work not found for slug: ${slug}`);
+}
+---
+
+<BaseLayout>
+  <div class="min-h-screen bg-black text-[var(--color-white)]">
+    <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
+
+      <!-- Breadcrumb -->
+      <nav class="text-xs md:text-sm text-white/60">
+        <ol class="flex flex-wrap items-center gap-1 md:gap-2">
+          <li>
+            <a href="/" class="hover:text-white transition-colors">Home</a>
+          </li>
+          <li class="mx-1">/</li>
+          <li>
+            <a href="/works" class="hover:text-white transition-colors">Works</a>
+          </li>
+          <li class="mx-1">/</li>
+          <li class="text-white line-clamp-1">{work.title}</li>
+        </ol>
+      </nav>
+
+      <!-- Header block -->
+      <header class="border border-white/15 bg-white/5 backdrop-blur-md rounded-lg p-4 md:p-6 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50 mb-1">
+              Work
+            </p>
+            <h1 class="font-accent text-2xl md:text-3xl lg:text-4xl font-bold">
+              {work.title}
+            </h1>
+            <p class="text-xs md:text-sm text-white/60 mt-2">
+              Date: {work.date} ・ Category: {work.category}
+            </p>
+          </div>
+
+          {work.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {work.tags.map((tag) => (
+                <span class="text-[10px] md:text-xs px-3 py-1 rounded-full border border-white/25 bg-white/10">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <p class="text-sm md:text-base text-white/80 leading-relaxed">
+          {work.description}
+        </p>
+      </header>
+
+      <!-- Main visual & sub images -->
+      <section class="space-y-4">
+        <!-- Main image -->
+        <div class="overflow-hidden rounded-lg border border-white/15 bg-white/5 max-h-[560px]">
+          <Picture
+            src={work.thumbnail}
+            alt={work.thumbnailAlt}
+            formats={['avif', 'webp']}
+            class="w-full h-full max-h-[560px] object-cover"
+          />
+        </div>
+
+        <!-- Sub image placeholders -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {work.subImage && work.subImage.length > 0 && work.subImage.map(image => 
+            <div class="aspect-video rounded-md overflow-hidden border border-white/15 bg-white/5">
+            <Picture
+            src={image.src}
+            alt={image.alt}
+            formats={['avif', 'webp']}
+            class='h-full w-full object-cover'
+            />
+          </div>
+        )
+        }
+        </div>
+      </section>
+
+      <!-- Text sections -->
+      <section class="space-y-10 text-sm md:text-base leading-relaxed">
+
+        <div class="space-y-2">
+          <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+            コンセプト
+          </h2>
+          {work.concept && <p class="text-white/80">{work.concept}</p>}
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+            プロセス
+          </h2>
+          {work.process && <p class="text-white/80">{work.process}</p>}
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+            役割/担当
+          </h2>
+          {work.role && work.role.length > 0 && (
+          <ul class="text-white/80 list-disc list-inside space-y-1">
+            {work.role.map(r => <li>{r}</li>)}
+          </ul>
+          )}
+
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+            ノーツ
+          </h2>
+          {work.notes && (<p class="text-white/80">{work.notes}</p>)}
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+            クレジット
+          </h2>
+          {work.credits && work.credits.length > 0 && (
+          <ul class="text-white/80 space-y-1">
+            {work.credits.map(c => <li>{c.label} : {c.value}</li>)}
+          </ul>
+          )}
+        </div>
+      </section>
+
+      <!-- More in this category -->
+      <section class="border-t border-white/10 pt-8 space-y-4">
+        <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+          More in this category
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          <a
+            href="/#works"
+            class="text-xs md:text-sm px-3 py-1 rounded-full border border-white/30 bg-white/5 hover:bg-white/10 transition-colors"
+          >
+            All
+          </a>
+          <button
+            type="button"
+            class="text-xs md:text-sm px-3 py-1 rounded-full border border-white/20 bg-white/5 text-white/70"
+          >
+            {work.category}
+          </button>
+        </div>
+      </section>
+
+      <!-- Bottom nav -->
+      <div class="flex items-center justify-between text-xs md:text-sm text-white/60 pt-4 border-t border-white/10">
+        <a href="/works" class="hover:text-white transition-colors">
+          ← Back to works
+        </a>
+        <a href="#top" class="hover:text-white transition-colors">
+          Back to top ↑
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
