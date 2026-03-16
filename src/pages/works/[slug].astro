@@ -44,14 +44,28 @@ if(!work){
       <header class="border border-white/15 bg-white/5 backdrop-blur-md rounded-lg p-4 md:p-6 space-y-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50 mb-1">
-              Work
+            <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50 mb-2">
+              Work detail
             </p>
-            <h1 class="font-accent text-2xl md:text-3xl lg:text-4xl font-bold">
+            <h1
+              class="
+                font-accent font-semibold
+                text-xl md:text-2xl lg:text-[26px]
+                leading-snug
+                text-white
+              "
+            >
               {work.title}
             </h1>
-            <p class="text-xs md:text-sm text-white/60 mt-2">
-              Date: {work.date} ・ Category: {work.category}
+            <p
+              class="
+                mt-3
+                text-[11px] md:text-xs
+                tracking-[0.16em] uppercase
+                text-white/60
+              "
+            >
+              Date {work.date} ・ Category {work.category}
             </p>
           </div>
 
@@ -100,49 +114,49 @@ if(!work){
       </section>
 
       <!-- Text sections -->
+      <!-- Text sections -->
       <section class="space-y-10 text-sm md:text-base leading-relaxed">
 
         <div class="space-y-2">
           <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
-            コンセプト
+            Concept
           </h2>
           {work.concept && <p class="text-white/80">{work.concept}</p>}
         </div>
 
         <div class="space-y-2">
           <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
-            プロセス
+            Process
           </h2>
           {work.process && <p class="text-white/80">{work.process}</p>}
         </div>
 
         <div class="space-y-2">
           <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
-            役割/担当
+            Role
           </h2>
           {work.role && work.role.length > 0 && (
-          <ul class="text-white/80 list-disc list-inside space-y-1">
-            {work.role.map(r => <li>{r}</li>)}
-          </ul>
+            <ul class="text-white/80 list-disc list-inside space-y-1">
+              {work.role.map((r) => <li>{r}</li>)}
+            </ul>
           )}
-
         </div>
 
         <div class="space-y-2">
           <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
-            ノーツ
+            Notes
           </h2>
-          {work.notes && (<p class="text-white/80">{work.notes}</p>)}
+          {work.notes && <p class="text-white/80">{work.notes}</p>}
         </div>
 
         <div class="space-y-2">
           <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
-            クレジット
+            Credits
           </h2>
           {work.credits && work.credits.length > 0 && (
-          <ul class="text-white/80 space-y-1">
-            {work.credits.map(c => <li>{c.label} : {c.value}</li>)}
-          </ul>
+            <ul class="text-white/80 space-y-1">
+              {work.credits.map((c) => <li>{c.label} : {c.value}</li>)}
+            </ul>
           )}
         </div>
       </section>
