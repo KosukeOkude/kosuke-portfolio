@@ -6,15 +6,15 @@ import { Picture } from 'astro:assets';
 import { getAllWorks,getWorkBySlug } from '@/data/works';
 
 
-export const getStaticPaths = (() => {
-  const works = getAllWorks();
+export const getStaticPaths = (async () => {
+  const works = await getAllWorks();
     return works.map((work) => ({
       params:{ slug: work.slug}
     }));
 }) satisfies GetStaticPaths;
 
 const {slug} = Astro.params;
-const work = getWorkBySlug(slug as string);
+const work = await getWorkBySlug(slug as string);
 
 if(!work){
   throw new Error(`Work not found for slug: ${slug}`);
@@ -75,23 +75,23 @@ if(!work){
       <section class="space-y-4">
         <!-- Main image -->
         <div class="overflow-hidden rounded-lg border border-white/15 bg-white/5 max-h-[560px]">
-          <Picture
+          <img
             src={work.thumbnail}
             alt={work.thumbnailAlt}
-            formats={['avif', 'webp']}
             class="w-full h-full max-h-[560px] object-cover"
+            loading="lazy"
           />
         </div>
 
         <!-- Sub image placeholders -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {work.subImage && work.subImage.length > 0 && work.subImage.map(image => 
+        {work.subImage && work.subImage.length > 0 && work.subImage.map(image =>
             <div class="aspect-video rounded-md overflow-hidden border border-white/15 bg-white/5">
-            <Picture
+            <img
             src={image.src}
             alt={image.alt}
-            formats={['avif', 'webp']}
             class='h-full w-full object-cover'
+            loading="lazy"
             />
           </div>
         )

@@ -2,12 +2,9 @@
 import Hero from "@/components/Hero/Hero.astro"
 import Works from "@/components/Works/Works.astro"
 import BaseLayout from "@/layouts/BaseLayout.astro"
-
-import { toWorkForClient } from '@/lib/worksForClient';
 import { getAllWorks } from "@/data/works";
-const works = getAllWorks();
 
-const workForClient = await Promise.all(works.map(toWorkForClient))
+const workForClient = await getAllWorks();
 ---
 
 <BaseLayout>

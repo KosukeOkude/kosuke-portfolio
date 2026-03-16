@@ -3,14 +3,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import worksBackgroundImage from '@/assets/images/works-background-img.jpg';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 
-import { getAllWorks, } from '@/data/works';
-import { toWorkForClient } from '@/lib/worksForClient';
+import { getAllWorks } from '@/data/works';
 import { WorksArchiveSection } from '@/components/Works/WorksArchiveSection';
 
-// 将来的には Sanity / works.ts から取得する想定。
-// いまはダミーデータでレイアウトだけ確認する。
-const works = getAllWorks();
-const workForClient = await Promise.all(works.map(toWorkForClient))
+const workForClient = await getAllWorks();
 
 ---
 
