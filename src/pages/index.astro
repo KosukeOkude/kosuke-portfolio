@@ -1,15 +1,22 @@
 ---
 import Hero from "@/components/Hero/Hero.astro"
-import WorksTopSection from "@/components/Works/WorksTopSection.astro"
 import BaseLayout from "@/layouts/BaseLayout.astro"
+
+import WorksTopSection from "@/components/Works/WorksTopSection.astro"
 import { getAllWorks } from "@/data/works";
+
 import GalleryTopSection from "@/components/Gallery/GalleryTopSection.astro";
+import { getGalleryCategories } from "@/data/gallery";
 
 const workForClient = await getAllWorks();
+const worksForTop = workForClient.slice(0,6);
+
+const galleryCategories = getGalleryCategories();
+const galleryCategoriesForTop = galleryCategories.slice(0, 6);
 ---
 
 <BaseLayout>
 	<Hero/>
-	<WorksTopSection works={workForClient}/>
-	<GalleryTopSection/>
+	<WorksTopSection works={ worksForTop }/>
+	<GalleryTopSection galleryCategories={ galleryCategoriesForTop }/>
 </BaseLayout>

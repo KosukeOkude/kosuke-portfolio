@@ -1,0 +1,42 @@
+---
+interface BreadcrumbsItem{
+    label: string;
+    href?: string;
+}
+
+interface BreadcrumbsProps {
+    items: BreadcrumbsItem[];
+}
+
+const { items } = Astro.props as BreadcrumbsProps;
+---
+
+<!-- パンくず -->
+<nav class="text-xs md:text-sm text-white/60">
+    <ol class="flex items-center gap-1 md:gap-2">
+        <li>
+            <a href="/" class="hover:text-white transition-colors">Home</a>
+        </li>
+        {items.map((item, index) => {
+            const isLast = index === items.length - 1;
+            return(
+                <>
+                    <li class="mx-1">/</li>
+                    <li class={isLast ? 'text-white' : ''}>
+                        {
+                            isLast ? (
+                                <span>{item.label}</span>
+                            ) : (
+                                <a href={item.href ?? '#'} class="hover:text-white transition-colors">{item.label}</a>
+                            )
+                        }
+                    </li>
+                </>
+            )
+        })}
+    </ol>
+</nav>
+
+
+<!--
+<li class="text-white">{ label }</li> -->

@@ -1,4 +1,9 @@
+import worksBackgroundImage from '@/assets/images/works-background-img.jpg';
 
+export const worksPageConfig = {
+  backgroundImage: worksBackgroundImage,
+  backgroundAlt: 'カフェで抹茶のお菓子とティーセット'
+}
 
 export interface Work {
   slug: string;

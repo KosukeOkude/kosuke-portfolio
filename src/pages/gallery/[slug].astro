@@ -1,0 +1,91 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
+import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
+import PageBottomNav from "@/components/UI/PageBottomNav.astro";
+
+import { getGalleryCategories, getGalleryCategoryBySlug } from '@/data/gallery';
+import sampleImage from '@/assets/images/sample-image.png';
+
+export const getStaticPaths = (() => {
+    const galleryCategories = getGalleryCategories();
+    return galleryCategories.map((category) => ({
+            params: { slug: category.slug}
+        }));
+}) satisfies GetStaticPaths;
+
+const { slug } = Astro.params;
+const category = getGalleryCategoryBySlug(slug as string);
+if(!category){
+    throw new Error(`Gallery category not found for slug: ${slug}`);
+}
+
+---
+
+<BaseLayout>
+  <div class="min-h-screen bg-black text-[var(--color-white)]">
+    <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
+      <Breadcrumbs
+      items={[
+        {label: 'Gallery', href: "/gallery"},
+        {label:  category.title }
+      ]}/>
+
+      <DetailPageHeader
+      label="GALLERY"
+      title={ category.title }
+      />
+
+      <section class="linear-slider">
+        <!-- カテゴリボタン（あとで React 化 / Island 化） -->
+        <div class="linear-slider__controls">
+          <button class="linear-slider__category is-active">All</button>
+          <button class="linear-slider__category">Portrait</button>
+          <button class="linear-slider__category">Food</button>
+        </div>
+
+        <!-- ビューポート：ここから外は見えない -->
+        <div class="linear-slider__viewport">
+          <!-- ===== レイヤー1：一番手前 ===== -->
+          <div class="linear-slider__layer linear-slider__layer--front">
+            <article class="linear-slider__item linear-slider__item--lg">
+              <img src={sampleImage.src} alt="" class="linear-slider__image" />
+            </article>
+            <article class="linear-slider__item linear-slider__item--md">
+              <img src={sampleImage.src} alt="" class="linear-slider__image" />
+            </article>
+            <!-- ... -->
+          </div>
+
+          <!-- ===== レイヤー2：中間 ===== -->
+          <div class="linear-slider__layer linear-slider__layer--middle">
+            <article class="linear-slider__item linear-slider__item--md">
+              <img src={sampleImage.src} alt="" class="linear-slider__image" />
+            </article>
+            <article class="linear-slider__item linear-slider__item--sm">
+              <img src={sampleImage.src} alt="" class="linear-slider__image" />
+            </article>
+            <!-- ... -->
+          </div>
+
+          <!-- ===== レイヤー3：奥 ===== -->
+          <div class="linear-slider__layer linear-slider__layer--back">
+            <article class="linear-slider__item linear-slider__item--sm">
+              <img src={sampleImage.src} alt="" class="linear-slider__image" />
+            </article>
+            <article class="linear-slider__item linear-slider__item--md">
+              <img src={sampleImage.src} alt="" class="linear-slider__image" />
+            </article>
+            <!-- ... -->
+          </div>
+        </div>
+      </section>
+
+      <PageBottomNav
+        label="gallery"
+        href="/gallery"
+      />
+    </div>
+  </div>
+</BaseLayout>

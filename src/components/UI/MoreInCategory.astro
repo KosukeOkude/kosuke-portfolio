@@ -1,0 +1,37 @@
+---
+
+interface Props {
+    baseHref: string;
+    allCategories: string[];
+}
+
+const { baseHref, allCategories } = Astro.props;
+
+const makeHref = (category: string) =>
+    category === 'All'
+    ? baseHref
+    : `${baseHref}?category=${encodeURIComponent(category)}`;
+
+const formatLabel = (category: string) =>
+    category === 'All'
+    ? 'All'
+    : category.charAt(0).toUpperCase() + category.slice(1);
+---
+
+<!-- More in this category -->
+<section class="border-t border-white/10 pt-8 space-y-4">
+<h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+    More in this category
+</h2>
+<div class="flex flex-wrap gap-2">
+    {allCategories.map((category) => {
+        const label = formatLabel(category);
+        return (
+            <a  href={ makeHref(category) }
+                class="text-xs md:text-sm px-3 py-1 rounded-full border border-white/30 bg-white/5 hover:bg-white/10 transition-colors">
+                { label }
+            </a>
+        )
+    })}
+</div>
+</section>

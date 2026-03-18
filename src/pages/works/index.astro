@@ -1,58 +1,44 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import worksBackgroundImage from '@/assets/images/works-background-img.jpg';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 
-import { getAllWorks } from '@/data/works';
+import { getAllWorks, worksPageConfig } from '@/data/works';
 import { WorksArchiveSection } from '@/components/Works/WorksArchiveSection';
+import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
+import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
 
 const workForClient = await getAllWorks();
-
+const rawCategory = Astro.url.searchParams.get('category') ?? 'All';
+const initialCategory =
+  rawCategory && rawCategory !== 'All'
+  ? rawCategory.toLowerCase()
+  : 'All';
 ---
 
 
 
 
 <BaseLayout>
-  <BackgroundSection image={worksBackgroundImage} showOverlay={true} alt="京都の川を、笠をかぶった船頭さんが操る小さな船でゆっくり進む私の目線"
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} showOverlay={true} 
 >
     <div class="relative min-h-screen text-[var(--color-white)]">
-        <!-- 背景画像 -->
-        <!-- <div class="absolute inset-0 -z-10">
-          <Picture
-            src={worksBackgroundImage}
-            alt="Works archive background"
-            formats={['avif', 'webp']}
-            class="w-full h-full object-cover"
-          />
-          <div class="absolute inset-0 bg-black/70" />
-        </div> -->
+
         <main class="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-10 md:py-14 space-y-10">
-          <!-- パンくず -->
-          <nav class="text-xs md:text-sm text-white/60">
-            <ol class="flex items-center gap-1 md:gap-2">
-              <li>
-                <a href="/" class="hover:text-white transition-colors">Home</a>
-              </li>
-              <li class="mx-1">/</li>
-              <li class="text-white">Works</li>
-            </ol>
-          </nav>
+          <Breadcrumbs
+          items={[
+            {label: 'Works'}
+          ]}>
+        </Breadcrumbs>
           <!-- タイトルエリア -->
-          <header class="space-y-6 max-w-3xl">
-            <div class="space-y-2">
-                <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50 mb-1">
-                    Work
-                </p>
-              <h1 class="font-accent text-3xl md:text-4xl lg:text-[40px] font-bold">
-                Selected works &amp; archives
-              </h1>
-            </div>
-            <p class="text-sm md:text-base text-white/75 leading-relaxed">
-              A quiet record of client work and personal projects.
-            </p>
-          </header>
-          <WorksArchiveSection works={workForClient} client:load/>
+           <ArchivePageHeader
+            label="works"
+            title="Selected works &amp; archives"
+          >
+          A quiet record of client work and personal projects.
+          </ArchivePageHeader>
+          <WorksArchiveSection
+            works={workForClient}
+            client:load/>
         </main>
       </div>
     </BackgroundSection>

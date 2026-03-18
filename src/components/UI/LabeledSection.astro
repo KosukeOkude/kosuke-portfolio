@@ -1,0 +1,16 @@
+---
+interface Props {
+    label: string;
+}
+
+const { label } = Astro.props;
+
+---
+
+
+<div class="space-y-2">
+    <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
+      { label }
+    </h2>
+    <slot/>
+</div>

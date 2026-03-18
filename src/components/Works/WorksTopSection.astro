@@ -5,8 +5,7 @@ import SectionTitle from "@/components/UI/SectionTitle.astro";
 import { WorksCardSlider } from "@/components/Works/WorksCardSlider";
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 
-import worksBackgroundImage from '@/assets/images/works-background-img.jpg'
-import { type WorkForClient } from "@/data/works";
+import { type WorkForClient, worksPageConfig } from "@/data/works";
 import SectionCtaLink from "@/components/UI/SectionCtaLink.astro";
 interface Props {
     works: WorkForClient[];
@@ -16,10 +15,11 @@ const {works} = Astro.props;
 ---
 
 
-<BackgroundSection image={worksBackgroundImage} alt="" showOverlay={true}
+<BackgroundSection image={worksPageConfig.backgroundImage}  alt={worksPageConfig.backgroundAlt} showOverlay={true}
 >
     <SectionLayout>
-        <div class="z-20 flex-1 flex flex-col justify-between max-h-[900px] my-auto gap-10" slot="sectionContent">
+        <div slot="sectionContent"
+             class="z-20 flex-1 flex flex-col justify-between max-h-[900px] my-auto gap-10">
         <!-- 縦の flex ＋ justify-between に変更 -->
             <!-- 上側：タイトル -->
             <SectionTitle title="WORKS">

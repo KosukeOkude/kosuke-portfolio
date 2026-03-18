@@ -86,7 +86,7 @@ export async function getAllWorks(): Promise<WorkForClient[]> {
       tags: item.tags ?? [],
       thumbnailUrl,
       thumbnailAlt: item.thumbnailAlt ?? '',
-      category: item.category ?? '',
+      category: (item.category ?? '').toLocaleLowerCase(),
     } satisfies WorkForClient;
   });
 }
