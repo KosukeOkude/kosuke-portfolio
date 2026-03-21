@@ -1,0 +1,134 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
+import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
+
+import { aboutPageConfig } from '@/data/about';
+import AboutSection from '@/components/About/AboutSection.astro';
+
+import { getAboutPageContent } from '@/lib/sanity/about';
+
+const about = await getAboutPageContent();
+
+const fallback = {
+    name: "KOSUKE OKUDE",
+    tagline: "Photographer based in Fukui",
+    intro: "福井の夏の風景に宿るノスタルジアを軸に、地域の展示や書籍のビジュアル、ウェディングなど、さまざまな現場で写真を届けています。",
+    encounterTitle:"写真との出会い・きっかけ" ,
+    encounterBody: "福井の田舎で過ごすなかで、移ろいゆく光や季節の気配を切り取りたいと思い、カメラを手にするようになりました。日常のなかにひそむ、かけがえのない一瞬を残すことが、いまの活動の原点です。",
+    themeTitle: "テーマ",
+    themeBody: "ノスタルジックな夏の情景、静かな日常のなかの安らぎ、そして人と場所との関係性。見慣れた風景の奥にある、感情の揺れや記憶の残響を、写真というメディアで丁寧に紡いでいきたいと考えています。",
+    achievementsTitle: "具体的な活動・実績",
+    achievementsIntro: "プラネタリウム展示、小説のための撮影、地域の建築や学校関連の記録など、クライアントワークと個人プロジェクトの両方で撮影を行っています。",
+    achievementsList: ["2024年 — プラネタリウム展示用ビジュアルの撮影・提供", "2024年 — 地域クライアント向け建築・空間ドキュメンテーション", "その他 — 書籍・広告・ウェディング等（要相談）"],
+    contactMessage: "撮影のご依頼やご相談など、まずはお気軽にご連絡ください。",
+    contactEmail: "hello@example.com"
+    }
+
+const data = {
+    name: about?.name ?? fallback.name,
+    tagline: about?.tagline ?? fallback.tagline,
+    intro: about?.intro ?? fallback.intro,
+    encounterTitle: about?.encounterTitle ?? fallback.encounterTitle,
+    encounterBody: about?.encounterBody ?? fallback.encounterBody,
+    themeTitle: about?.themeTitle ?? fallback.themeTitle,
+    themeBody: about?.themeBody ?? fallback.themeBody,
+    achievementsTitle: about?.achievementsTitle ?? fallback.achievementsTitle,
+    achievementsIntro: about?.achievementsIntro ?? fallback.achievementsIntro,
+    achievementsList: about?.achievementsList ?? fallback.achievementsList,
+    contactMessage: about?.contactMessage ?? fallback.contactMessage,
+    contactEmail: about?.contactEmail ?? fallback.contactEmail,
+};
+---
+
+<BaseLayout>
+  <!-- Hero: フルビューポート -->
+  <BackgroundSection
+    image={aboutPageConfig.backgroundImage}
+    alt={aboutPageConfig.backgroundAlt}
+    showOverlay={true}
+  >
+    <div
+      class="relative flex min-h-screen flex-col justify-end pb-12 pl-5 pr-5 md:pb-20 md:pl-10 md:pr-10 lg:pl-16 lg:pr-16"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
+      <div class="relative z-10 max-w-xl">
+        <p
+          class="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-white/60 md:text-[0.7rem]"
+        >
+          About
+        </p>
+        <h1
+          class="font-accent text-3xl font-bold leading-tight tracking-[0.04em] text-[var(--color-white)] md:text-4xl lg:text-5xl"
+        >
+          {data.name}
+        </h1>
+        <p class="mt-1 text-sm text-white/80 md:text-base">{data.tagline}</p>
+      </div>
+      <p
+        class="relative z-10 mt-12 text-[10px] uppercase tracking-[0.25em] text-white/40"
+        aria-hidden="true"
+      >
+        Scroll
+      </p>
+    </div>
+  </BackgroundSection>
+
+  <div class="bg-black text-[var(--color-white)]">
+    <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24 lg:px-16 lg:py-32">
+        <Breadcrumbs items={[{ label: 'About' }]} />
+
+        <AboutSection
+            title="ABOUT">
+            {data.intro}
+        </AboutSection>
+
+        <AboutSection
+            title={data.encounterTitle}>
+            {data.encounterBody}
+        </AboutSection>
+
+        <AboutSection
+            title={data.themeTitle}>
+            {data.themeBody}
+        </AboutSection>
+
+        <AboutSection
+            title={data.achievementsTitle}>
+            {data.achievementsIntro}
+            <ul class="mt-6 space-y-2 pl-4 text-sm leading-relaxed text-white/80 md:text-base">
+                {data.achievementsList.map((item) =>
+                    <li>{item}</li>
+                )}
+            </ul>
+        </AboutSection>
+
+      <!-- Contact -->
+      <section id="contact" class="mt-24 pb-16 md:mt-32 md:pb-24">
+        <h2
+          class="font-accent text-lg font-bold tracking-wide md:text-xl lg:text-2xl"
+        >
+          Contact
+        </h2>
+        <p class="mt-6 max-w-2xl text-sm leading-relaxed text-white/80 md:text-base">
+          {data.contactMessage}
+        </p>
+        <p class="mt-3 text-sm font-medium text-white/90 md:text-base">
+          <a
+            href="mailto:hello@example.com"
+            class="underline underline-offset-4 hover:text-white"
+          >
+            {data.contactEmail}
+          </a>
+        </p>
+        <div class="mt-8">
+          <SectionCtaLink href="/contact" label="Contact" />
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -4,6 +4,7 @@ import type { WorkForClient } from '@/data/works';
 import { WorksCardSlider } from '@/components/Works/WorksCardSlider';
 import { WorksCategories } from '@/components/Works/WorksCategories';
 import { WorksSortSelect, type SortOrder } from '@/components/Works/WorksSortSelect';
+import { normalizeSlug } from '@/lib/sanity/normalizeSlug';
 
 interface WorksArchiveSectionProps {
   works: WorkForClient[];
@@ -28,10 +29,12 @@ export const WorksArchiveSection: FC<WorksArchiveSectionProps> = ({ works }) => 
 
     const params = new URLSearchParams(window.location.search);
     const raw = params.get('category');
+    if(!raw) return;
+    const normalized = normalizeSlug(raw);
 
-    if(raw && raw !== 'All'){
-        setSelectedCategory(raw.toLowerCase());
-    }
+    if(normalized === 'all') setSelectedCategory('All');
+    else setSelectedCategory(normalized);
+
   }, []);
 
   function filterByCategory(works: WorkForClient[], category: string): WorkForClient[] {
@@ -64,7 +67,7 @@ export const WorksArchiveSection: FC<WorksArchiveSectionProps> = ({ works }) => 
       <WorksSortSelect value={sortOrder} onChange={setSortOrder} />
       <p className="text-xs md:text-sm text-white/60 mb-4">上下スクロールで作品が流れます</p>
       <section aria-label="Works archive" className="space-y-4">
-        <WorksCardSlider works={filteredWorks} />
+        <WorksCardSlider works={filteredWorks} resetKey={`${selectedCategory}-${sortOrder}`}/>
       </section>
     </>
   );

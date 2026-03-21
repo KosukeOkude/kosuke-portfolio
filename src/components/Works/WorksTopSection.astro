@@ -11,7 +11,7 @@ interface Props {
     works: WorkForClient[];
 }
 
-const {works} = Astro.props;
+const { works } = Astro.props;
 ---
 
 
@@ -33,7 +33,7 @@ const {works} = Astro.props;
                 上下スクロールで作品が流れます
             </p>
             <!-- カードスライダー用ラッパー（横スクロール） -->
-                <WorksCardSlider works={works} client:load/>
+                <WorksCardSlider works={works} resetKey="" client:load/>
             </div>
         </div>
         <SectionCtaLink

@@ -4,88 +4,66 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
+import { GalleryLinearSlider } from '@/components/Gallery/GalleryLinearSlider';
+import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems, galleryPageConfig  } from '@/data/gallery';
+import BackgroundSection from "@/components/Layout/BackgroundSection.astro";
+import { normalizeSlug } from "@/lib/sanity/normalizeSlug";
 
-import { getGalleryCategories, getGalleryCategoryBySlug } from '@/data/gallery';
-import sampleImage from '@/assets/images/sample-image.png';
-
-export const getStaticPaths = (() => {
-    const galleryCategories = getGalleryCategories();
+export const getStaticPaths = (async() => {
+    const galleryCategories = await getGalleryCategories();
+    console.log('Generated paths:', galleryCategories.map((c) => c.slug));
     return galleryCategories.map((category) => ({
-            params: { slug: category.slug}
+            params: { slug: normalizeSlug(category.slug)}
         }));
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-const category = getGalleryCategoryBySlug(slug as string);
+const category = await getGalleryCategoryBySlug(slug);
+
 if(!category){
     throw new Error(`Gallery category not found for slug: ${slug}`);
 }
 
+const categories = [
+  { slug: 'All', label: 'All'},
+  ...(await getGalleryCategories()).map(category => ({
+    slug: normalizeSlug(category.slug),
+    label: category.title
+  }))
+];
+
+const allItems = await getLinearSliderItems();
 ---
 
 <BaseLayout>
-  <div class="min-h-screen bg-black text-[var(--color-white)]">
-    <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
-      <Breadcrumbs
-      items={[
-        {label: 'Gallery', href: "/gallery"},
-        {label:  category.title }
-      ]}/>
+  <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} showOverlay={false}>
+    <div class="min-h-screen text-[var(--color-white)]">
+      <div class="max-w-10xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
+        <Breadcrumbs
+        items={[
+          {label:'Gallery', href:"/gallery"},
+          {label: category.title}
+        ]}/>
 
-      <DetailPageHeader
-      label="GALLERY"
-      title={ category.title }
+        <DetailPageHeader
+        label="GALLERY"
+        title="Selected category archive"
+        />
+
+
+      <GalleryLinearSlider
+        client:load
+        items={allItems}
+        categories={categories}
+        initialCategory={normalizeSlug(slug)}
       />
 
-      <section class="linear-slider">
-        <!-- カテゴリボタン（あとで React 化 / Island 化） -->
-        <div class="linear-slider__controls">
-          <button class="linear-slider__category is-active">All</button>
-          <button class="linear-slider__category">Portrait</button>
-          <button class="linear-slider__category">Food</button>
-        </div>
 
-        <!-- ビューポート：ここから外は見えない -->
-        <div class="linear-slider__viewport">
-          <!-- ===== レイヤー1：一番手前 ===== -->
-          <div class="linear-slider__layer linear-slider__layer--front">
-            <article class="linear-slider__item linear-slider__item--lg">
-              <img src={sampleImage.src} alt="" class="linear-slider__image" />
-            </article>
-            <article class="linear-slider__item linear-slider__item--md">
-              <img src={sampleImage.src} alt="" class="linear-slider__image" />
-            </article>
-            <!-- ... -->
-          </div>
-
-          <!-- ===== レイヤー2：中間 ===== -->
-          <div class="linear-slider__layer linear-slider__layer--middle">
-            <article class="linear-slider__item linear-slider__item--md">
-              <img src={sampleImage.src} alt="" class="linear-slider__image" />
-            </article>
-            <article class="linear-slider__item linear-slider__item--sm">
-              <img src={sampleImage.src} alt="" class="linear-slider__image" />
-            </article>
-            <!-- ... -->
-          </div>
-
-          <!-- ===== レイヤー3：奥 ===== -->
-          <div class="linear-slider__layer linear-slider__layer--back">
-            <article class="linear-slider__item linear-slider__item--sm">
-              <img src={sampleImage.src} alt="" class="linear-slider__image" />
-            </article>
-            <article class="linear-slider__item linear-slider__item--md">
-              <img src={sampleImage.src} alt="" class="linear-slider__image" />
-            </article>
-            <!-- ... -->
-          </div>
-        </div>
-      </section>
-
-      <PageBottomNav
-        label="gallery"
-        href="/gallery"
-      />
+        <PageBottomNav
+          label="gallery"
+          href="/gallery"
+        />
+      </div>
     </div>
-  </div>
+  </BackgroundSection>
 </BaseLayout>

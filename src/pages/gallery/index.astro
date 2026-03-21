@@ -6,7 +6,8 @@ import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
 
 import { galleryPageConfig, getGalleryCategories } from '@/data/gallery';
 import GalleryCategoryGrid from '@/components/Gallery/GalleryCategoryGrid.astro';
-const galleryCategories = getGalleryCategories();
+
+const galleryCategories = await getGalleryCategories();
 
 ---
 

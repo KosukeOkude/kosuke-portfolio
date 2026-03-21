@@ -7,16 +7,25 @@ import { getAllWorks } from "@/data/works";
 
 import GalleryTopSection from "@/components/Gallery/GalleryTopSection.astro";
 import { getGalleryCategories } from "@/data/gallery";
+import { getTopGalleryCategories } from '@/lib/sanity/site-settings';
+
+import AboutTopSection from "@/components/About/AboutTopSection.astro";
 
 const workForClient = await getAllWorks();
 const worksForTop = workForClient.slice(0,6);
 
-const galleryCategories = getGalleryCategories();
-const galleryCategoriesForTop = galleryCategories.slice(0, 6);
+
+//トップページのギャラリーの表示数を取得する関数-siteSetting.tsを参照してます
+let galleryAllCategoriesForTop = await getTopGalleryCategories();
+if (galleryAllCategoriesForTop.length === 0){
+    const all = await getGalleryCategories();
+    galleryAllCategoriesForTop = all.slice(0, 6);
+}
 ---
 
 <BaseLayout>
 	<Hero/>
 	<WorksTopSection works={ worksForTop }/>
-	<GalleryTopSection galleryCategories={ galleryCategoriesForTop }/>
+	<GalleryTopSection galleryCategories={ galleryAllCategoriesForTop }/>
+	<AboutTopSection/>
 </BaseLayout>

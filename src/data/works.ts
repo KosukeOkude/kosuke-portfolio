@@ -30,6 +30,7 @@ export interface WorkForClient {
   thumbnailUrl: string;
   thumbnailAlt: string;
   category: string;
+  resetKey:string;
 }
 
 // 作品データをすべて取得（アーカイブページなど一覧用）

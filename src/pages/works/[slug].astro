@@ -10,10 +10,11 @@ import { getAllWorks,getWorkBySlug } from '@/data/works';
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 
 
+
 export const getStaticPaths = (async () => {
   const works = await getAllWorks();
     return works.map((work) => ({
-      params:{ slug: work.slug}
+      params:{ slug: work.slug.trim().toLowerCase()}
     }));
 }) satisfies GetStaticPaths;
 

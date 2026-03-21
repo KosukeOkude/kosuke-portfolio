@@ -1,0 +1,108 @@
+---
+import { Picture } from 'astro:assets';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+import SectionLayout from '@/components/Layout/SectionLayout.astro';
+import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
+
+import profileImage from '@/assets/images/hero-profile-img.jpg';
+import { aboutPageConfig } from '@/data/about';
+
+---
+<BackgroundSection image={ aboutPageConfig.backgroundImage } alt={aboutPageConfig.backgroundAlt} showOverlay={ true }>
+    <SectionLayout>
+        <div slot="sectionContent"
+            class="min-h-screen text-[#1a1a1a] "
+        >
+            <div class="mx-auto max-w-[1120px] px-5 py-10 md:px-10 md:py-12 lg:pb-16">
+            <div
+                class="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-11"
+            >
+                <!-- 左：写真 -->
+                <aside class="lg:sticky lg:top-6" aria-label="プロフィール写真">
+                <Picture
+                    src={profileImage}
+                    alt="カメラを構える写真家のポートレート"
+                    width={520}
+                    height={520}
+                    formats={['avif', 'webp']}
+                    class="aspect-square w-full rounded object-cover shadow-[0_18px_40px_rgba(0,0,0,0.12)]"
+                />
+                </aside>
+
+                <!-- 右：カード -->
+                <article
+                class="rounded-md border border-[#e8e6e1] bg-white px-6 py-7 shadow-[0_12px_36px_rgba(0,0,0,0.06)] md:px-10 md:py-11"
+                >
+                <p
+                    class="mb-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-[#5c5c5c]"
+                >
+                    About
+                </p>
+                <h1
+                    class="font-accent mb-1 text-[clamp(1.75rem,4vw,2.35rem)] font-bold leading-tight tracking-[0.04em]"
+                >
+                    KOSUKE OKUDE
+                </h1>
+                <p class="mb-7 text-[0.95rem] text-[#5c5c5c]">Photographer based in Fukui</p>
+
+                <p class="mb-4 text-[0.9rem] leading-relaxed text-[#333]">
+                    福井の夏の風景に宿るノスタルジアを軸に、地域の展示や書籍のビジュアル、ウェディングなど、さまざまな現場で写真を届けています。
+                </p>
+
+                <h2 class="font-accent mt-7 mb-2.5 text-base font-bold tracking-wide first:mt-5">
+                    写真との出会い・きっかけ
+                </h2>
+                <p class="mb-4 text-[0.9rem] leading-relaxed text-[#333]">
+                    福井の田舎で過ごすなかで、移ろいゆく光や季節の気配を切り取りたいと思い、カメラを手にするようになりました。
+                </p>
+
+                <h2 class="font-accent mt-7 mb-2.5 text-base font-bold tracking-wide">テーマ</h2>
+                <p class="mb-4 text-[0.9rem] leading-relaxed text-[#333]">
+                    ノスタルジックな夏の情景、静かな日常のなかの安らぎ、そして人と場所との関係性。
+                </p>
+
+                <h2 class="font-accent mt-7 mb-2.5 text-base font-bold tracking-wide">
+                    具体的な活動・実績
+                </h2>
+                <p class="mb-2 text-[0.9rem] leading-relaxed text-[#333]">
+                    プラネタリウム展示、小説のための撮影、地域の建築や学校関連の記録など、クライアントワークと個人プロジェクトの両方で撮影を行っています。
+                </p>
+                <ul class="mt-2 list-disc space-y-1.5 pl-[1.15rem] text-[0.9rem] text-[#333]">
+                    <li>2024年 — プラネタリウム展示用ビジュアルの撮影・提供</li>
+                    <li>2024年 — 地域クライアント向け建築・空間ドキュメンテーション</li>
+                    <li>その他 — 書籍・広告・ウェディング等（要相談）</li>
+                </ul>
+
+                <div id="contact" class="mt-8 border-t border-[#e8e6e1] pt-6">
+                    <p class="mb-2 text-[0.88rem] leading-relaxed text-[#333]">
+                    撮影のご依頼やご相談など、まずはお気軽にご連絡ください。
+                    </p>
+                    <p class="text-[0.9rem] font-medium break-all">
+                    <a
+                        href="mailto:hello@example.com"
+                        class="text-[#1a1a1a] underline decoration-1 underline-offset-[3px]"
+                        >hello@example.com</a
+                    >
+                    </p>
+                    <div class="mt-7">
+                    <a
+                        href="/contact"
+                        class="inline-flex min-w-[200px] items-center justify-center bg-[#111] px-7 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-black"
+                    >
+                        Contact
+                    </a>
+                    </div>
+                </div>
+                </article>
+            </div>
+            </div>
+        </div>
+
+        <SectionCtaLink
+            slot="sectionCta"
+            href="/about"
+            label="About me"
+        />
+
+    </SectionLayout>
+</BackgroundSection>

@@ -1,22 +1,6 @@
-import { createClient } from '@sanity/client';
-import { createImageUrlBuilder } from '@sanity/image-url';
 import type { Work, WorkForClient } from '@/data/works';
-
-const projectId = import.meta.env.SANITY_PROJECT_ID;
-const dataset = import.meta.env.SANITY_DATASET;
-
-if (!projectId || !dataset) {
-  throw new Error('SANITY_PROJECT_ID と SANITY_DATASET を .env に設定してください');
-}
-
-export const sanityClient = createClient({
-  projectId,
-  dataset,
-  apiVersion: '2024-01-01',
-  useCdn: true,
-});
-
-const builder = createImageUrlBuilder(sanityClient);
+import { sanityClient, urlFor } from '@/lib/sanity/client';
+import { normalizeSlug } from '@/lib/sanity/normalizeSlug';
 //一覧用ワーク全フィールド
 export const worksListQuery = `*[_type == "work"] | order(date desc) {
     _id,
@@ -54,10 +38,7 @@ export const workBySlugQuery = `*[_type == "work" && slug.current == $slug][0] {
     }
   }`;
 
-export function urlFor(source: { _ref?: string; _id?:string; } | undefined) {
-  if (!source?._ref && !source?._id) return null;
-  return builder.image(source);
-}
+
 export async function getAllWorks(): Promise<WorkForClient[]> {
   const list = await sanityClient.fetch<
     {
@@ -80,7 +61,7 @@ export async function getAllWorks(): Promise<WorkForClient[]> {
         .auto('format')
         .url() ?? '';
     return {
-      slug: item.slug,
+      slug: normalizeSlug(item.slug),
       title: item.title,
       date: item.date,
       tags: item.tags ?? [],
@@ -125,7 +106,7 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
     }))
 
     return {
-        slug: doc.slug,
+        slug: normalizeSlug(doc.slug),
         title: doc.title,
         date: doc.date,
         tags: doc.tags ?? [],

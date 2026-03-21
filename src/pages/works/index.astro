@@ -8,18 +8,14 @@ import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
 import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
 
 const workForClient = await getAllWorks();
-const rawCategory = Astro.url.searchParams.get('category') ?? 'All';
-const initialCategory =
-  rawCategory && rawCategory !== 'All'
-  ? rawCategory.toLowerCase()
-  : 'All';
+
 ---
 
 
 
 
 <BaseLayout>
-  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} showOverlay={true} 
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} showOverlay={true}
 >
     <div class="relative min-h-screen text-[var(--color-white)]">
 

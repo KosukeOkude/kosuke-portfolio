@@ -1,0 +1,134 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
+import { contactPageConfig } from '@/data/contact';
+const contactEmail = 'hello@example.com';
+const responseNote = '2〜3営業日以内にご返信いたします。';
+---
+
+
+<BaseLayout>
+    <BackgroundSection
+    image={contactPageConfig.backgroundImage}
+    alt={contactPageConfig.backgroundAlt}
+    showOverlay={true}
+  >
+    <div
+      class="relative flex min-h-screen flex-col justify-end pb-12 pl-5 pr-5 md:pb-20 md:pl-10 md:pr-10 lg:pl-16 lg:pr-16"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
+      <div class="relative z-10 max-w-xl">
+        <p
+          class="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-white/60 md:text-[0.7rem]"
+        >
+          Contact
+        </p>
+        <h1
+          class="font-accent text-3xl font-bold leading-tight tracking-[0.04em] text-[var(--color-white)] md:text-4xl lg:text-5xl"
+        >
+          お問い合わせ
+        </h1>
+        <p class="mt-1 text-sm text-white/80 md:text-base">
+          撮影のご依頼やご相談など、お気軽にご連絡ください。
+        </p>
+      </div>
+      <p
+        class="relative z-10 mt-12 text-[10px] uppercase tracking-[0.25em] text-white/40"
+        aria-hidden="true"
+      >
+        Scroll
+      </p>
+    </div>
+  </BackgroundSection>
+
+
+  <!-- 黒背景コンテンツ: フォーム + メール情報 2カラム -->
+  <div class="bg-white text-[var(--color-light-black)]">
+    <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24 lg:px-16 lg:py-32">
+      <Breadcrumbs items={[{ label: 'About', href: '/about' }, { label: 'Contact' }]} />
+      <section class="mt-12 md:mt-16 lg:mt-24">
+        <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <!-- 左: フォーム -->
+          <div>
+            <form
+              class="space-y-6"
+              method="POST"
+              action="#"
+            >
+              <div>
+                <label for="name" class="mb-1 block text-xs font-medium uppercase tracking-[0.2em] text-black/60">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  class="w-full border-b border-black/30 bg-transparent px-0 py-2 text-sm text-black placeholder-black/40 outline-none transition-colors focus:border-black/60 md:text-base"
+                  placeholder="お名前"
+                />
+              </div>
+              <div>
+                <label for="email" class="mb-1 block text-xs font-medium uppercase tracking-[0.2em] text-black/60">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class="w-full border-b border-black/30 bg-transparent px-0 py-2 text-sm text-black placeholder-black/40 outline-none transition-colors focus:border-black/60 md:text-base"
+                  placeholder="メールアドレス"
+                />
+              </div>
+              <div>
+                <label for="message" class="mb-1 block text-xs font-medium uppercase tracking-[0.2em] text-black/60">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={5}
+                  required
+                  class="w-full resize-none border-b border-black/30 bg-transparent px-0 py-2 text-sm text-black placeholder-black/40 outline-none transition-colors focus:border-black/60 md:text-base"
+                  placeholder="お問い合わせ内容"
+                />
+              </div>
+              <button
+                type="submit"
+                class="mt-4 inline-flex items-center justify-center px-6 py-3 border border-black/40 rounded-full text-xs font-medium tracking-[0.18em] uppercase bg-black/5 hover:bg-black/10 hover:border-black/70 text-black transition-colors"
+              >
+                送信
+              </button>
+            </form>
+          </div>
+          <!-- 右: メール・返信目安 -->
+          <div class="flex flex-col justify-start">
+            <h2 class="font-accent text-lg font-bold tracking-wide text-black md:text-xl lg:text-2xl">
+              Contact
+            </h2>
+            <p class="mt-4 text-sm leading-relaxed text-black/70 md:text-base">
+              直接メールでのお問い合わせも可能です。
+            </p>
+            <p class="mt-4 text-sm font-medium text-black/90 md:text-base">
+              <a
+                href={`mailto:${contactEmail}`}
+                class="underline underline-offset-4 hover:text-black"
+              >
+                {contactEmail}
+              </a>
+            </p>
+            <p class="mt-6 text-xs text-black/50 md:text-sm">
+              {responseNote}
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</BaseLayout>
