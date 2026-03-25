@@ -1,0 +1,37 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
+import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
+
+import { getAllNews } from '@/data/news';
+import { NewsArchiveSection } from '@/components/News/NewsArchiveSection';
+
+const newsItems = await getAllNews();
+---
+
+
+
+
+<BaseLayout>
+    <div class="relative min-h-screen text-[var(--color-white)]">
+        <main class="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-10 md:py-14 space-y-10">
+          <Breadcrumbs
+          items={[
+            {label: 'News'}
+          ]}>
+        </Breadcrumbs>
+          <!-- タイトルエリア -->
+           <ArchivePageHeader
+            label="news"
+            title="Selected news &amp; archives"
+          >
+          A quiet record of client news and personal projects.
+          </ArchivePageHeader>
+
+          <NewsArchiveSection
+            newsItems={newsItems}
+            client:load
+          />
+        </main>
+      </div>
+</BaseLayout>

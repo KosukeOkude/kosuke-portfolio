@@ -1,6 +1,6 @@
 import type { Work, WorkForClient } from '@/data/works';
-import { sanityClient, urlFor } from '@/lib/sanity/client';
-import { normalizeSlug } from '@/lib/sanity/normalizeSlug';
+import { sanityClient, urlFor } from '@/sanity/client';
+import { normalizeSlug } from '@/utils/normalizeSlug';
 //一覧用ワーク全フィールド
 export const worksListQuery = `*[_type == "work"] | order(date desc) {
     _id,
@@ -18,7 +18,6 @@ export const worksListQuery = `*[_type == "work"] | order(date desc) {
 
 export const workBySlugQuery = `*[_type == "work" && slug.current == $slug][0] {
     _id,
-
     "slug": slug.current,
     title,
     date,
@@ -37,7 +36,6 @@ export const workBySlugQuery = `*[_type == "work" && slug.current == $slug][0] {
       alt
     }
   }`;
-
 
 export async function getAllWorks(): Promise<WorkForClient[]> {
   const list = await sanityClient.fetch<
@@ -101,27 +99,24 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
   const subImage: { src: string; alt: string }[] = (doc.subImages ?? [])
     .filter((s): s is { asset: { _ref: string }; alt: string | null } => !!s.asset)
     .map((s) => ({
-        src: urlFor(s.asset)?.width(1200).auto('format').url() ?? '',
-        alt: s.alt ?? '',
-    }))
+      src: urlFor(s.asset)?.width(1200).auto('format').url() ?? '',
+      alt: s.alt ?? '',
+    }));
 
-    return {
-        slug: normalizeSlug(doc.slug),
-        title: doc.title,
-        date: doc.date,
-        tags: doc.tags ?? [],
-        thumbnail: thumbnailUrl,
-        thumbnailAlt: doc.thumbnailAlt ?? '',
-        description: doc.description ?? '',
-        category: doc.category ?? '',
-        concept: doc.concept ?? undefined,
-        process: doc.process ?? undefined,
-        role: doc.role ?? undefined,
-        notes: doc.notes ?? undefined,
-        credits: doc.credits ?? undefined,
-        subImage: subImage.length > 0 ? subImage : undefined,
-    } satisfies Work
-
+  return {
+    slug: normalizeSlug(doc.slug),
+    title: doc.title,
+    date: doc.date,
+    tags: doc.tags ?? [],
+    thumbnail: thumbnailUrl,
+    thumbnailAlt: doc.thumbnailAlt ?? '',
+    description: doc.description ?? '',
+    category: doc.category ?? '',
+    concept: doc.concept ?? undefined,
+    process: doc.process ?? undefined,
+    role: doc.role ?? undefined,
+    notes: doc.notes ?? undefined,
+    credits: doc.credits ?? undefined,
+    subImage: subImage.length > 0 ? subImage : undefined,
+  } satisfies Work;
 }
-
-

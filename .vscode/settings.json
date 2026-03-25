@@ -1,3 +1,43 @@
 {
-  "cSpell.words": ["Kosuke", "Okude"]
+  "cSpell.words": ["Kosuke", "Okude"],
+  "explorer.decorations.colors": true,
+  "explorer.decorations.badges": true,
+  "workbench.colorCustomizations": {
+    "folderPathColor.custom1": "#5EB87A",
+    "folderPathColor.custom2": "#E5A84F",
+    "folderPathColor.custom3": "#3DB8BF",
+    "folderPathColor.custom4": "#5B8FD9",
+    "folderPathColor.custom5": "#B87AB8",
+    "folderPathColor.custom6": "#3c49ff"
+  },
+  "folder-path-color.folders": [
+    { "path": "src/utils", "color": "custom6", "tooltip": "Utils" },
+    { "path": "src/pages/about", "color": "custom1", "tooltip": "About" },
+    { "path": "src/components/About", "color": "custom1", "tooltip": "About" },
+    { "path": "src/data/about.ts", "color": "custom1", "tooltip": "About" },
+    { "path": "src/sanity/about.ts", "color": "custom1", "tooltip": "About · Sanity" },
+    { "path": "photo-portfolio-cms/schemaTypes/about.ts", "color": "custom1", "tooltip": "About · schema" },
+    { "path": "src/pages/contact", "color": "custom2", "tooltip": "Contact" },
+    { "path": "src/components/Contact", "color": "custom2", "tooltip": "Contact" },
+    { "path": "src/data/contact.ts", "color": "custom2", "tooltip": "Contact" },
+    { "path": "src/pages/gallery", "color": "custom3", "tooltip": "Gallery" },
+    { "path": "src/components/Gallery", "color": "custom3", "tooltip": "Gallery" },
+    { "path": "src/data/gallery.ts", "color": "custom3", "tooltip": "Gallery" },
+    { "path": "src/sanity/gallery.ts", "color": "custom3", "tooltip": "Gallery · Sanity" },
+    { "path": "photo-portfolio-cms/schemaTypes/gallery.ts", "color": "custom3", "tooltip": "Gallery · schema" },
+    { "path": "src/pages/news", "color": "custom4", "tooltip": "News" },
+    { "path": "src/components/News", "color": "custom4", "tooltip": "News" },
+    { "path": "src/data/news.ts", "color": "custom4", "tooltip": "News" },
+    { "path": "src/sanity/news.ts", "color": "custom4", "tooltip": "News · Sanity" },
+    { "path": "photo-portfolio-cms/schemaTypes/news.ts", "color": "custom4", "tooltip": "News · schema" },
+    { "path": "src/pages/works", "color": "custom5", "tooltip": "Works" },
+    { "path": "src/components/Works", "color": "custom5", "tooltip": "Works" },
+    { "path": "src/data/works.ts", "color": "custom5", "tooltip": "Works" },
+    { "path": "src/sanity/works.ts", "color": "custom5", "tooltip": "Works · Sanity" },
+    { "path": "photo-portfolio-cms/schemaTypes/work.ts", "color": "custom5", "tooltip": "Works · schema" },
+    { "path": "src/sanity/client.ts", "color": "yellow", "tooltip": "Sanity · client" },
+    { "path": "src/sanity/site-settings.ts", "color": "green", "tooltip": "Sanity · site settings" },
+    { "path": "photo-portfolio-cms/schemaTypes/site-settings.ts", "color": "green", "tooltip": "Site settings · schema" },
+    { "path": "photo-portfolio-cms/schemaTypes/index.ts", "color": "cyan", "tooltip": "Schema registry" }
+  ]
 }

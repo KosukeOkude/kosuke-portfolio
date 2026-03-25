@@ -1,5 +1,4 @@
 ---
-import type { GetStaticPaths } from "astro";
 import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
@@ -8,18 +7,18 @@ import MoreInCategory from "@/components/UI/MoreInCategory.astro";
 
 import { getAllWorks,getWorkBySlug } from '@/data/works';
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
-
+import { normalizeSlug } from "@/utils/normalizeSlug";
 
 
 export const getStaticPaths = (async () => {
   const works = await getAllWorks();
     return works.map((work) => ({
-      params:{ slug: work.slug.trim().toLowerCase()}
+      params:{ slug: normalizeSlug(work.slug)}
     }));
-}) satisfies GetStaticPaths;
+});
 
 const { slug } = Astro.params;
-const work = await getWorkBySlug(slug as string);
+const work = await getWorkBySlug(slug);
 
 const allWorks = await getAllWorks();
 // カテゴリ一覧（'All' + 小文字カテゴリの Set）

@@ -1,4 +1,4 @@
-import { sanityClient } from '@/lib/sanity/client';
+import { sanityClient } from '@/sanity/client';
 
 const aboutPageQuery = `*[_type == "aboutPage"][0]{
     name,

@@ -2,8 +2,8 @@ import worksBackgroundImage from '@/assets/images/works-background-img.jpg';
 
 export const worksPageConfig = {
   backgroundImage: worksBackgroundImage,
-  backgroundAlt: 'カフェで抹茶のお菓子とティーセット'
-}
+  backgroundAlt: 'カフェで抹茶のお菓子とティーセット',
+};
 
 export interface Work {
   slug: string;
@@ -30,8 +30,7 @@ export interface WorkForClient {
   thumbnailUrl: string;
   thumbnailAlt: string;
   category: string;
-  resetKey:string;
 }
 
 // 作品データをすべて取得（アーカイブページなど一覧用）
-export { getAllWorks, getWorkBySlug } from '@/lib/sanity/works'
+export { getAllWorks, getWorkBySlug } from '@/sanity/works';

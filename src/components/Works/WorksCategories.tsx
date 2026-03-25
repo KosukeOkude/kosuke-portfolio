@@ -1,17 +1,14 @@
-import type { FC } from "react";
-
 interface WorksCategoryProps {
     categories: string[];
     selectedCategory: string;
     onSelect: (category: string) => void;
 }
 
-
-export const WorksCategories: FC<WorksCategoryProps> = ({
+export const WorksCategories = ({
     categories,
     selectedCategory,
     onSelect
-}) => (
+}: WorksCategoryProps) => (
     <div className="flex flex-wrap gap-3 mb-4">
         {categories.map((category) => {
             const isActive = category === selectedCategory;

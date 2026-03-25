@@ -1,0 +1,135 @@
+import { sanityClient, urlFor } from '@/sanity/client';
+import type { NewsArchive, NewsPage } from '@/data/news';
+import { normalizeSlug } from '@/utils/normalizeSlug';
+
+export const newsListQuery = `*[_type == "news"] | order(date desc) {
+  _id,
+  date,
+  title,
+  summary,
+  "thumbnailUrl": thumbnail.asset->,
+  thumbnailAlt,
+  "slug": slug.current,
+  tags,
+  category
+}`;
+
+export const newsBySlugQuery = `*[_type == "news" && slug.current == $slug][0] {
+  _id,
+  date,
+  title,
+  summary,
+  "thumbnailUrl": thumbnail.asset->,
+  thumbnailAlt,
+  "slug": slug.current,
+  tags,
+  category,
+  description,
+  body,
+  details,
+  venue,
+  eventDate,
+  relatedLinks,
+  "subImage":subImages[] {
+    "asset": image.asset->,
+    alt
+  }
+}`;
+
+export async function getAllNews(): Promise<NewsArchive[]> {
+  //クエリを投げる側
+  const list = await sanityClient.fetch<
+    {
+      _id: string;
+      date: string;
+      title: string;
+      summary: string;
+      thumbnailUrl: { _ref?: string } | null;
+      thumbnailAlt: string;
+      slug: string;
+      tags: string[] | null;
+      category: string;
+    }[]
+  >(newsListQuery);
+
+  //返却側
+  return list.map((item) => {
+    const thumbnailUrl =
+      urlFor(item.thumbnailUrl ?? undefined)
+        ?.width(560)
+        .height(640)
+        .auto('format')
+        .url() ?? '';
+
+    const normalizedSlug = normalizeSlug(item.slug);
+    const normalizeCategory = item.category.toLocaleLowerCase();
+    return {
+      id: item._id,
+      date: item.date,
+      title: item.title,
+      summary: item.summary,
+      thumbnailUrl,
+      thumbnailAlt: item.thumbnailAlt,
+      slug: normalizedSlug,
+      tags: item.tags ?? [],
+      category: normalizeCategory,
+    } satisfies NewsArchive;
+  });
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsPage> {
+  const doc = await sanityClient.fetch<{
+    _id: string;
+    date: string;
+    title: string;
+    summary: string;
+    thumbnailUrl: { _ref?: string; _id?: string } | null;
+    thumbnailAlt: string | null;
+    slug: string;
+    tags: string[] | null;
+    category: string;
+    description: string;
+    body: string | null; // 本文（Works の concept 相当）
+    details: string | null; // 詳細・補足
+    venue: string | null; // 会場
+    eventDate: string | null; // イベント日時
+    relatedLinks: { label: string; url: string }[] | null; // 関連リンク（credits の代わり）
+    subImage: { asset: { _ref?: string; _id?: string } | null; alt: string | null }[] | null;
+  }>(newsBySlugQuery, { slug });
+
+  //返却側
+  const thumbnailUrl =
+    urlFor(doc.thumbnailUrl ?? undefined)
+      ?.width(1200)
+      .auto('format')
+      .url() ?? '';
+
+  const normalizedSlug = normalizeSlug(doc.slug);
+  const normalizeCategory = doc.category.toLocaleLowerCase();
+
+  const subImage: { src: string; alt: string }[] = (doc.subImage ?? [])
+    .filter((s): s is { asset: { _ref?: string; _id?: string }; alt: string | null } => !!s.asset)
+    .map((s) => ({
+      src: urlFor(s.asset)?.width(1200).auto('format').url() ?? '',
+      alt: s.alt ?? '',
+    }));
+
+  return {
+    id: doc._id,
+    date: doc.date,
+    title: doc.title,
+    summary: doc.summary,
+    thumbnailUrl,
+    thumbnailAlt: doc.thumbnailAlt ?? '',
+    slug: normalizedSlug,
+    tags: doc.tags ?? [],
+    category: normalizeCategory,
+    description: doc.description,
+    body: doc.body ?? undefined, // 本文（Works の concept 相当）
+    details: doc.details ?? undefined, // 詳細・補足
+    venue: doc.venue ?? undefined, // 会場
+    eventDate: doc.eventDate ?? undefined, // イベント日時
+    relatedLinks: doc.relatedLinks ?? undefined, // 関連リンク（credits の代わり）
+    subImage,
+  };
+}

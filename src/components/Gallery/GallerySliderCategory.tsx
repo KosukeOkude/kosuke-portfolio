@@ -1,16 +1,11 @@
-import type { FC } from 'react';
-
-export type GalleryCategoryOption = {
-    label: string;
-    slug: string;
-};
+import { type CategoryOption } from "@/type/category";
 
 interface GallerySliderCategoryProps {
-    categories: GalleryCategoryOption[];
+    categories: CategoryOption[];
     selectedCategory: string;
     onSelect:(slug: string) => void;
 }
-export const GallerySliderCategory: FC<GallerySliderCategoryProps> = ({ categories, selectedCategory, onSelect }) => {
+export const GallerySliderCategory = ({ categories, selectedCategory, onSelect }: GallerySliderCategoryProps) => {
   return (
 
     <div className="mx-auto flex flex-nowrap gap-2 overflow-x-auto">

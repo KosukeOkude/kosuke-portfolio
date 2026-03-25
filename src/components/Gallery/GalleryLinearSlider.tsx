@@ -1,58 +1,39 @@
 import { useState, useMemo } from 'react';
 import type { FC } from 'react';
 import type { GalleryLinearSliderItem } from '@/data/gallery';
-import { GallerySortSelect, type GallerySortOrder } from '@/components/Gallery/GallerySortSelect';
-import { GallerySliderCategory, type GalleryCategoryOption } from '@/components/Gallery/GallerySliderCategory';
+import { GallerySortSelect } from '@/components/Gallery/GallerySortSelect';
+import { GallerySliderCategory } from '@/components/Gallery/GallerySliderCategory';
 import { GalleryTrack } from '@/components/Gallery/GalleryTrack';
+import { sortByDate, type DateSortOrder } from '@/utils/sortByDate';
+import { filterByCategory } from '@/utils/filterByCategory';
+import { type CategoryOption } from "@/type/category";
 
 type Props = {
   items: GalleryLinearSliderItem[];
-  categories: GalleryCategoryOption[];
+  categories: CategoryOption[];
   initialCategory?: string;
 };
 
-
-
 export const GalleryLinearSlider: FC<Props> = ({ items, categories, initialCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory ?? 'All');
-  const [sortOrder, setSortOrder] = useState<GallerySortOrder>('date-desc');
+  const [sortOrder, setSortOrder] = useState<DateSortOrder>('date-desc');
   // カテゴリで絞る（Allなら全件）
-  const visibleItems = selectedCategory === 'All' ? items : items.filter((item) => item.categorySlug === selectedCategory);
-  const visibleItemsSorted = useMemo(() => sortGalleryItems(visibleItems, sortOrder), [visibleItems, sortOrder]);
+  const filteredByCategoryItems = filterByCategory(items, selectedCategory, g => g.categorySlug);
 
-  function getCreatedAtMs(item: GalleryLinearSliderItem) {
-    const ms = new Date(item.createdAt).getTime();
+  const getDateMs = (n: GalleryLinearSliderItem) => {
+    const ms = new Date(n.createdAt).getTime();
     return Number.isFinite(ms) ? ms : 0;
-  }
+  };
 
-  function sortGalleryItems(items: GalleryLinearSliderItem[], sortOrder: GallerySortOrder) {
-    const copy = [...items];
-
-    if (sortOrder === 'date-desc') {
-      return copy.sort((a, b) => getCreatedAtMs(b) - getCreatedAtMs(a));
-    }
-    if (sortOrder === 'date-asc') {
-      return copy.sort((a, b) => getCreatedAtMs(a) - getCreatedAtMs(b));
-    }
-    return copy;
-  }
+  const displayItems = useMemo(
+        () => sortByDate(filteredByCategoryItems, sortOrder, getDateMs),
+        [filteredByCategoryItems, sortOrder]);
 
   return (
     <section className="w-full">
-
-      <GallerySortSelect
-        value={sortOrder}
-        onChange={setSortOrder}
-        />
-      <GallerySliderCategory
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onSelect={setSelectedCategory}
-      />
-      <GalleryTrack
-        items={visibleItemsSorted}
-        resetKey={`${selectedCategory}-${sortOrder}`}
-      />
+      <GallerySortSelect value={sortOrder} onChange={setSortOrder} />
+      <GallerySliderCategory categories={categories} selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
+      <GalleryTrack items={displayItems} resetKey={`${selectedCategory}-${sortOrder}`} />
     </section>
   );
-}
+};

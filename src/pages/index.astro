@@ -7,25 +7,44 @@ import { getAllWorks } from "@/data/works";
 
 import GalleryTopSection from "@/components/Gallery/GalleryTopSection.astro";
 import { getGalleryCategories } from "@/data/gallery";
-import { getTopGalleryCategories } from '@/lib/sanity/site-settings';
+import { displayTopWorks, displayTopGalleryCategories, displayTopAbout, displayTopNews } from '@/sanity/site-settings';
 
 import AboutTopSection from "@/components/About/AboutTopSection.astro";
 
-const workForClient = await getAllWorks();
-const worksForTop = workForClient.slice(0,6);
+import NewsTopSection from "@/components/News/NewsTopSection.astro";
+import { getAllNews } from '@/data/news';
 
+
+
+
+let displayWorksForTop = await displayTopWorks();
+if(displayWorksForTop.length === 0){
+	const all = await getAllWorks();
+	displayWorksForTop = all.slice(0, 6);
+}
 
 //トップページのギャラリーの表示数を取得する関数-siteSetting.tsを参照してます
-let galleryAllCategoriesForTop = await getTopGalleryCategories();
-if (galleryAllCategoriesForTop.length === 0){
+let displayGalleryCategoriesForTop = await displayTopGalleryCategories();
+if (displayGalleryCategoriesForTop.length === 0){
     const all = await getGalleryCategories();
-    galleryAllCategoriesForTop = all.slice(0, 6);
+    displayGalleryCategoriesForTop = all.slice(0, 6);
 }
+
+const displayAboutForTop = await displayTopAbout();
+
+//トップページのギャラリーの表示数を取得する関数-siteSetting.tsを参照してます
+let displayNewsForTop= await displayTopNews();
+if (displayNewsForTop.length === 0){
+    const all = await getAllNews();
+    displayNewsForTop = all.slice(0, 6);
+}
+
 ---
 
 <BaseLayout>
 	<Hero/>
-	<WorksTopSection works={ worksForTop }/>
-	<GalleryTopSection galleryCategories={ galleryAllCategoriesForTop }/>
-	<AboutTopSection/>
+	<WorksTopSection works={ displayWorksForTop }/>
+	<GalleryTopSection galleryCategories={ displayGalleryCategoriesForTop }/>
+	<AboutTopSection about={displayAboutForTop}/>
+	<NewsTopSection newsItems={displayNewsForTop}/>
 </BaseLayout>

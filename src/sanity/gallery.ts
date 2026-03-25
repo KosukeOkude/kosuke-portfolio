@@ -1,6 +1,6 @@
 import type { GalleryCategory, GalleryLinearSliderItem } from '@/data/gallery';
-import { sanityClient, urlFor } from '@/lib/sanity/client';
-import { normalizeSlug } from "@/lib/sanity/normalizeSlug";
+import { sanityClient, urlFor } from '@/sanity/client';
+import { normalizeSlug } from '@/utils/normalizeSlug';
 
 export const galleryQuery = `*[_type == "gallery"] | order(title asc) {
     "slug": slug.current,
@@ -55,28 +55,32 @@ async function fetchGalleryData() {
         sliderItems.push({
           id: img.asset?._id ?? `${gallery.slug}-${i}`,
           categorySlug: normalizeSlug(gallery.slug),
-          imageUrl: urlFor(img.asset ?? undefined)?.width(2400).auto('format').url() ?? '',
+          imageUrl:
+            urlFor(img.asset ?? undefined)
+              ?.width(2400)
+              .auto('format')
+              .url() ?? '',
           imageAlt: img.alt ?? '',
           size: (img.size ?? 'md') as 'sm' | 'md' | 'xl' | '2xl' | '3xl',
-          createdAt: img.createdAt ?? ''
+          createdAt: img.createdAt ?? '',
         });
       }
     }
   }
-  return { categories, sliderItems }
+  return { categories, sliderItems };
 }
 
 export async function getGalleryCategories(): Promise<GalleryCategory[]> {
-    const { categories }= await fetchGalleryData();
-    return categories;
+  const { categories } = await fetchGalleryData();
+  return categories;
 }
 
 export async function getLinearSliderItems(): Promise<GalleryLinearSliderItem[]> {
-    const { sliderItems } = await fetchGalleryData();
-    return sliderItems;
+  const { sliderItems } = await fetchGalleryData();
+  return sliderItems;
 }
 
 export async function getGalleryCategoryBySlug(slug: string): Promise<GalleryCategory | null> {
-    const { categories } = await fetchGalleryData();
-    return categories.find((c) => c.slug.trim().toLowerCase() === slug.trim().toLowerCase()) ?? null;
+  const { categories } = await fetchGalleryData();
+  return categories.find((c) => c.slug.trim().toLowerCase() === slug.trim().toLowerCase()) ?? null;
 }

@@ -6,8 +6,7 @@ import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 import { GalleryLinearSlider } from '@/components/Gallery/GalleryLinearSlider';
 import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems, galleryPageConfig  } from '@/data/gallery';
-import BackgroundSection from "@/components/Layout/BackgroundSection.astro";
-import { normalizeSlug } from "@/lib/sanity/normalizeSlug";
+import { normalizeSlug } from "@/utils/normalizeSlug";
 
 export const getStaticPaths = (async() => {
     const galleryCategories = await getGalleryCategories();
@@ -36,7 +35,6 @@ const allItems = await getLinearSliderItems();
 ---
 
 <BaseLayout>
-  <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} showOverlay={false}>
     <div class="min-h-screen text-[var(--color-white)]">
       <div class="max-w-10xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
         <Breadcrumbs
@@ -65,5 +63,4 @@ const allItems = await getLinearSliderItems();
         />
       </div>
     </div>
-  </BackgroundSection>
 </BaseLayout>

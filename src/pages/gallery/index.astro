@@ -1,10 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
 import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
 
-import { galleryPageConfig, getGalleryCategories } from '@/data/gallery';
+import { getGalleryCategories } from '@/data/gallery';
 import GalleryCategoryGrid from '@/components/Gallery/GalleryCategoryGrid.astro';
 
 const galleryCategories = await getGalleryCategories();
@@ -15,8 +14,7 @@ const galleryCategories = await getGalleryCategories();
 
 
 <BaseLayout>
-  <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} showOverlay={false}
->
+
     <div class="relative min-h-screen text-[var(--color-white)]">
 
         <main class="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-10 md:py-14 space-y-10">
@@ -35,5 +33,4 @@ const galleryCategories = await getGalleryCategories();
             galleryCategories={galleryCategories}/>
         </main>
       </div>
-    </BackgroundSection>
   </BaseLayout>

@@ -23,10 +23,4 @@ export interface GalleryLinearSliderItem {
   createdAt: string;
 }
 
-export {
-  getGalleryCategories,
-  getLinearSliderItems,
-  getGalleryCategoryBySlug,
-  
-} from '@/lib/sanity/gallery'
-
+export { getGalleryCategories, getLinearSliderItems, getGalleryCategoryBySlug } from '@/sanity/gallery';
