@@ -1,30 +1,20 @@
 ---
 import MainNav from "@/components/Layout/MainNav.astro";
-import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro"
+import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro";
+
 ---
 
 <header
   id="header"
-  class:list={[
-    "header",
-    "fixed top-0 left-0 w-full z-50",
-  ]}
+  class="header fixed left-0 top-0 z-50 w-full"
 >
   <div
-    class:list={[
-      "max-w-[1680px] mx-auto w-full", // 中身だけ最大1680pxで中央寄せ
-      "px-5 py-4 md:px-10 lg:px-20",            // パディング
-      "flex justify-between items-center", // レイアウト
-    ]}
+    class="mx-auto flex w-full max-w-[1680px] flex-row items-center justify-between px-5 py-4 xl:px-20"
   >
     <h1>
       <a
         href="/"
-        class:list={[
-          "header__logo",
-          "text-black text-xl",
-          "font-accent font-bold leading-tight",
-        ]}
+        class="header__logo font-accent text-xl font-bold leading-tight text-white"
       >
         OKUDE KOSUKE
       </a>
@@ -36,3 +26,8 @@ import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro"
     </nav>
   </div>
 </header>
+
+<script>
+  import { initHeaderScrollHide } from "@/components/Layout/header.client";
+  initHeaderScrollHide();
+</script>

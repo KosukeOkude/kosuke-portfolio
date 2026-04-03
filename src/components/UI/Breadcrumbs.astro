@@ -6,28 +6,42 @@ interface BreadcrumbsItem{
 
 interface BreadcrumbsProps {
     items: BreadcrumbsItem[];
+    tone?: "on-dark" | "on-light";
 }
 
-const { items } = Astro.props as BreadcrumbsProps;
+const { items, tone = "on-dark" } = Astro.props as BreadcrumbsProps;
+
+const styles = {
+    "on-dark" : {
+        nav: "text-xs md:text-sm text-white/60",
+        link: "hover:text-white transition-colors",
+        current: "text-white"
+    },
+    "on-light" : {
+        nav: "text-xs md:text-sm text-black/60",
+        link: "hover:text-black transition-colors",
+        current: "text-black"
+    }
+}[tone]
 ---
 
 <!-- パンくず -->
-<nav class="text-xs md:text-sm text-white/60">
+<nav data-reveal class={styles.nav}>
     <ol class="flex items-center gap-1 md:gap-2">
         <li>
-            <a href="/" class="hover:text-white transition-colors">Home</a>
+            <a href="/" class={styles.link}>Home</a>
         </li>
         {items.map((item, index) => {
             const isLast = index === items.length - 1;
             return(
                 <>
                     <li class="mx-1">/</li>
-                    <li class={isLast ? 'text-white' : ''}>
+                    <li class={isLast ? styles.current : ''}>
                         {
                             isLast ? (
                                 <span>{item.label}</span>
                             ) : (
-                                <a href={item.href ?? '#'} class="hover:text-white transition-colors">{item.label}</a>
+                                <a href={item.href ?? '#'} class={styles.link}>{item.label}</a>
                             )
                         }
                     </li>
@@ -36,7 +50,3 @@ const { items } = Astro.props as BreadcrumbsProps;
         })}
     </ol>
 </nav>
-
-
-<!--
-<li class="text-white">{ label }</li> -->

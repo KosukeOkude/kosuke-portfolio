@@ -1,9 +1,11 @@
-import worksBackgroundImage from '@/assets/images/works-background-img.jpg';
+import worksBackgroundImage from "@/assets/images/works-background-img.jpg";
+import type { youtubeVideo } from "@/type/youtubeVideo";
 
 export const worksPageConfig = {
   backgroundImage: worksBackgroundImage,
-  backgroundAlt: 'カフェで抹茶のお菓子とティーセット',
+  backgroundAlt: "カフェで抹茶のお菓子とティーセット",
 };
+
 
 export interface Work {
   slug: string;
@@ -12,6 +14,7 @@ export interface Work {
   tags: string[];
   thumbnail: string;
   thumbnailAlt: string;
+  videos?: youtubeVideo[];
   description: string;
   category: string;
   concept?: string;
@@ -33,4 +36,4 @@ export interface WorkForClient {
 }
 
 // 作品データをすべて取得（アーカイブページなど一覧用）
-export { getAllWorks, getWorkBySlug } from '@/sanity/works';
+export { getAllWorks, getWorkBySlug } from "@/sanity/works";

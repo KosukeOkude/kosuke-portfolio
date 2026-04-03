@@ -5,6 +5,8 @@ import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
 import { contactPageConfig } from '@/data/contact';
 import PageHero from '@/components/UI/PageHero.astro';
 import { ContactForm } from '@/components/Contact/ContactForm';
+import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
+import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 const contactEmail = 'hello@example.com';
 const responseNote = '2〜3営業日以内にご返信いたします。';
 ---
@@ -14,8 +16,8 @@ const responseNote = '2〜3営業日以内にご返信いたします。';
     <BackgroundSection
     image={contactPageConfig.backgroundImage}
     alt={contactPageConfig.backgroundAlt}
-    showOverlay={true}
   >
+  <ScreenOverlay/>
   <PageHero
     label="CONTACT"
     title="お問い合わせ"
@@ -24,11 +26,9 @@ const responseNote = '2〜3営業日以内にご返信いたします。';
   </BackgroundSection>
 
 
-  <!-- 黒背景コンテンツ: フォーム + メール情報 2カラム -->
-  <div class="bg-white text-[var(--color-light-black)]">
-    <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24 lg:px-16 lg:py-32">
-      <Breadcrumbs items={[{ label: 'About', href: '/about' }, { label: 'Contact' }]} />
-      <section class="mt-12 md:mt-16 lg:mt-24">
+<ArchiveLayout extraClass='bg-white'>
+      <Breadcrumbs tone="on-light" items={[{ label: 'About', href: '/about' }, { label: 'Contact' }]} />
+      <section id="contact-form" class="mt-12 md:mt-16 lg:mt-24">
         <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <!-- 左: フォーム -->
           <div>
@@ -58,7 +58,5 @@ const responseNote = '2〜3営業日以内にご返信いたします。';
           </div>
         </div>
       </section>
-    </div>
-  </div>
-
+</ArchiveLayout>
 </BaseLayout>

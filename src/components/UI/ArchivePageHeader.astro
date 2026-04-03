@@ -7,7 +7,7 @@ interface ArchivePageHeaderProps {
 const { label, title } = Astro.props as ArchivePageHeaderProps;
 ---
 
-<header class="space-y-6 max-w-3xl">
+<header class="space-y-6 max-w-3xl" data-reveal>
     <div class="space-y-2">
         <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50 mb-1">
             { label }
@@ -16,7 +16,7 @@ const { label, title } = Astro.props as ArchivePageHeaderProps;
         { title }
       </h1>
     </div>
-    <p class="text-sm md:text-base text-white/75 leading-relaxed">
+    <p class="text-sm md:text-base text-white/75 leading-relaxed hidden md:block">
       <slot/>
     </p>
 </header>

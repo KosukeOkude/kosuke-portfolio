@@ -1,62 +1,75 @@
-import type { WorkForClient } from '@/data/works';
+import type { WorkForClient } from "@/data/works";
 
-interface Props {
+interface WorksCardProps {
   work: WorkForClient;
 }
 
-export default function WorksCard({ work }: Props) {
-  const { title, date, slug, tags = [], thumbnailUrl, thumbnailAlt = '' } = work;
+export default function WorksCard({ work }: WorksCardProps) {
+  const {
+    title,
+    date,
+    slug,
+    tags = [],
+    thumbnailUrl,
+    thumbnailAlt = "",
+  } = work;
 
   return (
-    <>
-      {/* <pre style={{ fontSize: '10px', color:'white' }}>{JSON.stringify(work, null, 2)}</pre> */}
-      <article className="flex flex-col flex-shrink-0 w-[240px] xl:w-[280px]">
-        <a href={`/works/${slug}`} className="block">
-          {/* 上のメタ部分 */}
-          <div className="border border-white/20 border-t-2 border-t-white">
-            <div className="
-                  w-full h-[200px] xl:h-[240px] min-h-0
-                  flex flex-col justify-end
-                  px-3 py-3
-                  bg-black/35
-                  backdrop-blur-md backdrop-saturate-150
-                  border-x border-t
-                  border-white/15 border-t-white/70
-            ">
-              <h3 className="
-                    text-[var(--color-white)]
-                    font-accent font-semibold
-                    text-[15px] md:text-[17px]
-                    leading-snug
-                    mb-2
-              ">{title}</h3>
-              <p className="
-                  text-body
-                  text-[11px] md:text-[12px]
-                  tracking-[0.16em] uppercase
-                  text-white/70
-                  mb-1.5
-                ">Date - {date}</p>
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                    <p className="
-                        text-body
-                        text-[11px]
-                        leading-snug
-                        text-white/65
-                    ">
-                    {tags.map((tag) => '#' + tag).join(' ')}
-                  </p>
-                </div>
-              )}
-            </div>
+    <article className="flex w-[240px] flex-shrink-0 flex-col xl:w-[280px]">
+      <a
+        href={`/works/${slug}`}
+        className="block"
+      >
+        {/* 上のメタ部分 */}
+        <div className="border-x border-t border-white/20 border-t-2 border-t-white">
+          <div
+            className="
+                relative flex h-[200px] min-h-0 w-full flex-col justify-end
+                border-x border-t border-white/15 border-t-white/70
+                bg-black/35 px-3 py-3
+                backdrop-blur-md backdrop-saturate-150
+                xl:h-[240px]
+          "
+          >
+            {tags.length > 0 && (
+              <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-1">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-body text-right text-[10px] font-medium leading-tight tracking-wide text-white/75 xl:text-[11px]"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <h3
+              className="
+                mb-1.5 font-accent text-base font-semibold leading-tight
+                text-[var(--color-white)] md:text-[17px] xl:text-lg xl:leading-snug
+                "
+            >
+              {title}
+            </h3>
+            <p
+              className="
+                text-body text-[10px] uppercase tracking-[0.14em] text-white/60
+                md:text-[11px] xl:text-xs
+                "
+            >
+              Date - {date}
+            </p>
           </div>
-          {/* 下の画像部分 */}
-          <div className="w-full aspect-[4/5] flex-shrink-0 overflow-hidden rounded-b-normal bg-gray-800">
-            <img src={thumbnailUrl} alt={thumbnailAlt} loading="lazy" className="w-full h-full object-cover" />
-          </div>
-        </a>
-      </article>
-    </>
+        </div>
+        <div className="aspect-[4/5] w-full flex-shrink-0 overflow-hidden rounded-b-normal bg-gray-800">
+          <img
+            src={thumbnailUrl}
+            alt={thumbnailAlt}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+        </div>
+      </a>
+    </article>
   );
 }

@@ -1,0 +1,89 @@
+---
+interface Props {
+  /** 動画URL（MP4/フォールバック） */
+  videoSrc?: string;
+  /** 軽量 WebM（優先して再生される想定） */
+  videoSrcWebmLight?: string;
+  /** 通常 WebM */
+  videoSrcWebm?: string;
+  /** MP4（フォールバック） */
+  videoSrcMp4?: string;
+  /** まだ動画が出ない間の見た目 */
+  videoPoster?: string;
+
+  /** アクセシビリティ用の説明（video に alt は無いので aria-label / sr-only で渡す） */
+  alt: string;
+
+  /** 任意で className を追加 */
+  className?: string;
+}
+
+const {
+  videoSrc,
+  videoSrcWebmLight,
+  videoSrcWebm,
+  videoSrcMp4,
+  videoPoster,
+  alt,
+  className,
+  ...rest
+} = Astro.props as Props & Record<string, unknown>;
+
+const hasSources = Boolean(videoSrcWebmLight || videoSrcWebm || videoSrcMp4);
+const fallbackSrc = videoSrc ?? '';
+---
+
+<section
+  class={["relative min-h-screen", className].filter(Boolean).join(" ")}
+  {...rest}
+>
+  <div class="absolute inset-0 -z-20">
+    {/* 背景動画。object-cover で領域に合わせる */}
+    <video
+      data-video-bg
+      {...(!hasSources && fallbackSrc ? { src: fallbackSrc } : {})}
+      poster={videoPoster}
+      muted
+      autoplay
+      loop
+      playsinline
+      preload="metadata"
+      aria-label={alt}
+      class="w-full h-full object-cover"
+    >
+      {hasSources && (
+        <>
+          {videoSrcWebmLight && <source src={videoSrcWebmLight} type="video/webm" />}
+          {videoSrcWebm && <source src={videoSrcWebm} type="video/webm" />}
+          {videoSrcMp4 && <source src={videoSrcMp4} type="video/mp4" />}
+        </>
+      )}
+    </video>
+
+    {/* 動画が再生できない/読み込み前のフォールバック */}
+    <div class="absolute inset-0 -z-10 bg-black" aria-hidden="true" />
+  </div>
+
+  <slot />
+</section>
+
+<script>
+  // “動画は嫌”なユーザー向けに prefers-reduced-motion のとき停止する
+  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>("video[data-video-bg]"));
+  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const apply = () => {
+    for (const v of videos) {
+      if (!v) continue;
+      if (mq.matches) {
+        try { v.pause(); } catch {}
+      } else {
+        // autoplay なので play 失敗は普通に起こりうる
+        try { v.play(); } catch {}
+      }
+    }
+  };
+
+  mq.addEventListener?.("change", apply);
+  apply();
+</script>

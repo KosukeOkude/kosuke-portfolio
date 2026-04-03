@@ -1,0 +1,40 @@
+---
+
+import SectionLayout from "@/components/Layout/SectionLayout.astro";
+import SectionTitle from "@/components/UI/SectionTitle.astro";
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+
+import { type WorkForClient, worksPageConfig } from "@/data/works";
+import SectionCtaLink from "@/components/UI/SectionCtaLink.astro";
+import ScreenOverlay from "@/components/UI/ScreenOverlay.astro";
+import WorksCardSliderForTop from "@/components/Works/home/WorksCardSliderForTop.astro";
+import WorksHintForTop from "@/components/Works/home/WorksHintForTop.astro";
+
+interface Props {
+    works: WorkForClient[];
+}
+
+const { works } = Astro.props;
+---
+
+
+<BackgroundSection image={worksPageConfig.backgroundImage}  alt={worksPageConfig.backgroundAlt} data-works-top-root className="min-h-screen">
+    <ScreenOverlay/>
+    <SectionLayout>
+        <div slot="sectionContent"
+             class="z-20 flex-1 flex flex-col max-h-[900px] my-auto min-[375px]:gap-3 gap-5">
+            <SectionTitle title="WORKS" revealOnce>
+            Step into my world through selected works.<br>
+            —or an intimate collection of moments across genres.
+            </SectionTitle>
+
+            <WorksHintForTop orientation="上下"/>
+            <WorksCardSliderForTop works={works}/>
+        </div>
+        <SectionCtaLink
+        slot="sectionCta"
+        href="/works"
+        label="Works archive"
+        />
+    </SectionLayout>
+</BackgroundSection>

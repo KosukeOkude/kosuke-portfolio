@@ -3,10 +3,13 @@ import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import LabeledSection from "@/components/UI/LabeledSection.astro";
 import MoreInCategory from "@/components/UI/MoreInCategory.astro";
-
-import { getAllNews, getNewsBySlug} from '@/data/news';
+import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
+
+import DetailImageGalleryWithLightbox from "@/components/Lightbox/DetailImageGalleryWithLightbox";
+import { getAllNews, getNewsBySlug} from '@/data/news';
 import { normalizeSlug } from "@/utils/normalizeSlug";
+import YoutubeVideos from "@/components/UI/YoutubeVideos.astro";
 
 
 
@@ -30,119 +33,99 @@ const allCategories = ['All', ...new Set(allNews.map(n => n.category))]
 
 
 
+
 <BaseLayout>
-    <div class="min-h-screen bg-black text-[var(--color-white)]">
-      <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
-        <Breadcrumbs
-          items={[
-            { label: 'News', href: '/news' },
-            { label: newsItem.title },
-          ]}
-        />
-        <!-- A案① メイン画像 -->
-        <div
-          class="overflow-hidden rounded-lg border border-white/15 bg-white/5 aspect-video md:aspect-[21/9] max-h-[min(70vh,560px)]"
+  <DetailPageLayout>
+        <Breadcrumbs items={[{ label: 'News', href: '/news' },{ label: newsItem.title },]}/>
+
+        <DetailImageGalleryWithLightbox
+          mainImageUrl={newsItem.thumbnailUrl}
+          mainImageAlt={newsItem.thumbnailAlt}
+          subImages={newsItem.subImage ?? []}
+          client:load
         >
-          <img
-            src={newsItem.thumbnailUrl}
-            alt={newsItem.thumbnailAlt}
-            class="w-full h-full object-cover"
-            loading="eager"
-          />
-        </div>
-        <!-- A案② タイトル・日付・タグ -->
-        <header class="space-y-4">
-          <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50">
-            News
-          </p>
-          <h1
-            class="font-accent font-semibold text-xl md:text-2xl lg:text-[26px] leading-snug text-white"
-          >
-            {newsItem.title}
-          </h1>
-          <p class="text-[11px] md:text-xs tracking-[0.16em] uppercase text-white/60">
-            {newsItem.date}
-            {newsItem.category && (
-              <>
-                {' '}
-                ・ {newsItem.category}
-              </>
-            )}
-          </p>
-          {newsItem.tags.length > 0 && (
-            <div class="flex flex-wrap gap-2">
-              {newsItem.tags.map((tag) => (
-                <span class="text-[10px] md:text-xs px-3 py-1 rounded-full border border-white/25 bg-white/10">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </header>
-        <!-- A案③ リード（説明） -->
-        {newsItem.description && (
-          <p class="text-sm md:text-base text-white/80 leading-relaxed max-w-3xl">
-            {newsItem.description}
-          </p>
-        )}
-        <!-- A案④ 本文・詳細ブロック -->
-        <section class="space-y-10 text-sm md:text-base leading-relaxed">
-          {newsItem.body && (
-            <LabeledSection label="本文">
-              <p class="text-white/80 whitespace-pre-line">{newsItem.body}</p>
-            </LabeledSection>
-          )}
-          {newsItem.details && (
-            <LabeledSection label="詳細">
-              <p class="text-white/80 whitespace-pre-line">{newsItem.details}</p>
-            </LabeledSection>
-          )}
-          {newsItem.venue && (
-            <LabeledSection label="会場">
-              <p class="text-white/80">{newsItem.venue}</p>
-            </LabeledSection>
-          )}
-          {newsItem.eventDate && (
-            <LabeledSection label="日時">
-              <p class="text-white/80">{newsItem.eventDate}</p>
-            </LabeledSection>
-          )}
-          {newsItem.relatedLinks && newsItem.relatedLinks.length > 0 && (
-            <LabeledSection label="関連リンク">
-              <ul class="text-white/80 space-y-2">
-                {newsItem.relatedLinks.map((link) => (
-                  <li>
-                    <a
-                      href={link.url}
-                      class="underline underline-offset-2 hover:text-white"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
+        <YoutubeVideos
+        videos={newsItem.videos}
+      />
+          <!-- A案② タイトル・日付・タグ -->
+          <header class="space-y-4">
+            <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50">
+              News
+            </p>
+            <h1
+              class="font-accent font-semibold text-xl md:text-2xl lg:text-[26px] leading-snug text-white"
+            >
+              {newsItem.title}
+            </h1>
+            <p class="text-[11px] md:text-xs tracking-[0.16em] uppercase text-white/60">
+              {newsItem.date}
+              {newsItem.category && (
+                <>
+                  {' '}
+                  ・ {newsItem.category}
+                </>
+              )}
+            </p>
+            {newsItem.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2">
+                {newsItem.tags.map((tag) => (
+                  <span class="text-[10px] md:text-xs px-3 py-1 rounded-full border border-white/25 bg-white/10">
+                    #{tag}
+                  </span>
                 ))}
-              </ul>
-            </LabeledSection>
-          )}
-        </section>
-        <!-- A案⑤ サブ画像 -->
-        {newsItem.subImage && newsItem.subImage.length > 0 && (
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {newsItem.subImage.map((image) => (
-              <div class="aspect-video rounded-md overflow-hidden border border-white/15 bg-white/5">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  class="h-full w-full object-cover"
-                  loading="lazy"
-                />
               </div>
-            ))}
-          </div>
-        )}
+            )}
+          </header>
+          <!-- A案③ リード（説明） -->
+          {newsItem.description && (
+            <p class="text-sm md:text-base text-white/80 leading-relaxed max-w-3xl">
+              {newsItem.description}
+            </p>
+          )}
+          <!-- A案④ 本文・詳細ブロック -->
+          <section class="space-y-10 text-sm md:text-base leading-relaxed">
+            {newsItem.body && (
+              <LabeledSection label="本文">
+                <p class="text-white/80 whitespace-pre-line">{newsItem.body}</p>
+              </LabeledSection>
+            )}
+            {newsItem.details && (
+              <LabeledSection label="詳細">
+                <p class="text-white/80 whitespace-pre-line">{newsItem.details}</p>
+              </LabeledSection>
+            )}
+            {newsItem.venue && (
+              <LabeledSection label="会場">
+                <p class="text-white/80">{newsItem.venue}</p>
+              </LabeledSection>
+            )}
+            {newsItem.eventDate && (
+              <LabeledSection label="日時">
+                <p class="text-white/80">{newsItem.eventDate}</p>
+              </LabeledSection>
+            )}
+            {newsItem.relatedLinks && newsItem.relatedLinks.length > 0 && (
+              <LabeledSection label="関連リンク">
+                <ul class="text-white/80 space-y-2">
+                  {newsItem.relatedLinks.map((link) => (
+                    <li>
+                      <a
+                        href={link.url}
+                        class="underline underline-offset-2 hover:text-white"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </LabeledSection>
+            )}
+          </section>
+        </DetailImageGalleryWithLightbox>
+
         <MoreInCategory baseHref="/news" allCategories={allCategories} />
         <PageBottomNav label="news" href="/news" />
-      </div>
-    </div>
+      </DetailPageLayout>
   </BaseLayout>

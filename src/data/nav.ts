@@ -9,5 +9,5 @@ export const navItems: navItem[] = [
   { label: 'GALLERY', href: '/gallery' },
   { label: 'ABOUT', href: '/about' },
   { label: 'NEWS', href: '/news' },
-  { label: 'CONTACT', href: '/contact' },
+  { label: 'CONTACT', href: '/contact#contact-form' },
 ];

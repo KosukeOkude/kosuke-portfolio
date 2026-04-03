@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
+import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
+import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
 
 import { getAllWorks, worksPageConfig } from '@/data/works';
 import { WorksArchiveSection } from '@/components/Works/WorksArchiveSection';
-import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
-import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
+import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 
 const workForClient = await getAllWorks();
 
@@ -15,27 +17,22 @@ const workForClient = await getAllWorks();
 
 
 <BaseLayout>
-  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} showOverlay={true}
->
-    <div class="relative min-h-screen text-[var(--color-white)]">
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt}>
+    <ScreenOverlay/>
+    <ArchiveLayout>
 
-        <main class="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-10 md:py-14 space-y-10">
-          <Breadcrumbs
-          items={[
-            {label: 'Works'}
-          ]}>
-        </Breadcrumbs>
-          <!-- タイトルエリア -->
-           <ArchivePageHeader
-            label="works"
-            title="Selected works &amp; archives"
-          >
-          A quiet record of client work and personal projects.
-          </ArchivePageHeader>
-          <WorksArchiveSection
-            works={workForClient}
-            client:load/>
-        </main>
+      <Breadcrumbs items={[{label: 'Works'}]}/>
+      <!-- タイトルエリア -->
+      <ArchivePageHeader
+        label="works"
+        title="Selected works &amp; archives"
+      >
+      A quiet record of client work and personal projects.
+      </ArchivePageHeader>
+      <div data-reveal id="archive-main">
+        <WorksArchiveSection works={workForClient} client:load/>
       </div>
-    </BackgroundSection>
-  </BaseLayout>
+    </ArchiveLayout>
+  </BackgroundSection>
+</BaseLayout>
+

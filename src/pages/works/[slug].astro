@@ -4,10 +4,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import LabeledSection from "@/components/UI/LabeledSection.astro";
 import MoreInCategory from "@/components/UI/MoreInCategory.astro";
-
-import { getAllWorks,getWorkBySlug } from '@/data/works';
+import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
+
+import DetailImageGalleryWithLightbox from "@/components/Lightbox/DetailImageGalleryWithLightbox";
+import { getAllWorks,getWorkBySlug } from '@/data/works';
 import { normalizeSlug } from "@/utils/normalizeSlug";
+import YoutubeVideos from "@/components/UI/YoutubeVideos.astro";
 
 
 export const getStaticPaths = (async () => {
@@ -32,8 +35,7 @@ if(!work){
 
 
 <BaseLayout>
-  <div class="min-h-screen bg-black text-[var(--color-white)]">
-    <div class="max-w-5xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
+  <DetailPageLayout>
       <Breadcrumbs
       items={[
         {label: 'Works', href: "/works"},
@@ -49,34 +51,16 @@ if(!work){
         description={work.description}
       />
 
-      <!-- Main visual & sub images -->
-      <section class="space-y-4">
-        <!-- Main image -->
-        <div class="overflow-hidden rounded-lg border border-white/15 bg-white/5 max-h-[560px]">
-          <img
-            src={work.thumbnail}
-            alt={work.thumbnailAlt}
-            class="w-full h-full max-h-[560px] object-cover"
-            loading="lazy"
-          />
-        </div>
+      <DetailImageGalleryWithLightbox
+        mainImageUrl={work.thumbnail}
+        mainImageAlt={work.thumbnailAlt}
+        subImages={work.subImage ?? []}
+        client:load
+      />
 
-        <!-- Sub image placeholders -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {work.subImage && work.subImage.length > 0 && work.subImage.map(image =>
-            <div class="aspect-video rounded-md overflow-hidden border border-white/15 bg-white/5">
-            <img
-            src={image.src}
-            alt={image.alt}
-            class='h-full w-full object-cover'
-            loading="lazy"
-            />
-          </div>
-        )
-        }
-        </div>
-      </section>
-
+      <YoutubeVideos
+        videos={work.videos}
+      />
       <section class="space-y-10 text-sm md:text-base leading-relaxed">
         {work.concept && (
           <LabeledSection
@@ -135,4 +119,5 @@ if(!work){
       />
     </div>
   </div>
+</DetailPageLayout>
 </BaseLayout>

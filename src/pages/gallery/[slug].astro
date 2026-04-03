@@ -5,8 +5,9 @@ import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 import { GalleryLinearSlider } from '@/components/Gallery/GalleryLinearSlider';
-import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems, galleryPageConfig  } from '@/data/gallery';
+import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems } from '@/data/gallery';
 import { normalizeSlug } from "@/utils/normalizeSlug";
+import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
 
 export const getStaticPaths = (async() => {
     const galleryCategories = await getGalleryCategories();
@@ -35,8 +36,7 @@ const allItems = await getLinearSliderItems();
 ---
 
 <BaseLayout>
-    <div class="min-h-screen text-[var(--color-white)]">
-      <div class="max-w-10xl mx-auto px-4 md:px-8 lg:px-12 py-10 md:py-16 space-y-10">
+  <DetailPageLayout className="max-w-8xl">
         <Breadcrumbs
         items={[
           {label:'Gallery', href:"/gallery"},
@@ -48,19 +48,16 @@ const allItems = await getLinearSliderItems();
         title="Selected category archive"
         />
 
-
-      <GalleryLinearSlider
+        <GalleryLinearSlider
         client:load
         items={allItems}
         categories={categories}
         initialCategory={normalizeSlug(slug)}
       />
 
-
         <PageBottomNav
           label="gallery"
           href="/gallery"
         />
-      </div>
-    </div>
+  </DetailPageLayout>
 </BaseLayout>

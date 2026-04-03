@@ -1,15 +1,20 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 /* merriweatherはBoldでしか使用しませんが一応400もここにコメントアウトします。 */
 /* @import "@fontsource/merriweather/400.css"; */
-@import '@fontsource/merriweather/700.css';
-@import '@fontsource/public-sans/400.css';
-@import '@fontsource/public-sans/700.css';
+@import "@fontsource/merriweather/700.css";
+@import "@fontsource/public-sans/400.css";
+@import "@fontsource/public-sans/700.css";
 
 /* ページ内の共通パーツです。 */
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
-  --font-base: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-accent: 'Merriweather', Georgia, 'Times New Roman', serif;
+  --font-base:
+    "Public Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-accent: "Merriweather", Georgia, "Times New Roman", serif;
   --color-light-black: #111111;
   --color-white: #ffffff;
   --header-height: 72px;
@@ -20,7 +25,7 @@
 }
 
 .font-body {
-  font-family: var(--font-accent);
+  font-family: var(--font-base);
 }
 
 /* 本文ベース */
@@ -72,34 +77,173 @@ h1,
   padding-top: var(--header-height);
 }
 
-img {
-  display: block;
-  max-width: 100%;
+/* global.css など */
+#header {
+  transition: transform 0.3s ease;
 }
-.hamburger-menu {
-  position: relative;
+#header.header-is-hidden {
+  transform: translateY(-100%);
 }
-.hamburger-menu .hamburger-menu__list {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  /* 背景・パディングなど */
+
+/* Works カード横スライダー用（横スクロールバー） */
+.works-card-slider-scroll {
+  overflow-x: auto;
+  /* カードとバーの間の余白（数値は好みで） */
+  padding-bottom: 14px;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) rgba(255, 255, 255, 0.08);
 }
-.hamburger-menu.isOpen .hamburger-menu__list {
-  display: flex;
+
+.works-card-slider-scroll::-webkit-scrollbar {
+  height: 6px;
 }
-/* PC 以上: 80px */
-/* @media (min-width: 1024px) {
-  main {
-    padding-inline: 80px;
+
+.works-card-slider-scroll::-webkit-scrollbar-track {
+  margin-inline: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+.works-card-slider-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.works-card-slider-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.55);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+[data-archive-heading-block],
+[data-archive-content],
+[data-reveal],
+[data-reveal-enter] {
+  opacity: 0;
+  transform: translateY(16px); /* runArchiveRevealAnimation の y と揃える */
+}
+
+[data-reveal-each] > * {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+[data-reveal-once] {
+  opacity: 0;
+}
+
+/* ユーザーの OS やブラウザで「アニメーションや動きを減らす」設定がオンになっているとき */
+@media (prefers-reduced-motion: reduce) {
+  [data-archive-heading-block],
+  [data-archive-content],
+  [data-reveal],
+  [data-reveal-each] {
+    opacity: 1;
+    transform: none;
   }
-} */
-/*
-プレフィックス	条件 (画面幅)	説明
-なし	0px 以上	モバイル（ベース）
-sm:	640px 以上	小さめタブレット〜
-md:	768px 以上	タブレット〜
-lg:	1024px 以上	小さめノート PC〜
-xl:	1280px 以上	一般的なフル HD 手前〜
-2xl:	1536px 以上	広めのデスクトップ〜 */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-each] > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-once] {
+    opacity: 1;
+  }
+}
+
+[data-hero-root] [data-section-overlay],
+[data-hero-root] [data-hero-profile-wrap],
+[data-hero-root] [data-hero-name],
+[data-hero-root] [data-hero-title] {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-root] [data-section-overlay],
+  [data-hero-root] [data-hero-profile-wrap],
+  [data-hero-root] [data-hero-name],
+  [data-hero-root] [data-hero-title] {
+    opacity: 1;
+  }
+}
+
+[data-works-top-root] [data-card-slider] {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-works-top-root] [data-card-slider] {
+    opacity: 1;
+  }
+}
+
+/* works Archiveのヒントのグラデーション */
+.works-hint-line-track {
+  display: block;
+  height: 1px;
+  max-width: 5rem;
+  overflow: hidden;
+  border-radius: 9999px;
+}
+.works-hint-line-shimmer {
+  display: block;
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.85),
+    transparent
+  );
+  animation: works-hint-shimmer-pass 2s ease-in-out infinite;
+}
+@keyframes works-hint-shimmer-pass {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+/* Works トップ（上下スクロール）ヒント: 縦トラック + 上→下シマー */
+.works-hint-line-track-vertical {
+  display: block;
+  width: 1px;
+  height: 3.25rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+}
+.works-hint-line-shimmer-vertical {
+  display: block;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 255, 255, 0.85),
+    transparent
+  );
+  animation: works-hint-shimmer-pass-vertical 2s ease-in-out infinite;
+}
+@keyframes works-hint-shimmer-pass-vertical {
+  0% {
+    transform: translateY(-120%);
+  }
+  100% {
+    transform: translateY(320%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .works-hint-line-shimmer,
+  .works-hint-line-shimmer-vertical {
+    animation: none;
+  }
+}

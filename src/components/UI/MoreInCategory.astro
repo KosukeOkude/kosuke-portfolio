@@ -1,4 +1,5 @@
 ---
+import { ARCHIVE_MAIN_ANCHOR_ID } from "@/constants/archiveMainAnchor";
 
 interface Props {
     baseHref: string;
@@ -7,10 +8,12 @@ interface Props {
 
 const { baseHref, allCategories } = Astro.props;
 
+const hash = `#${ARCHIVE_MAIN_ANCHOR_ID}`
+
 const makeHref = (category: string) =>
     category === 'All'
-    ? baseHref
-    : `${baseHref}?category=${encodeURIComponent(category)}`;
+    ? `${baseHref}${hash}`
+    : `${baseHref}?category=${encodeURIComponent(category)}${hash}`;
 
 const formatLabel = (category: string) =>
     category === 'All'
@@ -19,7 +22,7 @@ const formatLabel = (category: string) =>
 ---
 
 <!-- More in this category -->
-<section class="border-t border-white/10 pt-8 space-y-4">
+<section class="border-t border-white/10 pt-8 space-y-4" data-reveal>
 <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
     More in this category
 </h2>

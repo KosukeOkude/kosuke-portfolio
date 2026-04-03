@@ -1,0 +1,11 @@
+---
+const { class: className, pinOverlay = false } = Astro.props;
+---
+
+
+<div class:list={[
+    "pointe-events-none absolute inset-0 -z-10 bg-black/50",
+    className
+]}
+  data-section-overlay={pinOverlay ? true : undefined}
+  data-reveal-once={pinOverlay ? undefined : true} ></div>

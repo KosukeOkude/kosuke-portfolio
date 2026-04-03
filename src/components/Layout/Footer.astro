@@ -1,46 +1,46 @@
 ---
-import backToTopArrowIcon from "@/assets/images/backToTopArrow.svg"
+import ArrowLeftIcon from "@/components/Icons/ArrowLeftIcon";
+import { isHomePath } from "@/utils/homePath";
+//|| "/" … もし正規化の結果が空文字 "" になったら（通常はホームで末尾 / だけのときなど）、"/" として扱う。
+const pathname = Astro.url.pathname.replace(/\/$/,'') || '/';
+
+const isSlugDetailPage =
+  /^\/works\/[^/]+$/.test(pathname) ||
+  /^\/news\/[^/]+$/.test(pathname) ||
+  /^\/gallery\/[^/]+$/.test(pathname);
+
+const showBackToTop = !isSlugDetailPage;
+
 ---
 
-
-<footer class="hidden"
->
+<footer class="-mt-20 relative z-30 bg-transparent text-white pointer-events-none">
   <div
-    class:list={[
-      "max-w-[1680px] mx-auto w-full",
-      "px-5 py-4 md:px-10 lg:px-20",
-      "flex justify-between items-center",
-    ]}
+  class:list={[
+    "mx-auto flex w-full max-w-[1680px] flex-row items-center px-5 py-4 xl:px-20 ",
+    showBackToTop ? "justify-between" : "justify-center",
+  ]}
   >
-    <small>© {new Date().getFullYear()} Okude Kosuke.</small>
 
-    {/* md 以上: テキストリンク */}
-    <a
-      href="#header"
-      class:list={[
-        "hidden md:inline",
-        "text-sm",
-      ]}
+    <small class={showBackToTop ? "" : "text-center"}>© {new Date().getFullYear()} Okude Kosuke.</small>
+
+
+    {
+      showBackToTop && (
+      <a
+      href="#top"
+      class="pointer-events-auto hidden text-sm text-white hover:text-white/80 md:inline"
     >
       Back to top
     </a>
 
-    {/* モバイル: 画像ボタン */}
     <a
-      href="#header"
-      class:list={[
-        "md:hidden",
-        "w-10 h-10",
-        "flex items-center justify-center",
-      ]}
+      href="#top"
+      class="pointer-events-auto flex h-10 w-10 items-center justify-center text-white hover:text-white/80 md:hidden"
       aria-label="ページの先頭へ戻る"
     >
-      <img
-        src={backToTopArrowIcon.src}
-        alt=""
-        width="24"
-        height="24"
-      />
+      <ArrowLeftIcon className="rotate-90 w-6 h-6 cursor-pointer"/>
     </a>
+      )
+    }
   </div>
 </footer>

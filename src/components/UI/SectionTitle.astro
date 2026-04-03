@@ -1,13 +1,19 @@
 ---
-interface Props {
-    title:string;
+
+interface SectionTitleProps {
+  title: string;
+  revealOnce?: boolean;
 }
 
-const {title} = Astro.props;
+const { title, revealOnce = false } = Astro.props as SectionTitleProps;
 ---
 
 
-<div class="w-fit">
+<div
+  class="w-fit"
+  data-reveal-enter={revealOnce ? undefined : true}
+  data-reveal-once={revealOnce ? true : undefined}
+>
     <h2
     class="
       font-accent font-semibold

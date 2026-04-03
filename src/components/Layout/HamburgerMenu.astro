@@ -1,42 +1,65 @@
 ---
 import { navItems } from "@/data/nav";
-import hamburgerIcon from "@/assets/images/hamburger.svg"
+
+import BackButtonIcon from "@/components/Icons/BackButtonIcon";
+import HamburgerIcon from "@/components/Icons/HamburgerIcon";
 ---
 
-
-<div id="hamburger-wrapper" class="hamburger-menu md:hidden w-10 h-10 flex items-center justify-center">
+<div
+  id="hamburger-wrapper"
+  class="hamburger-menu group flex items-center justify-center md:hidden"
+>
   <button
     id="hamburger-button"
     type="button"
-    class="hamburger-menu__button"
+    class="relative z-[101] flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
     aria-expanded="false"
     aria-controls="hamburger-nav"
+    aria-haspopup="true"
     aria-label="メニューを開く"
   >
-    <img
-      + src={hamburgerIcon.src}
-      alt="クリック式のメニュー画像"
-      width="24"
-      height="18"
-      class="hamburger-menu__icon"
-    />
+    <HamburgerIcon id="hamburger-icon-open" className="pointer-events-none absolute inset-0 m-auto max-h-[18px] max-w-6"/>
+    <BackButtonIcon id="hamburger-icon-close" className="pointer-events-none absolute inset-0 m-auto !hidden max-h-[18px] max-w-6"/>
   </button>
-  <nav id="hamburger-nav" aria-label="モバイルメニュー">
-    <ul class="hamburger-menu__list flex flex-col gap-4 hidden">
-      {navItems.map((item) => (
-        <li><a href={item.href}>{item.label}</a></li>
-      ))}
-    </ul>
-  </nav>
+
+  <div
+    id="hamburger-panel"
+    class="pointer-events-none invisible fixed inset-0 z-[100] flex flex-col justify-center bg-[rgba(6,6,6,0.94)] px-5 pb-8 pt-[clamp(4.5rem,12vw,6rem)] opacity-0 backdrop-blur-[14px] transition-[opacity,visibility] duration-[280ms] ease-out group-[.isOpen]:pointer-events-auto group-[.isOpen]:visible group-[.isOpen]:opacity-100"
+    aria-hidden="true"
+  >
+    <div
+      id="hamburger-backdrop"
+      class="absolute inset-0 cursor-pointer"
+      tabindex="-1"
+    >
+    </div>
+
+    <nav
+      id="hamburger-nav"
+      class="relative z-10 mx-auto w-full max-w-[22rem]"
+      aria-label="モバイルメニュー"
+    >
+      <ul
+        class="m-0 flex list-none flex-col gap-0 border-t border-white/[0.12] p-0"
+      >
+        {
+          navItems.map((item) => (
+            <li class="border-b border-white/[0.12]">
+              <a
+                class="hamburger-menu__link font-accent block px-1 py-[1.1rem] text-[clamp(1.125rem,4vw,1.375rem)] font-bold tracking-[0.06em] text-white no-underline transition-[color,letter-spacing] duration-200 ease-in-out hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/55"
+                href={item.href}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
 </div>
 
-
 <script>
-  const btn = document.getElementById('hamburger-button');
-  const wrapper = document.getElementById('hamburger-wrapper');
-  btn?.addEventListener('click' , () => {
-  const isOpen = wrapper?.classList.toggle('isOpen');
-  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  btn.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
-  })
+  import { initHamburgerMenu } from "@/components/Layout/hamburgerMenu.client";
+  initHamburgerMenu();
 </script>

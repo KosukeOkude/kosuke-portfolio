@@ -1,6 +1,6 @@
 ---
 import SectionLayout from '@/components/Layout/SectionLayout.astro';
-import NewsList from '@/components/News/NewsList';
+import NewsListForTop from '@/components/News/NewsListForTop.astro';
 import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
 import SectionTitle from '@/components/UI/SectionTitle.astro';
 import type { NewsArchive } from '@/data/news';
@@ -11,19 +11,17 @@ interface Props {
 const { newsItems } = Astro.props;
 ---
 
-<section class="relative min-h-screen bg-[#0d0d0d]">
-  <SectionLayout>
+
+  <SectionLayout addClass="pb-30">
     <div slot="sectionContent" class="z-20 flex-1 flex flex-col gap-10 my-auto">
       <!-- タイトル -->
       <SectionTitle title="NEWS">
         Updates on upcoming shoots, exhibitions, and other latest news.
       </SectionTitle>
 
-      <NewsList
+      <NewsListForTop
         newsItems={newsItems}
-        :client:load
       />
     </div>
     <SectionCtaLink slot="sectionCta" href="/news" label="All news" />
   </SectionLayout>
-</section>

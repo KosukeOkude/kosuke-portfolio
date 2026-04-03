@@ -1,4 +1,4 @@
-export type DateSortOrder = 'date-desc' | 'date-asc';
+import type { DateSortOrder } from '@/type/DateSortOrder';
 
 export function sortByDate<T>(
     items: T[],

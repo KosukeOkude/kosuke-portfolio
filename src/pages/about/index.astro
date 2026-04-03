@@ -9,6 +9,9 @@ import AboutSection from '@/components/About/AboutSection.astro';
 
 import { getAboutPageContent } from '@/sanity/about';
 import PageHero from '@/components/UI/PageHero.astro';
+import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
+import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
+import ContactSection from '@/components/Contact/ContactSection.astro';
 
 const about = await getAboutPageContent();
 
@@ -48,17 +51,16 @@ const data = {
   <BackgroundSection
     image={aboutPageConfig.backgroundImage}
     alt={aboutPageConfig.backgroundAlt}
-    showOverlay={true}
   >
+  <ScreenOverlay/>
+
   <PageHero
     label="ABOUT"
     title={data.name}
     tagline={data.tagline}
   />
   </BackgroundSection>
-
-  <div class="bg-black text-[var(--color-white)]">
-    <div class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24 lg:px-16 lg:py-32">
+    <ArchiveLayout>
         <Breadcrumbs items={[{ label: 'About' }]} />
 
         <AboutSection
@@ -86,28 +88,16 @@ const data = {
             </ul>
         </AboutSection>
 
-      <!-- Contact -->
-      <section id="contact" class="mt-24 pb-16 md:mt-32 md:pb-24">
-        <h2
-          class="font-accent text-lg font-bold tracking-wide md:text-xl lg:text-2xl"
+        <ContactSection
+        message={data.contactMessage}
+        email={data.contactEmail}
         >
-          Contact
-        </h2>
-        <p class="mt-6 max-w-2xl text-sm leading-relaxed text-white/80 md:text-base">
-          {data.contactMessage}
-        </p>
-        <p class="mt-3 text-sm font-medium text-white/90 md:text-base">
-          <a
-            href="mailto:hello@example.com"
-            class="underline underline-offset-4 hover:text-white"
-          >
-            {data.contactEmail}
-          </a>
-        </p>
         <div class="mt-8">
-          <SectionCtaLink href="/contact" label="Contact" />
+          <SectionCtaLink href="/contact" label="Contact" hash='contact-form'/>
         </div>
-      </section>
+        </ContactSection>
+
     </div>
   </div>
+  </ArchiveLayout>
 </BaseLayout>

@@ -1,6 +1,6 @@
-import { sanityClient, urlFor } from '@/sanity/client';
-import type { NewsArchive, NewsPage } from '@/data/news';
-import { normalizeSlug } from '@/utils/normalizeSlug';
+import { sanityClient, urlFor } from "@/sanity/client";
+import type { NewsArchive, NewsPage } from "@/data/news";
+import { normalizeSlug } from "@/utils/normalizeSlug";
 
 export const newsListQuery = `*[_type == "news"] | order(date desc) {
   _id,
@@ -21,6 +21,10 @@ export const newsBySlugQuery = `*[_type == "news" && slug.current == $slug][0] {
   summary,
   "thumbnailUrl": thumbnail.asset->,
   thumbnailAlt,
+  videos[] {
+  type,
+  youtubeUrl
+  },
   "slug": slug.current,
   tags,
   category,
@@ -58,8 +62,8 @@ export async function getAllNews(): Promise<NewsArchive[]> {
       urlFor(item.thumbnailUrl ?? undefined)
         ?.width(560)
         .height(640)
-        .auto('format')
-        .url() ?? '';
+        .auto("format")
+        .url() ?? "";
 
     const normalizedSlug = normalizeSlug(item.slug);
     const normalizeCategory = item.category.toLocaleLowerCase();
@@ -85,6 +89,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     summary: string;
     thumbnailUrl: { _ref?: string; _id?: string } | null;
     thumbnailAlt: string | null;
+    videos: { type: string; youtubeUrl: string }[] | null;
     slug: string;
     tags: string[] | null;
     category: string;
@@ -94,25 +99,42 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     venue: string | null; // 会場
     eventDate: string | null; // イベント日時
     relatedLinks: { label: string; url: string }[] | null; // 関連リンク（credits の代わり）
-    subImage: { asset: { _ref?: string; _id?: string } | null; alt: string | null }[] | null;
+    subImage:
+      | { asset: { _ref?: string; _id?: string } | null; alt: string | null }[]
+      | null;
   }>(newsBySlugQuery, { slug });
 
   //返却側
   const thumbnailUrl =
     urlFor(doc.thumbnailUrl ?? undefined)
       ?.width(1200)
-      .auto('format')
-      .url() ?? '';
+      .auto("format")
+      .url() ?? "";
 
   const normalizedSlug = normalizeSlug(doc.slug);
   const normalizeCategory = doc.category.toLocaleLowerCase();
 
   const subImage: { src: string; alt: string }[] = (doc.subImage ?? [])
-    .filter((s): s is { asset: { _ref?: string; _id?: string }; alt: string | null } => !!s.asset)
+    .filter(
+      (
+        s,
+      ): s is { asset: { _ref?: string; _id?: string }; alt: string | null } =>
+        !!s.asset,
+    )
     .map((s) => ({
-      src: urlFor(s.asset)?.width(1200).auto('format').url() ?? '',
-      alt: s.alt ?? '',
+      src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
+      alt: s.alt ?? "",
     }));
+
+  // 追加：YouTubeだけ拾って WorkVideo に寄せる
+  const videos = (doc.videos ?? [])
+    .filter(
+      (v): v is { type: "youtube"; youtubeUrl: string } =>
+        v.type === "youtube" &&
+        typeof v.youtubeUrl === "string" &&
+        v.youtubeUrl.length > 0,
+    )
+    .map((v) => ({ type: v.type, youtubeUrl: v.youtubeUrl }));
 
   return {
     id: doc._id,
@@ -120,7 +142,8 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     title: doc.title,
     summary: doc.summary,
     thumbnailUrl,
-    thumbnailAlt: doc.thumbnailAlt ?? '',
+    thumbnailAlt: doc.thumbnailAlt ?? "",
+    videos: videos.length > 0 ? videos : undefined,
     slug: normalizedSlug,
     tags: doc.tags ?? [],
     category: normalizeCategory,

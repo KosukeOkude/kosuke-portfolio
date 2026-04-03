@@ -1,24 +1,17 @@
 ---
-// レイアウトのラッパー + 背景 + オーバーレイ + 中身のスロット
 import {Picture} from 'astro:assets';
 
-interface Props {
-    image: ImageMetadata;
-    alt: string;
-    showOverlay: boolean;
-}
-const { image, alt, showOverlay = true} = Astro.props;
+//restは以下で使用中
+// ファイル	渡している属性
+// src/components/Hero/Hero.astro	data-hero-root
+// src/components/Works/home/WorksTopSection.astro	data-works-top-root
+const { image, alt, className, ...rest } = Astro.props;
 ---
 
 
 
 
-<section class="relative">
-    <!-- オーバーレイ -->
-     {showOverlay && (
-        <div class="absolute inset-0 -z-10 bg-black/50"></div>
-     )}
-    <!-- 背景画像 -->
+<section class={`${className ?? ''} relative`} {...rest}>
     <div class="absolute inset-0 -z-20">
         <Picture
         src={image}
@@ -31,7 +24,5 @@ const { image, alt, showOverlay = true} = Astro.props;
         class="w-full h-full object-cover"
       />
       </div>
-    </div>
-    <!-- 各セクションのメインコンテンツ -->
         <slot />
 </section>

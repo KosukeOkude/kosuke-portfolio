@@ -1,3 +1,4 @@
+import type { youtubeVideo } from "@/type/youtubeVideo";
 
 // src/data/news.ts
 export interface NewsArchive {
@@ -7,6 +8,7 @@ export interface NewsArchive {
   summary: string;
   thumbnailUrl: string;
   thumbnailAlt: string;
+  videos?: youtubeVideo[];
   slug: string;
   tags: string[];
   category: string;
@@ -22,4 +24,4 @@ export interface NewsPage extends NewsArchive {
   subImage?: { src: string; alt: string }[];
 }
 
-export { getAllNews, getNewsBySlug } from '@/sanity/news'
+export { getAllNews, getNewsBySlug } from "@/sanity/news";

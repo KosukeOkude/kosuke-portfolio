@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
 import type { WorkForClient } from "@/data/works";
 import WorksCard from "@/components/Works/WorksCard.tsx";
-import { WORKS_TOP_CARD_READY } from "@/gsap/animations/worksTop.animation.react";
 
 // 作品一覧とスクロール先頭リセット用のキー（カテゴリ・並び替え変更など）
 interface WorksCardSliderProps {
@@ -19,10 +18,6 @@ export const WorksCardSlider = ({ works, resetKey }: WorksCardSliderProps) => {
     scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
   }, [resetKey]);
 
-  // マウント時に一度だけ GSAP へ「カード DOM 準備完了」を通知する
-  useEffect(() => {
-    window.dispatchEvent(new CustomEvent(WORKS_TOP_CARD_READY));
-  }, []);
   return (
     <div
       id="works_slider"

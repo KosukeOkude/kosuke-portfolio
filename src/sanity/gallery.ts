@@ -1,6 +1,6 @@
-import type { GalleryCategory, GalleryLinearSliderItem } from '@/data/gallery';
-import { sanityClient, urlFor } from '@/sanity/client';
-import { normalizeSlug } from '@/utils/normalizeSlug';
+import type { GalleryCategory, GalleryLinearSliderItem } from "@/data/gallery";
+import { sanityClient, urlFor } from "@/sanity/client";
+import { normalizeSlug } from "@/utils/normalizeSlug";
 
 export const galleryQuery = `*[_type == "gallery"] | order(title asc) {
     "slug": slug.current,
@@ -42,9 +42,9 @@ async function fetchGalleryData() {
     imageUrl:
       urlFor(g.coverImage ?? undefined)
         ?.width(800)
-        .auto('format')
-        .url() ?? '',
-    imageAlt: g.imageAlt ?? '',
+        .auto("format")
+        .url() ?? "",
+    imageAlt: g.imageAlt ?? "",
   }));
   // 3. GalleryLinearSliderItem に変換（フラット化）
   const sliderItems: GalleryLinearSliderItem[] = [];
@@ -57,12 +57,17 @@ async function fetchGalleryData() {
           categorySlug: normalizeSlug(gallery.slug),
           imageUrl:
             urlFor(img.asset ?? undefined)
-              ?.width(2400)
-              .auto('format')
-              .url() ?? '',
-          imageAlt: img.alt ?? '',
-          size: (img.size ?? 'md') as 'sm' | 'md' | 'xl' | '2xl' | '3xl',
-          createdAt: img.createdAt ?? '',
+              ?.width(800)
+              .auto("format")
+              .url() ?? "",
+          lightboxImageUrl:
+            urlFor(img.asset ?? undefined)
+              ?.width(2000)
+              .auto("format")
+              .url() ?? "",
+          imageAlt: img.alt ?? "",
+          size: (img.size ?? "md") as "sm" | "md" | "xl" | "2xl" | "3xl",
+          createdAt: img.createdAt ?? "",
         });
       }
     }
@@ -75,12 +80,20 @@ export async function getGalleryCategories(): Promise<GalleryCategory[]> {
   return categories;
 }
 
-export async function getLinearSliderItems(): Promise<GalleryLinearSliderItem[]> {
+export async function getLinearSliderItems(): Promise<
+  GalleryLinearSliderItem[]
+> {
   const { sliderItems } = await fetchGalleryData();
   return sliderItems;
 }
 
-export async function getGalleryCategoryBySlug(slug: string): Promise<GalleryCategory | null> {
+export async function getGalleryCategoryBySlug(
+  slug: string,
+): Promise<GalleryCategory | null> {
   const { categories } = await fetchGalleryData();
-  return categories.find((c) => c.slug.trim().toLowerCase() === slug.trim().toLowerCase()) ?? null;
+  return (
+    categories.find(
+      (c) => c.slug.trim().toLowerCase() === slug.trim().toLowerCase(),
+    ) ?? null
+  );
 }

@@ -1,17 +1,21 @@
 import type { NewsArchive } from "@/data/news";
 
 interface NewsListProps {
-    newsItems: NewsArchive[]
+  newsItems: NewsArchive[];
 }
 
-export default function NewsList({ newsItems }: NewsListProps){
+export function NewsList({ newsItems }: NewsListProps) {
+
+
   return (
-    <div className="grid grid-cols-1 gap-4 md:gap-6">
+    <div
+      className="grid grid-cols-1 gap-4 md:gap-6"
+    >
       {newsItems.map((item) => (
         <a
-            key={item.id}
-            href={`/news/${item.slug}`}
-            className="
+          key={item.id}
+          href={`/news/${item.slug}`}
+          className="
             group
             flex
             flex-row
@@ -27,7 +31,6 @@ export default function NewsList({ newsItems }: NewsListProps){
             hover:border-[#d4d4d4]
           "
         >
-
           <div className="flex-shrink-0 w-[140px] sm:w-[180px] md:w-[200px] aspect-square overflow-hidden bg-[#f5f5f5]">
             <img
               src={item.thumbnailUrl}

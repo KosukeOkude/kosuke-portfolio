@@ -1,0 +1,24 @@
+---
+import type { WorkForClient } from '@/data/works';
+import WorksCardForTop from '@/components/Works/home/WorksCardForTop.astro';
+
+interface Props {
+  works: WorkForClient[];
+}
+
+const {works} = Astro.props;
+
+
+
+---
+
+<div id="works_slider" data-card-slider>
+
+  <div class="works-card-slider-scroll min-w-0 flex-1 overflow-x-auto">
+    <div class="flex gap-5 md:gap-10 ">
+       {works.map((work) => (
+        <WorksCardForTop work={work} />
+       ))}
+    </div>
+  </div>
+</div>
