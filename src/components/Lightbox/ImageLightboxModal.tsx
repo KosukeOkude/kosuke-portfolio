@@ -96,7 +96,7 @@ export default function ImageLightBoxModal({
   // これを別変数に切り出すと、Portal 前後の責務（UI定義 / 転送）を分けて読める。
   const modalNode = (
     <div
-      className="fixed inset-0 z-50"
+      className="fixed inset-0 z-[9999999]"
       role="dialog"
       aria-modal="true"
       aria-label="Image lightbox"

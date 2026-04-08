@@ -6,7 +6,7 @@ import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro";
 
 <header
   id="header"
-  class="header fixed left-0 top-0 z-50 w-full"
+  class="header fixed left-0 top-0 z-999999 w-full mix-blend-difference"
 >
   <div
     class="mx-auto flex w-full max-w-[1680px] flex-row items-center justify-between px-5 py-4 xl:px-20"
@@ -16,7 +16,7 @@ import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro";
         href="/"
         class="header__logo font-accent text-xl font-bold leading-tight text-white"
       >
-        OKUDE KOSUKE
+        KOSUKE OKUDE
       </a>
     </h1>
 
@@ -27,7 +27,3 @@ import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro";
   </div>
 </header>
 
-<script>
-  import { initHeaderScrollHide } from "@/components/Layout/header.client";
-  initHeaderScrollHide();
-</script>

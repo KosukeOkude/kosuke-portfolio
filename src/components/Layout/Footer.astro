@@ -1,8 +1,9 @@
 ---
 import ArrowLeftIcon from "@/components/Icons/ArrowLeftIcon";
-import { isHomePath } from "@/utils/homePath";
 //|| "/" … もし正規化の結果が空文字 "" になったら（通常はホームで末尾 / だけのときなど）、"/" として扱う。
 const pathname = Astro.url.pathname.replace(/\/$/,'') || '/';
+
+const isHome = pathname === '/';
 
 const isSlugDetailPage =
   /^\/works\/[^/]+$/.test(pathname) ||
@@ -13,7 +14,9 @@ const showBackToTop = !isSlugDetailPage;
 
 ---
 
-<footer class="-mt-20 relative z-30 bg-transparent text-white pointer-events-none">
+<footer class:list={["-mt-20 relative z-[9999] bg-transparent pointer-events-none",
+  isHome ? "text-black" : "text-white"
+]}>
   <div
   class:list={[
     "mx-auto flex w-full max-w-[1680px] flex-row items-center px-5 py-4 xl:px-20 ",
@@ -28,17 +31,17 @@ const showBackToTop = !isSlugDetailPage;
       showBackToTop && (
       <a
       href="#top"
-      class="pointer-events-auto hidden text-sm text-white hover:text-white/80 md:inline"
+      class:list={["pointer-events-auto hidden text-sm md:inline", isHome ? 'text-black hover:text-black/80' : 'text-white hover:text-white/80']}
     >
       Back to top
     </a>
 
     <a
       href="#top"
-      class="pointer-events-auto flex h-10 w-10 items-center justify-center text-white hover:text-white/80 md:hidden"
+      class="pointer-events-auto flex h-10 w-10 items-center justify-center md:hidden"
       aria-label="ページの先頭へ戻る"
     >
-      <ArrowLeftIcon className="rotate-90 w-6 h-6 cursor-pointer"/>
+      <ArrowLeftIcon className={`rotate-90 w-6 h-6 cursor-pointer ${isHome ? 'text-black hover:text-black/80' : 'text-white hover:text-white/80'}`}/>
     </a>
       )
     }

@@ -17,7 +17,7 @@ const workForClient = await getAllWorks();
 
 
 <BaseLayout>
-  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt}>
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} works-archive-root>
     <ScreenOverlay/>
     <ArchiveLayout>
 
@@ -29,7 +29,7 @@ const workForClient = await getAllWorks();
       >
       A quiet record of client work and personal projects.
       </ArchivePageHeader>
-      <div data-reveal id="archive-main">
+      <div data-reveal-once id="archive-main">
         <WorksArchiveSection works={workForClient} client:load/>
       </div>
     </ArchiveLayout>

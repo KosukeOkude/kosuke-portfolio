@@ -1,5 +1,5 @@
-import worksBackgroundImage from "@/assets/images/works-background-img.jpg";
-import type { youtubeVideo } from "@/type/youtubeVideo";
+import worksBackgroundImage from "@/assets/images/works-image-3.jpg";
+import type { YoutubeVideo } from "@/type/youtubeVideo";
 
 export const worksPageConfig = {
   backgroundImage: worksBackgroundImage,
@@ -14,7 +14,7 @@ export interface Work {
   tags: string[];
   thumbnail: string;
   thumbnailAlt: string;
-  videos?: youtubeVideo[];
+  videos?: YoutubeVideo[];
   description: string;
   category: string;
   concept?: string;

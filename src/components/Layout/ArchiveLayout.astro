@@ -3,10 +3,10 @@ interface Props {
     extraClass?: string;
 }
 
-const { extraClass } = Astro.props as Props;
+const { extraClass, ...rest } = Astro.props as Props;
 ---
 
-<div class=`relative min-h-screen text-[var(--color-white)] ${extraClass}`>
+<div class=`overflow-hidden relative min-h-screen text-[var(--color-white)] ${extraClass}` {...rest}>
     <main class="max-w-[1680px] my-auto mx-auto px-5 xl:px-20 py-24 space-y-10">
         <slot/>
     </main>

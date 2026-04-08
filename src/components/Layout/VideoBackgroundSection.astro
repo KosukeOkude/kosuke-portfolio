@@ -37,7 +37,7 @@ const fallbackSrc = videoSrc ?? '';
   class={["relative min-h-screen", className].filter(Boolean).join(" ")}
   {...rest}
 >
-  <div class="absolute inset-0 -z-20">
+  <div class="absolute inset-0 -z-20" data-hero-bg-parallax>
     {/* 背景動画。object-cover で領域に合わせる */}
     <video
       data-video-bg

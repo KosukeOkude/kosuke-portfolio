@@ -2,7 +2,6 @@ import ArrowLeftIcon from "@/components/Icons/ArrowLeftIcon";
 import BackButtonIcon from "@/components/Icons/BackButtonIcon";
 import type { MouseEvent } from "react";
 
-
 type LightboxNavControlsProps = {
   onPrev: () => void;
   onNext: () => void;
@@ -15,8 +14,6 @@ function withStopPropagation(handler: () => void) {
     handler();
   };
 }
-
-
 
 export default function LightboxNavControls({
   onPrev,
@@ -33,7 +30,9 @@ export default function LightboxNavControls({
         type="button"
         onClick={withStopPropagation(onPrev)}
         className={`cursor-pointer fixed top-1/2 z-20 h-[3.25rem] min-w-[3.25rem] -translate-y-1/2 px-1 text-[1.65rem] font-extralight leading-none tracking-tight ${LIGHTBOX_CONTROL_CLASS}`}
-        style={{ left: "max(1rem, env(safe-area-inset-left))" }}
+        style={{
+          left: "max(1rem, env(safe-area-inset-left), calc((100vw - 1680px) / 2 + 1rem))",
+        }}
         aria-label="Previous image"
       >
         <ArrowLeftIcon className="pointer-events-none block h-6 w-6 shrink-0" />
@@ -43,7 +42,10 @@ export default function LightboxNavControls({
         type="button"
         onClick={withStopPropagation(onNext)}
         className={`cursor-pointer fixed top-1/2 z-20 h-[3.25rem] min-w-[3.25rem] -translate-y-1/2 px-1 text-[1.65rem] font-extralight leading-none tracking-tight ${LIGHTBOX_CONTROL_CLASS}`}
-        style={{ right: "max(1rem, env(safe-area-inset-right))" }}
+        style={{
+          right:
+            "max(1rem, env(safe-area-inset-right), calc((100vw - 1680px) / 2 + 1rem))",
+        }}
         aria-label="Next image"
       >
         <ArrowLeftIcon className="pointer-events-none block h-6 w-6 shrink-0 scale-x-[-1]" />
@@ -55,7 +57,8 @@ export default function LightboxNavControls({
         className={`cursor-pointer fixed z-20 h-[3.25rem] min-w-[3.25rem] text-[1.35rem] font-light leading-none ${LIGHTBOX_CONTROL_CLASS}`}
         style={{
           top: "max(1rem, env(safe-area-inset-top))",
-          right: "max(1rem, env(safe-area-inset-right))",
+          right:
+            "max(1rem, env(safe-area-inset-right), calc((100vw - 1680px) / 2 + 1rem))",
         }}
         aria-label="Close"
       >

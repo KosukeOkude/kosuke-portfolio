@@ -3,46 +3,30 @@ import { Picture } from 'astro:assets';
 import heroBackgroundPoster from '@/assets/images/hero-background-img.jpg';
 import heroProfileImage from '@/assets/images/hero-profile-img.jpg';
 import heroBackgroundVideoWebmLight from '@/assets/movies/hero-background-21-31-light.webm';
-import heroBackgroundVideoWebm from '@/assets/movies/hero-background-21-31.webm';
-import heroBackgroundVideoMp4 from '@/assets/movies/hero-background-21-31.mp4';
+import heroBackgroundVideoWebm from '@/assets/movies/hhpp-1080.webm';
+import heroBackgroundVideoMp4 from '@/assets/movies/hhpp-1080.mp4';
 // import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
+import ScrollLineVertical from '@/components/UI/ScrollLineVertical.astro';
 ---
 
 <VideoBackgroundSection
   videoPoster={heroBackgroundPoster.src}
-  videoSrcWebmLight={heroBackgroundVideoWebmLight}
+  videoSrcWebmLight={heroBackgroundVideoWebm}
   videoSrcWebm={heroBackgroundVideoWebm}
   videoSrcMp4={heroBackgroundVideoMp4}
   alt="ヒーロー背景の説明文"
   data-hero-root
 >
   <div class="relative z-0 min-h-screen">
-    <ScreenOverlay pinOverlay/>
+    <ScreenOverlay data-hero-overlay/>
     <div
       class="pointer-events-none absolute left-1/2 bottom-6 z-30  max-w-xs -translate-x-1/2 px-4 transform-gpu will-change-transform"
       aria-hidden="true"
-      data-hero-scroll-hint
     >
-      <div
-        class="group flex items-center gap-2 rounded-xl border border-white/[0.14] bg-gradient-to-br from-white/[0.09] via-white/[0.04] to-transparent px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-md motion-reduce:transition-none"
-        role="note"
-      >
-        <!-- 縦トラック（上下シマー用） -->
-        <span
-          class="self-center w-[1px] h-[2.1rem] overflow-hidden rounded-full bg-gradient-to-b from-white/90 via-white/45 to-white/5 opacity-95 group-hover:via-white/55 motion-reduce:transition-none"
-        >
-          <span class="works-hint-line-shimmer-vertical" />
-        </span>
-        <!-- テキスト（小さめ） -->
-        <p
-          class="min-w-0 self-center font-body text-[0.72rem] font-medium leading-relaxed tracking-[0.04em] text-white/[0.92] antialiased [text-shadow:0_1px_20px_rgba(0,0,0,0.5)] whitespace-nowrap"
-        >
-          scroll
-        </p>
-      </div>
-    </div>
+  </div>
+
     <div
       class="hero__content layout-offset-top layout-padding-x relative z-20 flex min-h-screen flex-col items-center justify-center"
     >
@@ -56,21 +40,23 @@ import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.a
           layout="constrained"
           fit="cover"
           position="center"
-          class="mb-10 h-[320px] w-[280px] rounded-xl object-cover md:mb-[60px] md:h-[420px] md:w-[380px] lg:h-[520px] lg:w-[480px]"
+          class="mb-10 h-[200px] w-[200px] rounded-xl object-cover md:mb-[60px] md:h-[300px] md:w-[300px]"
         />
       </div>
       <h2
         data-hero-name
-        class="hero__name font-accent mb-4 text-4xl font-bold text-[var(--color-white)] md:mb-6 md:text-5xl lg:text-7xl"
+        class="hero__name font-accent mb-4 text-2xl font-bold text-[var(--color-white)] md:mb-6 md:text-5xl lg:text-5xl"
       >
         KOSUKE OKUDE
       </h2>
       <p
         data-hero-title
-        class="hero__title font-accent text-lg font-bold text-[var(--color-white)] md:text-2xl lg:text-4xl"
+        class="hero__title font-accent text-sm font-bold text-[var(--color-white)] md:text-2xl lg:text-3xl"
       >
         PHOTOGRAPHER
       </p>
     </div>
   </div>
+
+  <ScrollLineVertical/>
 </VideoBackgroundSection>

@@ -19,9 +19,9 @@ const achievements = about?.achievementsList ?? [];
 
 ---
 <BackgroundSection image={ aboutPageConfig.backgroundImage } alt={aboutPageConfig.backgroundAlt}>
-    <ScreenOverlay/>
+    <ScreenOverlay data-reveal-bottom/>
         <SectionLayout>
-            <div slot="sectionContent" data-reveal-once
+            <div slot="sectionContent" data-reveal-bottom
                 class="text-[#1a1a1a] "
             >
                 <div class="mx-auto max-w-[1120px]">
@@ -32,8 +32,8 @@ const achievements = about?.achievementsList ?? [];
                     <Picture
                         src={profileImage}
                         alt="カメラを構える写真家のポートレート"
-                        width={520}
-                        height={520}
+                        width={1200}
+                        height={1200}
                         formats={['avif', 'webp']}
                         class="aspect-square w-full rounded object-cover shadow-[0_18px_40px_rgba(0,0,0,0.12)]"
                     />
@@ -99,7 +99,7 @@ const achievements = about?.achievementsList ?? [];
                             >{about?.contactEmail ?? 'hello@example.com'}</a
                         >
                         </p>
-                        <div class="mt-7">
+                        <div class="mt-7 flex justify-center md:block">
                         <a
                             href="/contact#contact-form"
                             class="inline-flex min-w-[200px] items-center justify-center bg-[#111] px-7 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-black"
@@ -117,6 +117,7 @@ const achievements = about?.achievementsList ?? [];
                 slot="sectionCta"
                 href="/about"
                 label="About me"
+                data-reveal
             />
 
         </SectionLayout>

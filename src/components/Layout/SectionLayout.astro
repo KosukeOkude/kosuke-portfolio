@@ -3,7 +3,7 @@ const {addClass, ...rest} = Astro.props;
 ---
 
 
-<section {...rest} class=` relative z-20 flex h-full w-full flex-col px-5 pt-[60px] min-[390px]:pt-16 xl:px-20 xl:pt-[80px] ${addClass ?? 'pb-[40px]'}`>
+<section {...rest} class=` relative z-20 flex h-full w-full flex-col pb-10 px-5 pt-[60px] min-[390px]:pt-16 xl:px-20 xl:pt-[80px] ${addClass ?? ''}`>
     <div class="flex-1 flex flex-col max-w-[1680px] mx-auto w-full">
         <slot name="sectionContent" />
       </div>

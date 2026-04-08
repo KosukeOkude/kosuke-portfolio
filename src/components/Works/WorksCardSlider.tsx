@@ -1,4 +1,5 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useLayoutEffect } from "react";
+import { gsap, ScrollTrigger } from "@/gsap/core/setup";
 import type { WorkForClient } from "@/data/works";
 import WorksCard from "@/components/Works/WorksCard.tsx";
 
@@ -16,6 +17,39 @@ export const WorksCardSlider = ({ works, resetKey }: WorksCardSliderProps) => {
   // resetKey が変わったらスライダーを左端へ戻す
   useEffect(() => {
     scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+  }, [resetKey]);
+  const stRef = useRef<ScrollTrigger>(null);
+
+  useLayoutEffect(() => {
+    const root = document.querySelector<HTMLElement>("[works-archive-root]");
+    const cardSlider = document.querySelector<HTMLElement>("[data-card-slider]");
+    const scroller = scrollerRef.current;
+
+    if (!root || !scroller) return;
+
+    stRef.current?.kill();
+    scroller.scrollLeft = 0;
+
+    const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth;
+    if (maxScrollLeft <= 0) return;
+
+    const tl = gsap.timeline();
+
+    tl.to(scroller, { scrollLeft: maxScrollLeft, ease: "none", duration: 1 });
+
+    stRef.current = ScrollTrigger.create({
+      trigger: cardSlider,
+      start: "bottom bottom",
+      end: `+=${maxScrollLeft}`,
+      pin:  root,
+      scrub: true,
+      animation: tl,
+      invalidateOnRefresh: true,
+    });
+
+    return () => {
+      stRef.current?.kill();
+    };
   }, [resetKey]);
 
   return (

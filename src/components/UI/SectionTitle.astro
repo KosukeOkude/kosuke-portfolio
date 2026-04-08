@@ -5,14 +5,13 @@ interface SectionTitleProps {
   revealOnce?: boolean;
 }
 
-const { title, revealOnce = false } = Astro.props as SectionTitleProps;
+const { title, revealOnce = false, ...rest } = Astro.props as SectionTitleProps;
 ---
 
 
 <div
   class="w-fit"
-  data-reveal-enter={revealOnce ? undefined : true}
-  data-reveal-once={revealOnce ? true : undefined}
+  {...rest}
 >
     <h2
     class="

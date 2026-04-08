@@ -9,7 +9,7 @@ export function playRevealOnce(target: HTMLElement) {
     ease: "power2.out",
     scrollTrigger: {
       trigger: target,
-      start: "top top+=200px",
+      start: "top bottom",
       toggleActions: "play none none none",
       invalidateOnRefresh: true,
     },

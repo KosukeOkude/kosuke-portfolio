@@ -79,14 +79,14 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
         value={sortOrder}
         onChange={setSortOrder}
       />
-      <WorksArchiveHint orientation="左右" />
+      <WorksArchiveHint orientation="上下" />
       <section
         aria-label="Works archive"
         className="space-y-4"
       >
         <div
           key={buildArchiveListKey(selectedCategory, sortOrder)}
-          data-reveal
+          data-reveal-once
         >
           <WorksCardSlider
             works={filteredWorks}

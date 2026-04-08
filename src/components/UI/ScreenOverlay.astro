@@ -1,5 +1,5 @@
 ---
-const { class: className, pinOverlay = false } = Astro.props;
+const { class: className, pinOverlay = false, ...rest } = Astro.props;
 ---
 
 
@@ -7,5 +7,5 @@ const { class: className, pinOverlay = false } = Astro.props;
     "pointe-events-none absolute inset-0 -z-10 bg-black/50",
     className
 ]}
-  data-section-overlay={pinOverlay ? true : undefined}
-  data-reveal-once={pinOverlay ? undefined : true} ></div>
+
+  {...rest}></div>

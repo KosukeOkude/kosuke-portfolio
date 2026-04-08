@@ -37,4 +37,10 @@ export function runGlobalRevealAnimation(
     options,
     started,
   });
+
+  applyRevealBySelector({
+    selector: "[data-reveal-bottom]",
+    options,
+    started,
+  });
 }

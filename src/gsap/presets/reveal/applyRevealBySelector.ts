@@ -6,6 +6,7 @@ import { skipInsideAstroIslands } from "@/gsap/utils/skipInsideAstroIslands";
 import type { RevealSelector } from "@/type/RevealSelector";
 import type { RunGlobalRevealOptions } from "@/type/RunGlobalRevealOptions";
 import { playRevealSingleEnterOnly } from "@/gsap/presets/reveal/playRevealSingleEnterOnly";
+import { playRevealBottom } from "@/gsap/presets/reveal/revealBottom";
 
 type ApplyRevealOptions = {
   selector: RevealSelector;
@@ -43,6 +44,8 @@ export function applyRevealBySelector({
       playRevealOnce(target);
     } else if (selector === "[data-reveal-enter]") {
       playRevealSingleEnterOnly(target);
+    } else if (selector === "[data-reveal-bottom]") {
+      playRevealBottom(target);
     }
   });
 }

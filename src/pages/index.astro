@@ -13,6 +13,10 @@ import AboutTopSection from "@/components/About/AboutTopSection.astro";
 
 import NewsTopSection from "@/components/News/NewsTopSection.astro";
 import { getAllNews } from '@/data/news';
+import Entrance from "@/components/Entrance/Entrance.astro";
+import ContactLayout from "@/components/Layout/ContactLayout.astro";
+import { ContactForm } from "@/components/Contact/ContactForm";
+import ArchiveLayout from "@/components/Layout/ArchiveLayout.astro";
 
 
 
@@ -41,9 +45,15 @@ if (displayNewsForTop.length === 0){
 ---
 
 <BaseLayout>
+	<Entrance/>
 	<Hero/>
 	<WorksTopSection works={ displayWorksForTop }/>
 	<GalleryTopSection galleryCategories={ displayGalleryCategoriesForTop }/>
 	<AboutTopSection about={displayAboutForTop}/>
 	<NewsTopSection newsItems={displayNewsForTop}/>
+	<ArchiveLayout extraClass="bg-white">
+		<ContactLayout>
+			<ContactForm client:load/>
+		</ContactLayout>
+	</ArchiveLayout>
 </BaseLayout>
