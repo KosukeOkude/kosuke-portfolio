@@ -1,11 +1,11 @@
 ---
-type ScrollLineVerticalForTopOptions = {
+type ScrollLineOnlyVerticalOptions = {
     isHiddenText?: boolean;
 }
-const { isHiddenText = false } = Astro.props as ScrollLineVerticalForTopOptions
+const { isHiddenText = false } = Astro.props as ScrollLineOnlyVerticalOptions
 ---
 <!-- スクロール誘導ライン -->
 <div class=`scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center gap-2`>
     <span class="font-body text-[0.6rem] tracking-[0.3em] uppercase text-white/40">{ isHiddenText ? '' : 'Scroll'}</span>
-    <div class="scroll-line scroll-line-horizontal"></div>
+    <div class="scroll-line"></div>
 </div>

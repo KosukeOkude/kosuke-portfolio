@@ -17,6 +17,8 @@ export function scrollPinFromPin(
   endTriggerEl: HTMLElement | null,
   animationEnd: () => string | number,
 ): void {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
   // null/undefinedを除外して有効なHTMLElementだけ抽出
   const elements = wrapperEls.filter(
     (el): el is HTMLElement => el !== null && el !== undefined,

@@ -9,6 +9,12 @@ export function runWorksTopAnimation(): void {
   const root = document.querySelector<HTMLElement>("[data-works-top-root]");
   if (!root) return;
   const cardSlider = root.querySelector<HTMLElement>("[data-card-slider]");
+
+  // モバイル（タッチデバイス）では横スクロールピンを使わない。スライダーを即表示して終了。
+  if (window.matchMedia("(pointer: coarse)").matches) {
+    if (cardSlider) gsap.set(cardSlider, { opacity: 1 });
+    return;
+  }
   const bgWrapper = root.querySelector<HTMLElement>("[data-background-wrapper]");
   const overlay = root.querySelector<HTMLElement>("[data-animation-overlay]");
   const next = root.nextElementSibling as HTMLElement;

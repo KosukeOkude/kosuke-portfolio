@@ -61,7 +61,7 @@ export default function ImageLightBoxModal({
   useFocusElementWhenLightboxCloses(isOpen, returnTargetId);
 
   // キーボード左右・スワイプ・ESC を束ねる入力ハンドラ群。
-  const { goPrev, goNext, onTouchStart, onTouchEnd } = useLightboxKeyboardAndSwipe({
+  const { goPrev, goNext } = useLightboxKeyboardAndSwipe({
     isOpen,
     itemCount,
     setActiveIndex,
@@ -115,8 +115,6 @@ export default function ImageLightBoxModal({
         <LightboxImageStage
           src={activeItem.src}
           alt={activeItem.alt}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
         />
       </div>
 

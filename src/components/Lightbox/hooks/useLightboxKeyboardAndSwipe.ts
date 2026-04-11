@@ -3,6 +3,7 @@ import { clampIndex } from "@/components/Lightbox/utils/clampIndex";
 import { useLightboxWindowKeyboard } from "@/components/Lightbox/hooks/useLightboxWindowKeyboard";
 import { useLightboxHorizontalSwipe } from "@/components/Lightbox/hooks/useLightboxHorizontalSwipe";
 import { useLightboxWheelNavigation } from "@/components/Lightbox/hooks/useLightboxWheelNavigation";
+
 type UseLightboxKeyboardAndSwipeOptions = {
   isOpen: boolean;
   itemCount: number;
@@ -28,23 +29,14 @@ export function useLightboxKeyboardAndSwipe({
     setActiveIndex((next) => clampIndex(next + 1, itemCount));
   }, [itemCount, setActiveIndex]);
 
-  //* 開いているときだけ window に keydown を付ける（副作用のみ）。
+  // 開いているときだけ window に keydown を付ける（副作用のみ）。
   useLightboxWindowKeyboard({ isOpen, onRequestClose, goPrev, goNext });
 
-  //横スワイプで goPrev / goNext を呼ぶ。戻り値はタッチ用ハンドラのみ。
-  const { onTouchStart, onTouchEnd } = useLightboxHorizontalSwipe({
-    itemCount,
-    swipeThresholdPx,
-    goPrev,
-    goNext,
-  });
+  // モバイル: 横スワイプで goPrev / goNext（window に直接登録、副作用のみ）。
+  useLightboxHorizontalSwipe({ isOpen, itemCount, swipeThresholdPx, goPrev, goNext });
 
+  // PC: ホイールで上下ナビゲーション（副作用のみ）。
   useLightboxWheelNavigation({ isOpen, goPrev, goNext });
 
-  return {
-    goPrev,
-    goNext,
-    onTouchStart,
-    onTouchEnd,
-  };
+  return { goPrev, goNext };
 }

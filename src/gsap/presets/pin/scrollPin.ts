@@ -18,6 +18,8 @@ export function scrollPinTo(
   pinEl: HTMLElement,
   endTriggerEl: HTMLElement | null,
 ): void {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
   gsap.to(pinEl, {
     y: "+=100vh",
     ease: "none",
@@ -36,6 +38,8 @@ export function scrollPinFromTo(
   pinEl: HTMLElement,
   endTriggerEl: HTMLElement | null,
 ): void {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
   gsap.fromTo(
     pinEl,
     { y: 0 },
@@ -55,6 +59,8 @@ export function scrollPinFromTo(
 }
 
 export function initScrollPin(): void {
+  if (window.matchMedia("(pointer: coarse)").matches) return;
+
   const root = document.querySelector<HTMLElement>("[data-scroll-pin]");
   if (!root) return;
   const next = root.nextElementSibling as HTMLElement | null;

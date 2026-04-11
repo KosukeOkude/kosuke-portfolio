@@ -272,12 +272,6 @@ h1,
   }
 }
 
-.scroll-line-horizontal {
-  width: 50px;
-  height: 1px;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.9), transparent);
-  animation: scrollLineHorizontal 2s ease-in-out infinite;
-}
 
 @keyframes scrollLineHorizontal {
   0% {
@@ -320,4 +314,24 @@ body.lightbox-open [data-screen-overlay] {
 
 .min-h-svh {
   min-height: 100svh;
+}
+
+/* モバイル: ツールバー出没による fixed 背景の微動を抑える。
+   bottom を切り離して height を lvh（toolbar 非表示時の最大高さ）で固定する。
+   fixedBackground=true の時だけ付く .fixed-bg-mobile クラスにのみ適用。 */
+@media (pointer: coarse) {
+  .fixed-bg-mobile {
+    bottom: auto;
+    height: 100lvh;
+  }
+}
+
+@media (pointer: coarse) {
+
+  .scroll-line-horizontal {
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.9), transparent);
+    animation: scrollLineHorizontal 2s ease-in-out infinite;
+  }
 }

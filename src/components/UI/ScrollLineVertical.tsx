@@ -10,7 +10,7 @@ export default function ScrollLineVertical({ isHiddenText = false }: ScrollLineV
           Scroll
         </span>
       )}
-      <div className="scroll-line"></div>
+      <div className="scroll-line scroll-line-horizontal"></div>
     </div>
   );
 }

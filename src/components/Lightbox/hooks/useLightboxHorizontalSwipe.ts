@@ -1,59 +1,92 @@
-import { useCallback, useRef, type TouchEvent } from 'react';
+import { useEffect, useRef } from "react";
 
-export type useLightboxHorizontalSwipeOptions = {
+type UseLightboxHorizontalSwipeOptions = {
+  isOpen: boolean;
   itemCount: number;
   swipeThresholdPx?: number;
   goPrev: () => void;
   goNext: () => void;
 };
 
+/**
+ * Lightbox 表示中に横スワイプで画像を切り替えるフック（モバイル向け）。
+ *
+ * ## なぜ window.addEventListener を使うか
+ * 以前は React の合成イベント（onTouchStart/onTouchEnd props）を
+ * pointer-events-none の div に渡していたが、
+ * CSS の pointer-events:none はヒットテストを無効にするためタッチが届かなかった。
+ * window に直接登録することでこの問題を回避している。
+ *
+ * ## なぜ touchmove で preventDefault するか
+ * 横スワイプ中にブラウザが「ページの横スクロール」と判定してイベントを横取りする。
+ * touchmove の時点で横方向が支配的と分かったら e.preventDefault() を呼ぶことで防ぐ。
+ * passive:false の指定が必要。
+ */
+export function useLightboxHorizontalSwipe({
+  isOpen,
+  itemCount,
+  swipeThresholdPx = 40,
+  goPrev,
+  goNext,
+}: UseLightboxHorizontalSwipeOptions) {
+  const goPrevRef = useRef(goPrev);
+  const goNextRef = useRef(goNext);
 
-//横スワイプで goPrev / goNext を呼ぶ。戻り値はタッチ用ハンドラのみ。
+  useEffect(() => { goPrevRef.current = goPrev; }, [goPrev]);
+  useEffect(() => { goNextRef.current = goNext; }, [goNext]);
 
-export function useLightboxHorizontalSwipe({ goPrev, goNext, itemCount, swipeThresholdPx = 40 }: useLightboxHorizontalSwipeOptions) {
-  const touchStartXRef = useRef<number | null>(null);
-  const touchStartYRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!isOpen) return;
 
-  const onTouchStart = useCallback((e: TouchEvent) => {
-    const t = e.touches[0];
-    if (!t) return;
-    touchStartXRef.current = t.clientX;
-    touchStartYRef.current = t.clientY;
-  }, []);
+    let startX: number | null = null;
+    let startY: number | null = null;
 
-  const onTouchEnd = useCallback(
-    (e: TouchEvent) => {
-      if (itemCount <= 0) return;
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      startX = t.clientX;
+      startY = t.clientY;
+    };
 
-      const startX = touchStartXRef.current;
-      const startY = touchStartYRef.current;
+    const onTouchMove = (e: TouchEvent) => {
       if (startX === null || startY === null) return;
+      const t = e.touches[0];
+      if (!t) return;
+      // 横方向が支配的な場合のみブラウザスクロールを止める
+      if (Math.abs(t.clientX - startX) > Math.abs(t.clientY - startY)) {
+        e.preventDefault();
+      }
+    };
 
+    const onTouchEnd = (e: TouchEvent) => {
+      if (itemCount <= 0 || startX === null || startY === null) return;
       const t = e.changedTouches[0];
       if (!t) return;
 
       const deltaX = t.clientX - startX;
       const deltaY = t.clientY - startY;
+      startX = null;
+      startY = null;
 
-      const isMostlyHorizontal = Math.abs(deltaX) >= Math.abs(deltaY);
-      const isEnoughSwipe = Math.abs(deltaX) >= swipeThresholdPx;
-
-      touchStartXRef.current = null;
-      touchStartYRef.current = null;
-
-      if (!isMostlyHorizontal || !isEnoughSwipe) return;
+      // 縦スワイプ、または閾値未満は無視
+      if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+      if (Math.abs(deltaX) < swipeThresholdPx) return;
 
       if (deltaX > 0) {
-        goPrev();
-      } else if (deltaX < 0) {
-        goNext();
+        goPrevRef.current(); // 右スワイプ → 前の画像
+      } else {
+        goNextRef.current(); // 左スワイプ → 次の画像
       }
-    },
-    [goNext, goPrev, itemCount, swipeThresholdPx],
-  );
+    };
 
-  return {
-    onTouchStart,
-    onTouchEnd,
-  };
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [isOpen, itemCount, swipeThresholdPx]);
 }

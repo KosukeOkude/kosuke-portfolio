@@ -18,7 +18,7 @@ const mobileWebp = mobileImage ? (await getImage({ src: mobileImage, format: 'we
 ---
 
 <section class={`${className ?? ''} relative`} {...rest}>
-  <div class={`${bgPositionClass} inset-0 -z-20 ${fixedBackground ? 'min-[3000px]:max-w-[2400px] min-[3000px]:left-1/2 min-[3000px]:-translate-x-1/2 min-[3000px]:top-0 min-[3000px]:bottom-0' : ''}`} data-background-wrapper>
+  <div class={`${bgPositionClass} inset-0 -z-20 ${fixedBackground ? 'min-[3000px]:max-w-[2400px] min-[3000px]:left-1/2 min-[3000px]:-translate-x-1/2 min-[3000px]:top-0 min-[3000px]:bottom-0 fixed-bg-mobile ' : ''}`} data-background-wrapper>
     <picture class="w-full h-full">
       {/* モバイル画像がある場合のみ出力（767px以下で優先される）*/}
       {mobileAvif && <source media="(max-width: 767px)" type="image/avif" srcset={mobileAvif} />}
