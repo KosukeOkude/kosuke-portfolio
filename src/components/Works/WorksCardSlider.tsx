@@ -18,7 +18,6 @@ export const WorksCardSlider = ({ works, scrollerRef }: WorksCardSliderProps) =>
     >
       <div
         ref={scrollerRef}
-        data-scrollable
         className="works-card-slider-scroll min-w-0 flex-1 overflow-x-auto "
       >
         <div className="flex gap-5 md:gap-10">

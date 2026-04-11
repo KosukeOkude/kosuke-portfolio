@@ -45,7 +45,6 @@ export const GalleryTrack = ({
       <div
         ref={scrollerRef}
         data-gallery-scroller
-        data-scrollable
         className="h-full flex items-center gap-10 pl-6 overflow-x-auto overflow-y-hidden"
       >
         <div className="h-full flex items-center gap-10 pl-6 w-max">
