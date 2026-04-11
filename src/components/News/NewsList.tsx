@@ -5,11 +5,10 @@ interface NewsListProps {
 }
 
 export function NewsList({ newsItems }: NewsListProps) {
-
-
   return (
     <div
       className="grid grid-cols-1 gap-4 md:gap-6"
+      data-reveal-once
     >
       {newsItems.map((item) => (
         <a

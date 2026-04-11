@@ -9,9 +9,7 @@ export function runWorksTopAnimation(): void {
   const root = document.querySelector<HTMLElement>("[data-works-top-root]");
   if (!root) return;
   const cardSlider = root.querySelector<HTMLElement>("[data-card-slider]");
-  const bgWrapper = root.querySelector<HTMLElement>(
-    "[data-background-wrapper]",
-  );
+  const bgWrapper = root.querySelector<HTMLElement>("[data-background-wrapper]");
   const overlay = root.querySelector<HTMLElement>("[data-animation-overlay]");
   const next = root.nextElementSibling as HTMLElement;
   const cta = root.querySelector<HTMLElement>("[data-works-cta]");
@@ -25,32 +23,39 @@ export function runWorksTopAnimation(): void {
     return;
   }
 
-  const scroller = cardSlider.querySelector<HTMLElement>(
-    ".works-card-slider-scroll",
-  );
+  const scroller = cardSlider.querySelector<HTMLElement>(".works-card-slider-scroll");
   if (!scroller) return;
 
-  gsap.set([titleBlock, overlay, hint, cardSlider], { opacity: 0 });
+  // null になりうる要素は filter(Boolean) でまとめて除外してから set する
+  gsap.set([titleBlock, overlay, hint, cardSlider].filter(Boolean), { opacity: 0 });
 
   const headingTl = gsap.timeline({ paused: true });
 
-  headingTl.fromTo(
-    overlay,
-    { opacity: 0 },
-    { opacity: 1, duration: 1, ease: "power2.out" },
-  );
-  headingTl.fromTo(
-    titleBlock,
-    { opacity: 0 },
-    { opacity: 1, duration: 1, ease: "power2.out" },
-    "<",
-  );
-  headingTl.fromTo(
-    hint,
-    { opacity: 0 },
-    { opacity: 1, duration: 1, ease: "power2.out" },
-    "<",
-  );
+  // overlay / titleBlock / hint はテンプレート構成によっては存在しない場合があるため
+  // それぞれ個別にガードしてから fromTo に渡す
+  if (overlay) {
+    headingTl.fromTo(
+      overlay,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+    );
+  }
+  if (titleBlock) {
+    headingTl.fromTo(
+      titleBlock,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+      "<",
+    );
+  }
+  if (hint) {
+    headingTl.fromTo(
+      hint,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+      "<",
+    );
+  }
 
   ScrollTrigger.create({
     trigger: root,
@@ -75,9 +80,8 @@ export function runWorksTopAnimation(): void {
   cardTl.to(
     scroller,
     {
-      opacity: 1,
       scrollLeft: () => getMaxScrollLeft(scroller),
-      duration: 5,
+      duration: 7,
       ease: "none",
     },
     0,

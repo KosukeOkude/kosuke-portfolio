@@ -2,10 +2,11 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
 import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
-
-import { getAllNews } from '@/data/news';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+import { getAllNews, newsPageConfig } from '@/data/news';
 import { NewsArchiveSection } from '@/components/News/NewsArchiveSection';
 import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
+import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 
 const newsItems = await getAllNews();
 ---
@@ -14,6 +15,8 @@ const newsItems = await getAllNews();
 
 
 <BaseLayout>
+  <BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager>
+    <ScreenOverlay/>
   <ArchiveLayout>
 
     <Breadcrumbs items={[{label: 'News'}]}/>
@@ -24,8 +27,9 @@ const newsItems = await getAllNews();
     A quiet record of client news and personal projects.
     </ArchivePageHeader>
 
-    <div data-reveal id="archive-main">
+    <div id="archive-main">
       <NewsArchiveSection newsItems={newsItems} client:load/>
     </div>
   </ArchiveLayout>
+  </BackgroundSection>
 </BaseLayout>

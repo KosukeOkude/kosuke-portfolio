@@ -1,8 +1,0 @@
----
-const { isHiddenText } = Astro.props
----
-<!-- スクロール誘導ライン -->
-<div class=`absolute bottom-10 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center gap-2`>
-    <span class="font-body text-[0.6rem] tracking-[0.3em] uppercase text-white/40">{ isHiddenText ? '' : 'Scroll'}</span>
-    <div class="scroll-line"></div>
-</div>

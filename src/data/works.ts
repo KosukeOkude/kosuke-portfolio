@@ -1,11 +1,12 @@
 import worksBackgroundImage from "@/assets/images/works-image-3.jpg";
+import worksMobileBackgroundImage from "@/assets/images/about-background-image.jpg";
 import type { YoutubeVideo } from "@/type/youtubeVideo";
 
 export const worksPageConfig = {
   backgroundImage: worksBackgroundImage,
   backgroundAlt: "カフェで抹茶のお菓子とティーセット",
+  mobileImage: worksMobileBackgroundImage,
 };
-
 
 export interface Work {
   slug: string;

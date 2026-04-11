@@ -22,9 +22,7 @@ interface NewsArchiveProps {
 }
 
 export const NewsArchiveSection = ({ newsItems }: NewsArchiveProps) => {
-  const [selectedCategory, setSelectedCategory] = useState<"All" | string>(
-    "All",
-  );
+  const [selectedCategory, setSelectedCategory] = useState<"All" | string>("All");
   const [sortOrder, setSortOrder] = useState<DateSortOrder>("date-desc");
 
   //一意なカテゴリを抽出し、先頭に 'All' を追加
@@ -33,11 +31,7 @@ export const NewsArchiveSection = ({ newsItems }: NewsArchiveProps) => {
   const allCategories = useAllCategories(newsItems, getCategory);
 
   const filteredNews = useMemo(() => {
-    const filtered = filterByCategory(
-      newsItems,
-      selectedCategory,
-      (n) => n.category,
-    );
+    const filtered = filterByCategory(newsItems, selectedCategory, (n) => n.category);
     // sortByDate 用: item.date をエポック ms にし、Invalid / NaN は 0（同キーとして並ぶ）
     return sortByDate(filtered, sortOrder, (n) => toTimeMsOrZero(n.date));
   }, [newsItems, selectedCategory, sortOrder]);
@@ -79,12 +73,9 @@ export const NewsArchiveSection = ({ newsItems }: NewsArchiveProps) => {
         value={sortOrder}
         onChange={setSortOrder}
       />
-      <div
-        key={buildArchiveListKey(selectedCategory, sortOrder)}
-        data-reveal
-      >
-        <NewsList newsItems={filteredNews} />
-      </div>
+
+        <NewsList newsItems={filteredNews} key={buildArchiveListKey(selectedCategory, sortOrder)}/>
+
     </>
   );
 };

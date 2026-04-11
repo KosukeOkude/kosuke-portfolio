@@ -7,9 +7,11 @@ import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 
 import DetailImageGalleryWithLightbox from "@/components/Lightbox/DetailImageGalleryWithLightbox";
-import { getAllNews, getNewsBySlug} from '@/data/news';
+import { getAllNews, getNewsBySlug, newsPageConfig } from '@/data/news';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { normalizeSlug } from "@/utils/normalizeSlug";
 import YoutubeVideos from "@/components/UI/YoutubeVideos.astro";
+import ScreenOverlay from "@/components/UI/ScreenOverlay.astro";
 
 
 
@@ -35,6 +37,8 @@ const allCategories = ['All', ...new Set(allNews.map(n => n.category))]
 
 
 <BaseLayout>
+  <BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager>
+    <ScreenOverlay/>
   <DetailPageLayout>
         <Breadcrumbs items={[{ label: 'News', href: '/news' },{ label: newsItem.title },]}/>
 
@@ -128,4 +132,5 @@ const allCategories = ['All', ...new Set(allNews.map(n => n.category))]
         <MoreInCategory baseHref="/news" allCategories={allCategories} />
         <PageBottomNav label="news" href="/news" />
       </DetailPageLayout>
+  </BackgroundSection>
   </BaseLayout>

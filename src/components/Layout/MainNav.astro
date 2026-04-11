@@ -7,7 +7,7 @@ import { navItems } from "@/data/nav"
 <nav class="hidden md:flex gap-6 " aria-label="メインナビゲーション">
     <ul class="flex gap-6 font-bold text-base">
       {navItems.map((item) => (
-        <li><a class="text-white" href={item.href}>{item.label}</a></li>
+        <li><a class="text-white opacity-100 transition-opacity duration-200 hover:opacity-50" href={item.href}>{item.label}</a></li>
       ))}
     </ul>
 </nav>

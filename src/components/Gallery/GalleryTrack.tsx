@@ -1,6 +1,7 @@
-import { useRef, useEffect } from "react";
+import { type RefObject } from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
 import { useGalleryTrackScrollToItem } from "@/hooks/gallery/useGalleryTrackScrollToItem";
+import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
 
 interface GalleryTrackProps {
   items: GalleryLinearSliderItem[];
@@ -8,6 +9,9 @@ interface GalleryTrackProps {
   onOpenImage: (index: number) => void;
   scrollToId: string | null;
   scrollToken: number; // 閉じた瞬間ごとにトリガーするため
+  scrollerRef: RefObject<HTMLDivElement | null>;
+  maxScrollLeft: RefObject<number | null>;
+  pinSt: RefObject<ScrollTrigger | null>;
 }
 
 const SIZE_CLASS: Record<GalleryLinearSliderItem["size"], string> = {
@@ -20,35 +24,33 @@ const SIZE_CLASS: Record<GalleryLinearSliderItem["size"], string> = {
 
 export const GalleryTrack = ({
   items,
-  resetKey,
   onOpenImage,
   scrollToId,
   scrollToken,
+  scrollerRef,
+  maxScrollLeft,
+  pinSt,
 }: GalleryTrackProps) => {
-  const scrollerRef = useRef<HTMLDivElement | null>(null);
-
-  // resetKey（カテゴリ/並び替え）変更時は先頭に戻す
-  useEffect(() => {
-    scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
-  }, [resetKey]);
-
   // 指定IDの要素を「可能な範囲で中央」へスクロール
-  useGalleryTrackScrollToItem({ scrollerRef, scrollToId, scrollToken });
+  useGalleryTrackScrollToItem({
+    scrollerRef,
+    scrollToId,
+    scrollToken,
+    maxScrollLeft,
+    pinSt,
+  });
 
   return (
-    <div
-      id="#archive-main"
-      className="relative w-full mt-10 h-[70vh]"
-      data-reveal
-    >
+    <div className="relative w-full mt-10 h-[65vh]">
       <div
         ref={scrollerRef}
-        className="h-full flex items-center gap-10 px-6 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-proximity"
+        data-gallery-scroller
+        className="h-full flex items-center gap-10 pl-6 overflow-x-auto overflow-y-hidden"
       >
-        <div className="h-full flex items-center gap-10 px-6 w-max">
+        <div className="h-full flex items-center gap-10 pl-6 w-max">
           {items.map((item, index) => (
             <article
-              className="shrink-0 snap-center"
+              className="shrink-0"
               key={item.id}
             >
               <button
@@ -65,8 +67,13 @@ export const GalleryTrack = ({
               </button>
             </article>
           ))}
+          <div
+            className="shrink-0 w-6"
+            aria-hidden="true"
+          />
         </div>
       </div>
+      <ScrollLineVertical/>
     </div>
   );
 };

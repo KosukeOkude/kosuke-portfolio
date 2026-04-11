@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { clampIndex } from "@/components/Lightbox/utils/clampIndex";
 import { useLightboxWindowKeyboard } from "@/components/Lightbox/hooks/useLightboxWindowKeyboard";
 import { useLightboxHorizontalSwipe } from "@/components/Lightbox/hooks/useLightboxHorizontalSwipe";
+import { useLightboxWheelNavigation } from "@/components/Lightbox/hooks/useLightboxWheelNavigation";
 type UseLightboxKeyboardAndSwipeOptions = {
   isOpen: boolean;
   itemCount: number;
@@ -37,6 +38,8 @@ export function useLightboxKeyboardAndSwipe({
     goPrev,
     goNext,
   });
+
+  useLightboxWheelNavigation({ isOpen, goPrev, goNext });
 
   return {
     goPrev,

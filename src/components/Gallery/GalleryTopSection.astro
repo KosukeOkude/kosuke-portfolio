@@ -3,9 +3,8 @@ import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import SectionLayout from '@/components/Layout/SectionLayout.astro';
 import SectionTitle from '@/components/UI/SectionTitle.astro';
 import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
-
 import GalleryCategoryGrid from '@/components/Gallery/GalleryCategoryGrid.astro';
-import type { GalleryCategory } from '@/data/gallery';
+import { type GalleryCategory, galleryPageConfig } from '@/data/gallery';
 
 interface Props {
     galleryCategories: GalleryCategory[];
@@ -15,7 +14,11 @@ const { galleryCategories } = Astro.props;
 ---
 
 
-<SectionLayout addClass="z-20 bg-black min-h-screen">
+
+<BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} className={"z-20  min-h-screen"}>
+
+<SectionLayout addClass="z-20 min-h-screen">
+
     <div class="z-20 flex-1 flex flex-col justify-between my-auto gap-10" slot="sectionContent">
         <SectionTitle title="GALLERY" data-reveal>
             Photographs and moments, collected over time.
@@ -31,3 +34,6 @@ const { galleryCategories } = Astro.props;
         data-reveal
     />
 </SectionLayout>
+
+
+</BackgroundSection>

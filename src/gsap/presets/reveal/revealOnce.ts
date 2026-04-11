@@ -1,7 +1,13 @@
 import { gsap } from "@/gsap/core/setup";
 
 export function playRevealOnce(target: HTMLElement) {
-  gsap.set(target, { opacity: 0, y: 0 });
+  const rect = target.getBoundingClientRect();
+  const isAlreadyInView = rect.top < window.innerHeight;
+
+  if (!isAlreadyInView) {
+    gsap.set(target, { opacity: 0, y: 0 });
+  }
+
   gsap.to(target, {
     opacity: 1,
     y: 0,

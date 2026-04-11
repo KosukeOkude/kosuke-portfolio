@@ -1,4 +1,4 @@
-import { type DateSortOrder } from "@/utils/sortByDate";
+import type { DateSortOrder } from "@/type/DateSortOrder";
 
 export interface ArchiveDateSortSelectProps {
   value: DateSortOrder;
@@ -18,7 +18,7 @@ export const ArchiveDateSortSelect = ({
   id = 'archive-date-sort',
   name
 }: ArchiveDateSortSelectProps) => (
-  <div className={`${className ?? ''} mb-10`}>
+  <div className={`${className ?? ''} mb-5`}>
     <label
       htmlFor={id}
       className="sr-only"

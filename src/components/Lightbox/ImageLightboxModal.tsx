@@ -17,6 +17,8 @@ import LightboxNavControls from "@/components/Lightbox/parts/LightboxNavControls
 import { REVEAL_REFRESH_EVENT } from "@/gsap/core/useRevealDispatch";
 import { useLightboxImageIntroAnimation } from "@/components/Lightbox/hooks/useLightboxImageIntroAnimation";
 import { createPortal } from "react-dom";
+import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
+import { useBodyBackgroundHide } from "@/components/Lightbox/hooks/useBodyBackgroundHide";
 
 type ImageLightboxModalProps = {
   items: LightboxItem[];
@@ -36,9 +38,7 @@ export default function ImageLightBoxModal({
   // 入力配列の件数。index の安全化やナビ制御で参照する共通値。
   const itemCount = items.length;
   // 現在表示中のスライド index（Prev/Next・キーボード・スワイプで更新）。
-  const [activeIndex, setActiveIndex] = useState(
-    clampIndex(initialIndex, itemCount),
-  );
+  const [activeIndex, setActiveIndex] = useState(clampIndex(initialIndex, itemCount));
 
   // 「閉じる」要求を親へ返す窓口。最後に見ていた index を渡す。
   const requestClose = useCallback(() => {
@@ -54,17 +54,19 @@ export default function ImageLightBoxModal({
   /** body スクロールのロック制御（開いている間だけ固定）。 */
   useBodyScrollLock(isOpen);
 
+/* body にクラスがついている間、モーダル以外を隠す */
+  useBodyBackgroundHide(isOpen);
+
   /** close 後にフォーカス復帰先（returnTargetId）へ戻す。 */
   useFocusElementWhenLightboxCloses(isOpen, returnTargetId);
 
   // キーボード左右・スワイプ・ESC を束ねる入力ハンドラ群。
-  const { goPrev, goNext, onTouchStart, onTouchEnd } =
-    useLightboxKeyboardAndSwipe({
-      isOpen,
-      itemCount,
-      setActiveIndex,
-      onRequestClose: requestClose,
-    });
+  const { goPrev, goNext, onTouchStart, onTouchEnd } = useLightboxKeyboardAndSwipe({
+    isOpen,
+    itemCount,
+    setActiveIndex,
+    onRequestClose: requestClose,
+  });
 
   // ライトボックス表示時に reveal 再計算イベントを発火（必要な要素だけ再スキャン）。
   useEffect(() => {
@@ -94,6 +96,8 @@ export default function ImageLightBoxModal({
 
   // 実際に body 直下へ転送するモーダル本体。
   // これを別変数に切り出すと、Portal 前後の責務（UI定義 / 転送）を分けて読める。
+
+
   const modalNode = (
     <div
       className="fixed inset-0 z-[9999999]"
@@ -121,6 +125,8 @@ export default function ImageLightBoxModal({
         onNext={goNext}
         onClose={requestClose}
       />
+
+      <ScrollLineVertical isHiddenText={false} />
     </div>
   );
 

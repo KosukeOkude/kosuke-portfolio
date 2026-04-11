@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useRef } from "react";
 import type { WorkForClient } from "@/data/works";
 import { WorksCardSlider } from "@/components/Works/WorksCardSlider";
 import { filterByCategory } from "@/utils/filterByCategory";
@@ -8,22 +8,21 @@ import { ArchiveCategoryChips } from "@/components/UI/ArchiveCategoryChips";
 import { formatArchiveCategoryLabel } from "@/utils/archive/formatArchiveCategoryLabel";
 import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
 import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
-import WorksArchiveHint from "@/components/Works/WorksArchiveHint";
 import { useArchiveMoreInCategoryLanding } from "@/hooks/useArchiveMoreInCategoryLanding";
 import { useRevealRefreshOnChange } from "@/hooks/useRevealRefreshOnChange";
 import { buildArchiveListKey } from "@/utils/archive/buildArchiveListKey";
 import type { DateSortOrder } from "@/type/DateSortOrder";
 import { useArchiveCategoryFromQuery } from "@/hooks/useArchiveCategoryFromQuery";
-import { useScrollArchiveMainOnFilterChange } from "@/hooks/useScrollArchiveMainOnFilterChange";
+import { useScrollToPinStart } from "@/hooks/useScrollToPinStart";
+import { useHorizontalScrollTrigger } from "@/hooks/useHorizontalScrollTrigger";
+import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
 
 interface WorksArchiveSectionProps {
   works: WorkForClient[];
 }
 
 export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
-  const [selectedCategory, setSelectedCategory] = useState<"All" | string>(
-    "All",
-  );
+  const [selectedCategory, setSelectedCategory] = useState<"All" | string>("All");
   const [sortOrder, setSortOrder] = useState<DateSortOrder>("date-desc");
 
   //一意なカテゴリを抽出し、先頭に 'All' を追加
@@ -32,11 +31,7 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
   const allCategories = useAllCategories(works, getCategory);
 
   const filteredWorks = useMemo(() => {
-    const filtered = filterByCategory(
-      works,
-      selectedCategory,
-      (w) => w.category,
-    );
+    const filtered = filterByCategory(works, selectedCategory, (w) => w.category);
     return sortByDate(filtered, sortOrder, (w) => new Date(w.date).getTime());
   }, [works, selectedCategory, sortOrder]);
 
@@ -64,8 +59,21 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
   // GSAP の reveal（`initRevealAnimation`）に DOM を全文再スキャンさせる。
   useRevealRefreshOnChange([selectedCategory, sortOrder]);
 
-  // カテゴリ／ソート変更のたび一覧（#archive-main）へスクロール（deps は listKey で変化を 1 本にまとめる）
-  useScrollArchiveMainOnFilterChange([selectedCategory, sortOrder]);
+  // 横スクロール領域の ref（GSAP と scrollTo 共用）
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+
+  const listKey = buildArchiveListKey(selectedCategory, sortOrder);
+
+  // 横スクロールを縦スクロールに変換する GSAP ScrollTrigger を設定
+  const { pinSt } = useHorizontalScrollTrigger(
+    scrollerRef,
+    listKey,
+    "[data-card-slider]",
+    "[works-archive-root]",
+  );
+
+  // カテゴリ／ソート変更時に PIN 開始位置（Works 一覧先頭）へ戻す
+  useScrollToPinStart(pinSt, [selectedCategory, sortOrder], "#archive-main");
 
   return (
     <>
@@ -79,20 +87,16 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
         value={sortOrder}
         onChange={setSortOrder}
       />
-      <WorksArchiveHint orientation="上下" />
       <section
         aria-label="Works archive"
         className="space-y-4"
       >
-        <div
+        <WorksCardSlider
           key={buildArchiveListKey(selectedCategory, sortOrder)}
-          data-reveal-once
-        >
-          <WorksCardSlider
-            works={filteredWorks}
-            resetKey={buildArchiveListKey(selectedCategory, sortOrder)}
-          />
-        </div>
+          works={filteredWorks}
+          scrollerRef={scrollerRef}
+        />
+        <ScrollLineVertical isHiddenText={false} />
       </section>
     </>
   );

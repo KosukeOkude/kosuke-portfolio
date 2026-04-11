@@ -5,6 +5,9 @@ import { ARCHIVE_MAIN_ANCHOR_ID } from "@/constants/archiveMainAnchor";
  * アーカイブでチップ・並び替えなど **フィルタに相当する値が変わったあと**、
  * `id="archive-main"` の要素へ `scrollIntoView` する（ページ内の一覧エリアへ寄せる）。
  *
+ * `scrollIntoView` による大まかなスクロールのため、GSAP の横スクロール変換（scrub）が絡む場面では
+ * スクロール位置がずれる場合がある。横スクロールトリガーを使うアーカイブには `useScrollToPinStart` を使う。
+ *
  * - `deps` は `useEffect` の依存配列と同じ。例: `[selectedCategory, sortOrder]` や
  *   `[buildArchiveListKey(selectedCategory, sortOrder)]`（いずれも「組が変わったら」でよい）。
  * - **初回マウント時も 1 回実行**される。メニュー直後は動かしたくない場合は呼び出し側で別途ガードするか、
@@ -16,14 +19,14 @@ import { ARCHIVE_MAIN_ANCHOR_ID } from "@/constants/archiveMainAnchor";
  */
 
 export function useScrollArchiveMainOnFilterChange(deps: DependencyList): void {
-    const isFirstRunRef = useRef(true);
+  const isFirstRunRef = useRef(true);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     if (isFirstRunRef.current) {
-        isFirstRunRef.current = false;
-        return;
+      isFirstRunRef.current = false;
+      return;
     }
 
     const scrollToMainIntoView = (): void => {

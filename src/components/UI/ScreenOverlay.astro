@@ -4,8 +4,8 @@ const { class: className, pinOverlay = false, ...rest } = Astro.props;
 
 
 <div class:list={[
-    "pointe-events-none absolute inset-0 -z-10 bg-black/50",
+    "pointe-events-none fixed inset-0 -z-10 bg-black/50 w-full h-full",
     className
 ]}
-
+  data-screen-overlay
   {...rest}></div>

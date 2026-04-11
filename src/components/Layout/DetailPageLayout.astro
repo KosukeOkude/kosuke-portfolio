@@ -1,9 +1,9 @@
 ---
-const { className } = Astro.props
+const { className, ...rest } = Astro.props
 ---
 
 
-<div class="min-h-screen bg-black text-[var(--color-white)]">
+<div class="min-h-screen text-[var(--color-white)]" {...rest}>
     <div class={`mx-auto px-4 md:px-8 pb-20 pt-30 space-y-10 xl:px-20 ${className ?? "max-w-5xl"}`}>
         <slot/>
     </div>

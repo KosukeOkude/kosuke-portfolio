@@ -72,9 +72,7 @@ export default function randomImagesOnScreen(): void {
   const root = document.querySelector<HTMLElement>("[data-entrance-root]");
   if (!root) return;
   const films = document.querySelectorAll<HTMLElement>("[data-entrance-film]");
-  const tooltip = document.querySelector<HTMLElement>(
-    "[data-entrance-tooltip]",
-  );
+  const tooltip = document.querySelector<HTMLElement>("[data-entrance-tooltip]");
   const title = document.querySelector<HTMLElement>("[data-entrance-title]");
 
   const gridLines = {
@@ -142,6 +140,13 @@ export default function randomImagesOnScreen(): void {
         start: "top top",
         end: "+=600",
         scrub: true,
+        invalidateOnRefresh: true,
+        onLeave() {
+          gsap.set(root, { display: "none" });
+        },
+        onEnterBack() {
+          gsap.set(root, { display: "block" });
+        },
       },
     },
   );

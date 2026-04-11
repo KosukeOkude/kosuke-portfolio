@@ -7,7 +7,6 @@ import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { type WorkForClient, worksPageConfig } from "@/data/works";
 import SectionCtaLink from "@/components/UI/SectionCtaLink.astro";
 import WorksCardSliderForTop from "@/components/Works/home/WorksCardSliderForTop.astro";
-import WorksHintForTop from "@/components/Works/home/WorksHintForTop.astro";
 import AnimationScreenOverlay from "@/components/UI/AnimationScreenOverlay.astro";
 
 interface Props {
@@ -22,12 +21,11 @@ const { works } = Astro.props;
     <AnimationScreenOverlay/>
     <SectionLayout>
         <div slot="sectionContent"
-             class="z-20 flex-1 flex flex-col max-h-[900px] my-auto min-[375px]:gap-3 gap-5">
+             class="z-20 flex flex-col justify-between my-auto min-[375px]:gap-20 gap-5">
             <SectionTitle title="WORKS" data-works-top-title>
             Step into my world through selected works.<br>
             —or an intimate collection of moments across genres.
             </SectionTitle>
-            <WorksHintForTop orientation="上下" data-works-top-hint/>
             <WorksCardSliderForTop works={works}/>
         </div>
         <SectionCtaLink

@@ -3,7 +3,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/UI/Breadcrumbs.astro';
 import ArchivePageHeader from '@/components/UI/ArchivePageHeader.astro';
 import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
-import { getGalleryCategories } from '@/data/gallery';
+import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
+import { getGalleryCategories, galleryPageConfig } from '@/data/gallery';
 import GalleryCategoryGrid from '@/components/Gallery/GalleryCategoryGrid.astro';
 
 const galleryCategories = await getGalleryCategories();
@@ -14,16 +15,18 @@ const galleryCategories = await getGalleryCategories();
 
 
 <BaseLayout>
-  <ArchiveLayout>
-    <Breadcrumbs items={[{label: 'Gallery'}]}/>
-    <ArchivePageHeader
-      label="gallery"
-      title="Frames &amp; moments"
-    >
-     Light and time, held in each frame.
-    </ArchivePageHeader>
+  <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} fixedBackground eager>
+    <ArchiveLayout>
+      <Breadcrumbs items={[{label: 'Gallery'}]}/>
+      <ArchivePageHeader
+        label="gallery"
+        title="Frames &amp; moments"
+      >
+       Light and time, held in each frame.
+      </ArchivePageHeader>
 
-    <GalleryCategoryGrid galleryCategories={galleryCategories}/>
+      <GalleryCategoryGrid galleryCategories={galleryCategories}/>
 
-  </ArchiveLayout>
+    </ArchiveLayout>
+  </BackgroundSection>
 </BaseLayout>

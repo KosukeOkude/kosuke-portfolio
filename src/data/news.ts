@@ -1,4 +1,10 @@
-import type { youtubeVideo } from "@/type/youtubeVideo";
+import type { YoutubeVideo } from "@/type/youtubeVideo";
+import newsBackgroundImage from "@/assets/images/news-background.jpg";
+
+export const newsPageConfig = {
+  backgroundImage: newsBackgroundImage,
+  backgroundAlt: "News background",
+};
 
 // src/data/news.ts
 export interface NewsArchive {
@@ -8,7 +14,7 @@ export interface NewsArchive {
   summary: string;
   thumbnailUrl: string;
   thumbnailAlt: string;
-  videos?: youtubeVideo[];
+  videos?: YoutubeVideo[];
   slug: string;
   tags: string[];
   category: string;

@@ -1,28 +1,41 @@
 ---
-import {Picture} from 'astro:assets';
+import { getImage } from 'astro:assets';
 
-//restは以下で使用中
+// rest は以下で使用中
 // ファイル	渡している属性
 // src/components/Hero/Hero.astro	data-hero-root
 // src/components/Works/home/WorksTopSection.astro	data-works-top-root
-const { image, alt, className, ...rest } = Astro.props;
+const { image, alt, className, fixedBackground, mobileImage, eager, ...rest } = Astro.props;
+const bgPositionClass = fixedBackground ? "fixed" : "absolute";
+
+// デスクトップ用（AVIF / WebP）
+const desktopAvif = (await getImage({ src: image, format: 'avif', widths: [640, 1280, 1920], quality: 80 })).src;
+const desktopWebp = (await getImage({ src: image, format: 'webp', widths: [640, 1280, 1920], quality: 80 })).src;
+
+// モバイル用（指定がある場合のみ）
+const mobileAvif = mobileImage ? (await getImage({ src: mobileImage, format: 'avif', width: 768, quality: 80 })).src : null;
+const mobileWebp = mobileImage ? (await getImage({ src: mobileImage, format: 'webp', width: 768, quality: 80 })).src : null;
 ---
 
-
 <section class={`${className ?? ''} relative`} {...rest}>
-    <div class="absolute inset-0 -z-20" data-background-wrapper>
-        <Picture
-        src={image}
-        formats={['avif', 'webp']}
-        quality="80"
-        layout="full-width"
-        widths={[640, 1280, 1920]}
-        fit="cover"
-        position="center"
+  <div class={`${bgPositionClass} inset-0 -z-20 ${fixedBackground ? 'min-[3000px]:max-w-[2400px] min-[3000px]:left-1/2 min-[3000px]:-translate-x-1/2 min-[3000px]:top-0 min-[3000px]:bottom-0' : ''}`} data-background-wrapper>
+    <picture class="w-full h-full">
+      {/* モバイル画像がある場合のみ出力（767px以下で優先される）*/}
+      {mobileAvif && <source media="(max-width: 767px)" type="image/avif" srcset={mobileAvif} />}
+      {mobileWebp && <source media="(max-width: 767px)" type="image/webp" srcset={mobileWebp} />}
+      {/* デスクトップ用（常に出力）*/}
+      <source type="image/avif" srcset={desktopAvif} />
+      <source type="image/webp" srcset={desktopWebp} />
+      <img
+        src={desktopWebp}
         alt={alt}
         class="w-full h-full object-cover"
         data-background
+        loading={eager ? "eager" : "lazy"}
+        fetchpriority={eager ? "high" : "auto"}
+        decoding="async"
       />
-      </div>
-        <slot />
+    </picture>
+  </div>
+  <slot />
 </section>

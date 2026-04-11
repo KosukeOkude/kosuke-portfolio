@@ -1,4 +1,4 @@
-import lightboxImageIntro from "@/gsap/presets/lightboxImageIntro";
+import lightboxImageIntro from "@/components/Lightbox/lightboxImageIntro";
 import { type RefObject, useLayoutEffect, useRef } from "react";
 
 type useLightboxImageIntroAnimationProps = {

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
 import { GalleryTrack } from "@/components/Gallery/GalleryTrack";
 import { sortByDate } from "@/utils/sortByDate";
 import { filterByCategory } from "@/utils/filterByCategory";
@@ -13,7 +13,8 @@ import { toTimeMsOrZero } from "@/utils/toTimeMsOrZero";
 import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
 import { useRevealRefreshOnChange } from "@/hooks/useRevealRefreshOnChange";
 import { buildArchiveListKey } from "@/utils/archive/buildArchiveListKey";
-import { useScrollArchiveMainOnFilterChange } from "@/hooks/useScrollArchiveMainOnFilterChange";
+import { useHorizontalScrollTrigger } from "@/hooks/useHorizontalScrollTrigger";
+import { useScrollToPinStart } from "@/hooks/useScrollToPinStart";
 
 type GalleryLinearSliderProps = {
   items: GalleryLinearSliderItem[];
@@ -26,9 +27,7 @@ export const GalleryLinearSlider = ({
   categories,
   initialCategory,
 }: GalleryLinearSliderProps) => {
-  const [selectedCategory, setSelectedCategory] = useState(
-    initialCategory ?? "All",
-  );
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory ?? "All");
   const [sortOrder, setSortOrder] = useState<DateSortOrder>("date-desc");
   // カテゴリで絞る（Allなら全件）
   const filteredByCategoryItems = filterByCategory(
@@ -39,12 +38,11 @@ export const GalleryLinearSlider = ({
 
   const displayItems = useMemo(
     () =>
-      sortByDate(filteredByCategoryItems, sortOrder, (n) =>
-        toTimeMsOrZero(n.createdAt),
-      ),
+      sortByDate(filteredByCategoryItems, sortOrder, (n) => toTimeMsOrZero(n.createdAt)),
     [filteredByCategoryItems, sortOrder],
   );
 
+  // Lightbox の開閉状態と、閉じた際に元の画像位置へトラックを戻すスクロール情報を管理
   const lightboxBridge = useGalleryLightboxScrollBridge(displayItems);
 
   // 初回ペイント後の useEffect で reveal 再スキャン（島内 [data-reveal] を拾う）
@@ -54,24 +52,54 @@ export const GalleryLinearSlider = ({
   // GSAP の reveal（`initRevealAnimation`）に DOM を全文再スキャンさせる。
   useRevealRefreshOnChange([buildArchiveListKey(selectedCategory, sortOrder)]);
 
-  // カテゴリ／ソート変更のたび一覧（#archive-main）へスクロール（deps は listKey で変化を 1 本にまとめる）
-  useScrollArchiveMainOnFilterChange([selectedCategory, sortOrder]);
+  // 横スクロール領域の ref（GSAP と scrollTo 共用）
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const listKey = buildArchiveListKey(selectedCategory, sortOrder);
+
+  // 横スクロールを縦スクロールに変換する GSAP ScrollTrigger を設定
+  const { maxScrollLeft, pinSt } = useHorizontalScrollTrigger(
+    scrollerRef,
+    listKey,
+    "[data-gallery-scroller]",
+    "[data-gallery-slug-root]",
+  );
+
+  // カテゴリ／ソート変更時に PIN 開始位置（ギャラリー先頭）へ戻す
+  useScrollToPinStart(pinSt, [selectedCategory, sortOrder], "#archive-main");
+
+  // useScrollArchiveMainOnFilterChange([selectedCategory, sortOrder]);
+
+  // ソート・カテゴリ変更時に「最後に見た画像への復元スクロール」をキャンセルする
+  const handleCategorySelect = useCallback(
+    (cat: string) => {
+      lightboxBridge.clearScrollTarget();
+      setSelectedCategory(cat);
+    },
+    [lightboxBridge],
+  );
+
+  const handleSortChange = useCallback(
+    (order: DateSortOrder) => {
+      lightboxBridge.clearScrollTarget();
+      setSortOrder(order);
+    },
+    [lightboxBridge],
+  );
 
   return (
     <section className="w-full">
       <ArchiveCategoryChips
         categories={categories}
         selectedCategory={selectedCategory}
-        onSelect={setSelectedCategory}
+        onSelect={handleCategorySelect}
       />
       <ArchiveDateSortSelect
         value={sortOrder}
-        onChange={setSortOrder}
+        onChange={handleSortChange}
       />
       <div
         key={buildArchiveListKey(selectedCategory, sortOrder)}
-        data-reveal
-        id="archive-main"
+        data-reveal-once
       >
         <GalleryTrack
           items={displayItems}
@@ -81,6 +109,9 @@ export const GalleryLinearSlider = ({
           scrollToId={lightboxBridge.scrollToId}
           // 同じIDでも再スクロールを起こすためのトリガー
           scrollToken={lightboxBridge.scrollToken}
+          scrollerRef={scrollerRef}
+          maxScrollLeft={maxScrollLeft}
+          pinSt={pinSt}
         />
       </div>
 

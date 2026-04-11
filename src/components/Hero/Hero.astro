@@ -1,19 +1,17 @@
 ---
 import { Picture } from 'astro:assets';
-import heroBackgroundPoster from '@/assets/images/hero-background-img.jpg';
+import heroBackgroundPoster from '@/assets/images/hhpp-poster.jpg';
 import heroProfileImage from '@/assets/images/hero-profile-img.jpg';
-import heroBackgroundVideoWebmLight from '@/assets/movies/hero-background-21-31-light.webm';
 import heroBackgroundVideoWebm from '@/assets/movies/hhpp-1080.webm';
 import heroBackgroundVideoMp4 from '@/assets/movies/hhpp-1080.mp4';
 // import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
-import ScrollLineVertical from '@/components/UI/ScrollLineVertical.astro';
+import ScrollLineVerticalForTop from '@/components/UI/ScrollLineVerticalForTop.astro';
 ---
 
 <VideoBackgroundSection
   videoPoster={heroBackgroundPoster.src}
-  videoSrcWebmLight={heroBackgroundVideoWebm}
   videoSrcWebm={heroBackgroundVideoWebm}
   videoSrcMp4={heroBackgroundVideoMp4}
   alt="ヒーロー背景の説明文"
@@ -58,5 +56,5 @@ import ScrollLineVertical from '@/components/UI/ScrollLineVertical.astro';
     </div>
   </div>
 
-  <ScrollLineVertical/>
+  <ScrollLineVerticalForTop isHiddenText={false}/>
 </VideoBackgroundSection>

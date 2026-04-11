@@ -6,7 +6,7 @@ export default function LightboxOverlay({ onBackdropClose }: LightboxOverlayProp
   return (
     <button
       type="button"
-      className="absolute inset-0 z-0 bg-black/100"
+      className="absolute inset-0 z-0"
       onClick={onBackdropClose}
       aria-label="Close lightbox background"
     />

@@ -17,22 +17,22 @@ const workForClient = await getAllWorks();
 
 
 <BaseLayout>
-  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} works-archive-root>
-    <ScreenOverlay/>
-    <ArchiveLayout>
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} mobileImage={worksPageConfig.mobileImage} works-archive-root eager>
+      <ScreenOverlay/>
+      <ArchiveLayout>
+        <Breadcrumbs items={[{label: 'Works'}]}/>
+        <!-- タイトルエリア -->
+        <ArchivePageHeader
+          label="works"
+          title="Selected works &amp; archives"
+        >
+        A quiet record of client work and personal projects.
+        </ArchivePageHeader>
+        <div id="archive-main">
+          <WorksArchiveSection works={workForClient} client:load/>
+        </div>
+      </ArchiveLayout>
 
-      <Breadcrumbs items={[{label: 'Works'}]}/>
-      <!-- タイトルエリア -->
-      <ArchivePageHeader
-        label="works"
-        title="Selected works &amp; archives"
-      >
-      A quiet record of client work and personal projects.
-      </ArchivePageHeader>
-      <div data-reveal-once id="archive-main">
-        <WorksArchiveSection works={workForClient} client:load/>
-      </div>
-    </ArchiveLayout>
   </BackgroundSection>
 </BaseLayout>
 
