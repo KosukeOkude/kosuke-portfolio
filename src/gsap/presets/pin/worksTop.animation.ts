@@ -1,5 +1,6 @@
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/gsap/core/setup";
 import { scrollPinFromPin } from "@/gsap/presets/pin/scrollPinFromPin";
+import { playRevealSingle } from "@/gsap/presets/reveal/singleReveal";
 
 function getMaxScrollLeft(el: HTMLElement): number {
   return Math.max(0, el.scrollWidth - el.clientWidth);
@@ -10,22 +11,26 @@ export function runWorksTopAnimation(): void {
   if (!root) return;
   const cardSlider = root.querySelector<HTMLElement>("[data-card-slider]");
 
-  // モバイル（タッチデバイス）では横スクロールピンを使わない。スライダーを即表示して終了。
+  const titleBlock = root.querySelector<HTMLElement>("[data-works-top-title]");
+  const hint = root.querySelector<HTMLElement>("[data-works-top-hint]");
+  const cta = root.querySelector<HTMLElement>("[data-works-cta]");
+
+  // モバイル（タッチデバイス）ではピンを使わず、各要素に reveal アニメーションをかける。
   if (window.matchMedia("(pointer: coarse)").matches) {
-    if (cardSlider) gsap.set(cardSlider, { opacity: 1 });
+    [titleBlock, hint, cardSlider, cta].forEach((el) => {
+      if (el) playRevealSingle(el);
+    });
     return;
   }
   const bgWrapper = root.querySelector<HTMLElement>("[data-background-wrapper]");
   const overlay = root.querySelector<HTMLElement>("[data-animation-overlay]");
   const next = root.nextElementSibling as HTMLElement;
-  const cta = root.querySelector<HTMLElement>("[data-works-cta]");
-  const titleBlock = root.querySelector<HTMLElement>("[data-works-top-title]");
-  const hint = root.querySelector<HTMLElement>("[data-works-top-hint]");
 
   if (!cardSlider || !bgWrapper || !next) return;
 
+
   if (prefersReducedMotion()) {
-    gsap.set([cardSlider], { opacity: 1 });
+    gsap.set([titleBlock, hint, cta, cardSlider].filter(Boolean), { opacity: 1 });
     return;
   }
 

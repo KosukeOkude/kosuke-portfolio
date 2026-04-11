@@ -57,9 +57,8 @@ h3,
 
 /* 3. タイトル・ロゴ用（h1 / サイトロゴ） */
 h1,
-.site-logo,
-.header__logo {
-  letter-spacing: 0.04em; /* Merriweather なら 0.04〜0.05em くらいがちょうどよいゾーン */
+.site-logo {
+  letter-spacing: 0.04em;
 }
 
 /* 共通パディング（横方向） */
