@@ -11,6 +11,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 画像のドラッグ・選択を無効化 */
+img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 :root {
   --font-base: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-accent: "Merriweather", Georgia, "Times New Roman", serif;

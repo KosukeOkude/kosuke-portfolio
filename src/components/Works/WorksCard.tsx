@@ -18,7 +18,7 @@ export default function WorksCard({ work }: WorksCardProps) {
     <article className="flex max-[400px]:w-[192px] w-[240px] flex-shrink-0 flex-col xl:w-[280px]">
       <a
         href={`/works/${slug}`}
-        className="block"
+        className="group block"
       >
         {/* 上のメタ部分 */}
         <div className="border-x border-t border-white/20 border-t-2 border-t-white">
