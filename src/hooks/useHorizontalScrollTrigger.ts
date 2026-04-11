@@ -59,6 +59,9 @@ export function useHorizontalScrollTrigger(
 
     if (!root || !scroller) return;
 
+    // モバイル（タッチデバイス）では横スクロールピンを使わない
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     // resetKey 変更時: 既存 ST を破棄してスクロール位置を先頭に戻す
     stRef.current?.kill();
     stRef.current = null;
