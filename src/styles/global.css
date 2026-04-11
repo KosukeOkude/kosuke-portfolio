@@ -317,3 +317,7 @@ body.lightbox-open [data-background-wrapper] img,
 body.lightbox-open [data-screen-overlay] {
   visibility: visible;
 }
+
+.min-h-svh {
+  min-height: 100svh;
+}

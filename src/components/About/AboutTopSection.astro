@@ -18,7 +18,7 @@ const { about } = Astro.props;
 const achievements = about?.achievementsList ?? [];
 
 ---
-<BackgroundSection image={ aboutPageConfig.backgroundImage } alt={aboutPageConfig.backgroundAlt} className={"min-h-screen"}>
+<BackgroundSection image={ aboutPageConfig.backgroundImage } alt={aboutPageConfig.backgroundAlt} className={"min-h-svh"}>
     <ScreenOverlay data-reveal-bottom/>
         <SectionLayout>
             <div slot="sectionContent" data-reveal-bottom
