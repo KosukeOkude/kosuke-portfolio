@@ -25,7 +25,7 @@ type UseLightboxHorizontalSwipeOptions = {
 export function useLightboxHorizontalSwipe({
   isOpen,
   itemCount,
-  swipeThresholdPx = 40,
+  swipeThresholdPx = 60,
   goPrev,
   goNext,
 }: UseLightboxHorizontalSwipeOptions) {
@@ -38,6 +38,8 @@ export function useLightboxHorizontalSwipe({
   useEffect(() => {
     if (!isOpen) return;
 
+    const THROTTLE_MS = 600; // ホイールと同じ連射防止間隔
+    let lastSwipeTime = 0;
     let startX: number | null = null;
     let startY: number | null = null;
 
@@ -71,6 +73,11 @@ export function useLightboxHorizontalSwipe({
       // 縦スワイプ、または閾値未満は無視
       if (Math.abs(deltaX) < Math.abs(deltaY)) return;
       if (Math.abs(deltaX) < swipeThresholdPx) return;
+
+      // 連射防止
+      const now = Date.now();
+      if (now - lastSwipeTime < THROTTLE_MS) return;
+      lastSwipeTime = now;
 
       if (deltaX > 0) {
         goPrevRef.current(); // 右スワイプ → 前の画像
