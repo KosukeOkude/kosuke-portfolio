@@ -24,8 +24,8 @@ export function initLenisWithScrollTrigger(): void {
   if (prefersReducedMotion()) return;
 
   if (isTouchDevice()) {
-    // モバイル: Lenis を使わずネイティブスクロール + normalizeScroll でピンズレを防ぐ
-    ScrollTrigger.normalizeScroll(true);
+    // モバイル: Lenis を使わずネイティブスクロールに任せる
+    // normalizeScroll は setup.ts で ST 生成前に呼び済み
     return;
   }
 
