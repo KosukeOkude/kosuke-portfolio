@@ -316,8 +316,11 @@ body.lightbox-open [data-screen-overlay] {
   min-height: 100svh;
 }
 
-/* .fixed-bg-mobile: fixedBackground=true の時だけ付くクラス（現状は追加スタイルなし）。
-   bottom:auto + height:100lvh は iOS での fixed 要素ガクつきを悪化させるため使用しない。 */
+@media (pointer: coarse) {
+  .fixed-bg-mobile {
+    height: 100lvh;
+  }
+}
 
 @media (pointer: coarse) {
 
