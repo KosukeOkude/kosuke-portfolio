@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Sanity CMS（別リポジトリのため除外）
+photo-portfolio-cms/
