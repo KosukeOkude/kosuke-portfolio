@@ -16,7 +16,7 @@ export function animationHeroIntro(): void {
 
   if (!overlay || !profileWrap || !nameEl || !titleEl) return;
 
-  if (prefersReducedMotion()) {
+  if (prefersReducedMotion() || window.matchMedia("(pointer: coarse)").matches) {
     gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 1 });
     return;
   }
