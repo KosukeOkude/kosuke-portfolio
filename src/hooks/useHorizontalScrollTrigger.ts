@@ -55,7 +55,11 @@ export function useHorizontalScrollTrigger(
 
   useLayoutEffect(() => {
     const root = document.querySelector<HTMLElement>(pinSelector);
+    const cardSlider = document.querySelector<HTMLElement>(triggerSelector);
     const scroller = scrollerRef.current;
+
+    // モバイル（タッチデバイス）かどうかを判定
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
 
     if (!root || !scroller) return;
 
@@ -88,7 +92,9 @@ export function useHorizontalScrollTrigger(
       );
 
       stRef.current = ScrollTrigger.create({
-        trigger: root,
+        // モバイルではスライダー自体の bottom を基準にする
+        // デスクトップではルート要素の bottom を基準にする
+        trigger: isMobile && cardSlider ? cardSlider : root,
         start: "bottom bottom",
         // 関数にすることで refresh のたびに最新の scrollWidth で end を再計算する
         end: () => `+=${scroller.scrollWidth - scroller.clientWidth}`,
