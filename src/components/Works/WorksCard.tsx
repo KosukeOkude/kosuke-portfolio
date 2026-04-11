@@ -15,7 +15,7 @@ export default function WorksCard({ work }: WorksCardProps) {
   } = work;
 
   return (
-    <article className="flex w-[240px] flex-shrink-0 flex-col xl:w-[280px]">
+    <article className="flex w-[192px] max-[375px]:w-[192px] min-[376px]:w-[240px] flex-shrink-0 flex-col xl:w-[280px]">
       <a
         href={`/works/${slug}`}
         className="block"
@@ -24,11 +24,11 @@ export default function WorksCard({ work }: WorksCardProps) {
         <div className="border-x border-t border-white/20 border-t-2 border-t-white">
           <div
             className="
-                relative flex h-[200px] min-h-0 w-full flex-col justify-end
+                relative flex h-[160px] min-h-0 w-full flex-col justify-end
                 border-x border-t border-white/15 border-t-white/70
                 bg-black/35 px-3 py-3
                 backdrop-blur-md backdrop-saturate-150
-                xl:h-[240px]
+                min-[376px]:h-[200px] xl:h-[240px]
           "
           >
             {tags.length > 0 && (
