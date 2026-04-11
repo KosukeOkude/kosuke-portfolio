@@ -316,6 +316,19 @@ body.lightbox-open [data-screen-overlay] {
   min-height: 100svh;
 }
 
+/* 幅375px以下でフィルムのスプロケット（穴）を縮小 */
+@media (max-width: 375px) {
+  [data-film-frame] {
+    width: 60px;
+  }
+  .sprocket {
+    height: 8px;
+    background-image: radial-gradient(circle at 50% 50%, transparent 2.5px, #141414 3px);
+    background-size: 12px 8px;
+    background-position: 6px 50%;
+  }
+}
+
 @media (pointer: coarse) {
   .fixed-bg-mobile {
     height: 100lvh;

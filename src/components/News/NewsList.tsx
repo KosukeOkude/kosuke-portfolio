@@ -39,8 +39,8 @@ export function NewsList({ newsItems }: NewsListProps) {
                 w-full
                 h-full
                 object-cover
-                grayscale
-                group-hover:grayscale-0
+                [@media(pointer:fine)]:grayscale
+                [@media(pointer:fine)]:group-hover:grayscale-0
                 transition-[filter]
                 duration-300
               "

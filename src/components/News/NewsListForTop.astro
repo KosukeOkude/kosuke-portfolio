@@ -26,8 +26,7 @@ const { newsItems } = Astro.props;
           alt={item.thumbnailAlt}
           loading="lazy"
           class="
-            w-full h-full object-cover grayscale
-            group-hover:grayscale-0 transition-[filter] duration-300
+            w-full h-full object-cover [@media(pointer:fine)]:grayscale [@media(pointer:fine)]:group-hover:grayscale-0 transition-[filter] duration-300
           "
         />
       </div>

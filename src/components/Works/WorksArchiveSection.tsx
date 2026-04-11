@@ -15,7 +15,7 @@ import type { DateSortOrder } from "@/type/DateSortOrder";
 import { useArchiveCategoryFromQuery } from "@/hooks/useArchiveCategoryFromQuery";
 import { useScrollToPinStart } from "@/hooks/useScrollToPinStart";
 import { useHorizontalScrollTrigger } from "@/hooks/useHorizontalScrollTrigger";
-import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
+import WorksArchiveHint from "@/components/Works/WorksArchiveHint";
 
 interface WorksArchiveSectionProps {
   works: WorkForClient[];
@@ -91,12 +91,12 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
         aria-label="Works archive"
         className="space-y-4"
       >
+        <WorksArchiveHint />
         <WorksCardSlider
           key={buildArchiveListKey(selectedCategory, sortOrder)}
           works={filteredWorks}
           scrollerRef={scrollerRef}
         />
-        <ScrollLineVertical isHiddenText={false} />
       </section>
     </>
   );
