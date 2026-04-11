@@ -37,8 +37,8 @@ const allItems = await getLinearSliderItems();
 ---
 
 <BaseLayout>
-  <BackgroundSection data-gallery-slug-root image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} fixedBackground eager>
-  <DetailPageLayout className="max-w-[1680px]">
+  <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} fixedBackground eager>
+  <DetailPageLayout data-gallery-slug-root className="max-w-[1680px]">
         <Breadcrumbs
         items={[
           {label:'Gallery', href:"/gallery"},

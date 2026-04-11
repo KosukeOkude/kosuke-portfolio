@@ -17,7 +17,7 @@ export const ArchiveCategoryChips = ({
   onSelect,
 }: ArchiveCategoryChipsProps) => (
   <div className="flex xl:flex-wrap gap-3
-  py-5 mb-4 overflow-x-auto">
+  py-5 mb-4 overflow-x-auto" data-scrollable>
     {categories.map((category) => {
       const isActive = category.slug === selectedCategory;
       return (
