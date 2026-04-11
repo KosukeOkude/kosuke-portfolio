@@ -316,15 +316,8 @@ body.lightbox-open [data-screen-overlay] {
   min-height: 100svh;
 }
 
-/* モバイル: ツールバー出没による fixed 背景の微動を抑える。
-   bottom を切り離して height を lvh（toolbar 非表示時の最大高さ）で固定する。
-   fixedBackground=true の時だけ付く .fixed-bg-mobile クラスにのみ適用。 */
-@media (pointer: coarse) {
-  .fixed-bg-mobile {
-    bottom: auto;
-    height: 100lvh;
-  }
-}
+/* .fixed-bg-mobile: fixedBackground=true の時だけ付くクラス（現状は追加スタイルなし）。
+   bottom:auto + height:100lvh は iOS での fixed 要素ガクつきを悪化させるため使用しない。 */
 
 @media (pointer: coarse) {
 
