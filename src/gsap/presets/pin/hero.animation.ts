@@ -16,7 +16,7 @@ export function animationHeroIntro(): void {
 
   if (!overlay || !profileWrap || !nameEl || !titleEl) return;
 
-  if (prefersReducedMotion() || window.matchMedia("(pointer: coarse)").matches) {
+  if (prefersReducedMotion()) {
     gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 1 });
     return;
   }
@@ -33,7 +33,7 @@ export function animationHeroIntro(): void {
   const introSt = ScrollTrigger.create({
     trigger: root,
     start: "top top",
-    end: "+=2000",
+    end: "+=1700",
     pin: true,
     scrub: 1,
     animation: tl,

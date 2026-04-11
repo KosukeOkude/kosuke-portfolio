@@ -138,7 +138,7 @@ export default function randomImagesOnScreen(): void {
       scrollTrigger: {
         trigger: document.body,
         start: "top top",
-        end: "+=600",
+        end: "+=300",
         scrub: true,
         invalidateOnRefresh: true,
         onLeave() {
