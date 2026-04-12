@@ -13,9 +13,19 @@ export function ContactForm({ action = '/api/contact' }: ContactFormProps) {
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const isValidEmail = (value: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status === 'loading') return;
+
+    if (!isValidEmail(email)) {
+      setStatus('error');
+      setErrorMessage('メールアドレスの形式が正しくありません（例: email@example.com）');
+      return;
+    }
+
     setStatus('loading');
     setErrorMessage('');
     try {

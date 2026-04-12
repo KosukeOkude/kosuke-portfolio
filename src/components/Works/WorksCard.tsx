@@ -65,8 +65,8 @@ export default function WorksCard({ work }: WorksCardProps) {
         <div className="aspect-[4/5] w-full flex-shrink-0 overflow-hidden rounded-b-normal bg-gray-800">
           <img
             src={thumbnailUrl}
-            srcSet={thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 280, 560]) : undefined}
-            sizes="(max-width: 400px) 192px, (max-width: 1280px) 240px, 280px"
+            srcSet={thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 300, 350, 560]) : undefined}
+            sizes="(max-width: 400px) 192px, (max-width: 1280px) 300px, 350px"
             alt={thumbnailAlt}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
