@@ -100,12 +100,19 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
       .auto("format")
       .url() ?? "";
 
-  const subImage: { src: string; alt: string }[] = (doc.subImages ?? [])
+  const thumbnailLightboxUrl =
+    urlFor(doc.thumbnail ?? undefined)
+      ?.width(2000)
+      .auto("format")
+      .url() ?? "";
+
+  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (doc.subImages ?? [])
     .filter(
       (s): s is { asset: { _ref: string }; alt: string | null } => !!s.asset,
     )
     .map((s) => ({
       src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
+      lightboxSrc: urlFor(s.asset)?.width(2000).auto("format").url() ?? "",
       alt: s.alt ?? "",
     }));
 
@@ -125,6 +132,7 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
     date: doc.date,
     tags: doc.tags ?? [],
     thumbnail: thumbnailUrl,
+    thumbnailLightboxUrl,
     thumbnailAlt: doc.thumbnailAlt ?? "",
     videos: videos.length > 0 ? videos : undefined,
     description: doc.description ?? "",

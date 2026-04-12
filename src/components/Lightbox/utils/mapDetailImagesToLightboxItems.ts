@@ -7,14 +7,14 @@ export function mapDetailImagesToLightboxItems(
   source: DetailImageSource,
 ): LightboxItem[] {
   const primaryImage: LightboxItem = {
-    src: source.mainImageUrl,
+    src: source.mainImageLightboxUrl,
     alt: source.mainImageAlt ?? "",
   };
 
   const secondaryImages: LightboxItem[] = (
     source.subImages ?? []
   ).map((subImage) => ({
-    src: subImage.src,
+    src: subImage.lightboxSrc,
     alt: subImage.alt ?? "",
   }));
 

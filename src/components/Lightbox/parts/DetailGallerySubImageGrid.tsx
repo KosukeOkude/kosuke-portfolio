@@ -27,8 +27,8 @@ export function DetailSubImageGrid({
           <div className="aspect-video rounded-md overflow-hidden border border-white/15 bg-white/5">
             <img
               src={image.src}
-              srcSet={image.src ? buildSrcSet(image.src, [400, 800, 1600]) : undefined}
-              sizes="(max-width: 768px) 100vw, 63vw"
+              srcSet={image.src ? buildSrcSet(image.src, [400, 800, 1200]) : undefined}
+              sizes="(max-width: 768px) 100vw, 50vw"
               alt={image.alt ?? ""}
               className="h-full w-full object-cover"
               loading="lazy"

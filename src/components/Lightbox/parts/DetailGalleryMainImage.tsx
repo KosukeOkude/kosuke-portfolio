@@ -21,8 +21,8 @@ export function DetailGalleryMainImage({
       <div className="overflow-hidden rounded-lg border border-white/15 bg-white/5 h-[360px] md:h-[560px]">
         <img
           src={mainImage}
-          srcSet={mainImage ? buildSrcSet(mainImage, [400, 800, 1600]) : undefined}
-          sizes="(max-width: 768px) 100vw, 63vw"
+          srcSet={mainImage ? buildSrcSet(mainImage, [400, 800, 1200]) : undefined}
+          sizes="(max-width: 768px) 100vw, 50vw"
           alt={mainImageAlt ?? ""}
           className="w-full h-full object-cover"
           loading="lazy"

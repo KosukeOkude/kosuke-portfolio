@@ -110,10 +110,16 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
       .auto("format")
       .url() ?? "";
 
+  const thumbnailLightboxUrl =
+    urlFor(doc.thumbnailUrl ?? undefined)
+      ?.width(2000)
+      .auto("format")
+      .url() ?? "";
+
   const normalizedSlug = normalizeSlug(doc.slug);
   const normalizeCategory = doc.category.toLocaleLowerCase();
 
-  const subImage: { src: string; alt: string }[] = (doc.subImage ?? [])
+  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (doc.subImage ?? [])
     .filter(
       (
         s,
@@ -122,6 +128,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     )
     .map((s) => ({
       src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
+      lightboxSrc: urlFor(s.asset)?.width(2000).auto("format").url() ?? "",
       alt: s.alt ?? "",
     }));
 
@@ -141,6 +148,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     title: doc.title,
     summary: doc.summary,
     thumbnailUrl,
+    thumbnailLightboxUrl,
     thumbnailAlt: doc.thumbnailAlt ?? "",
     videos: videos.length > 0 ? videos : undefined,
     slug: normalizedSlug,

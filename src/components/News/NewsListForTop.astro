@@ -1,5 +1,6 @@
 ---
 import type { NewsArchive } from "@/data/news";
+import { buildSrcSet } from "@/utils/buildSrcSet";
 
 interface Props {
   newsItems: NewsArchive[];
@@ -23,6 +24,8 @@ const { newsItems } = Astro.props;
       <div class="flex-shrink-0 w-[140px] sm:w-[180px] md:w-[200px] aspect-square overflow-hidden bg-[#f5f5f5]">
         <img
           src={item.thumbnailUrl}
+          srcset={buildSrcSet(item.thumbnailUrl, [200, 400])}
+          sizes="(max-width: 640px) 140px, (max-width: 768px) 180px, 200px"
           alt={item.thumbnailAlt}
           loading="lazy"
           class="

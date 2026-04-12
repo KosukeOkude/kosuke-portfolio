@@ -44,6 +44,7 @@ const allCategories = ['All', ...new Set(allNews.map(n => n.category))]
 
         <DetailImageGalleryWithLightbox
           mainImageUrl={newsItem.thumbnailUrl}
+          mainImageLightboxUrl={newsItem.thumbnailLightboxUrl}
           mainImageAlt={newsItem.thumbnailAlt}
           subImages={newsItem.subImage ?? []}
           client:load

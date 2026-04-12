@@ -8,6 +8,7 @@ import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
 
 export default function DetailImageGalleryWithLightbox({
   mainImageUrl,
+  mainImageLightboxUrl,
   mainImageAlt,
   subImages = [],
   children,
@@ -20,10 +21,11 @@ export default function DetailImageGalleryWithLightbox({
     () =>
       mapDetailImagesToLightboxItems({
         mainImageUrl,
+        mainImageLightboxUrl,
         mainImageAlt,
         subImages,
       }),
-    [mainImageUrl, mainImageAlt, subImages],
+    [mainImageUrl, mainImageLightboxUrl, mainImageAlt, subImages],
   );
 
   const openAt = (index: number) => {

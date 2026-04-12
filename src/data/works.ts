@@ -14,6 +14,7 @@ export interface Work {
   date: string;
   tags: string[];
   thumbnail: string;
+  thumbnailLightboxUrl: string;
   thumbnailAlt: string;
   videos?: YoutubeVideo[];
   description: string;
@@ -23,7 +24,7 @@ export interface Work {
   role?: string[];
   notes?: string;
   credits?: { label: string; value: string }[];
-  subImage?: { src: string; alt: string }[];
+  subImage?: { src: string; lightboxSrc: string; alt: string }[];
 }
 
 export interface WorkForClient {

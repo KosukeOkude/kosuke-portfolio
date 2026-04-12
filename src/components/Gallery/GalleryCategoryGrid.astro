@@ -1,12 +1,12 @@
 ---
 import type { GalleryCategory } from '@/data/gallery';
+import { buildSrcSet } from '@/utils/buildSrcSet';
 
 interface Props {
     galleryCategories: GalleryCategory[];
 }
 
 const { galleryCategories } = Astro.props;
-
 ---
 
 <div
@@ -27,6 +27,8 @@ const { galleryCategories } = Astro.props;
         ">
             <img
                 src={category.imageUrl}
+                srcset={buildSrcSet(category.imageUrl, [400, 800, 1200])}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 alt={category.imageAlt}
                 loading="lazy"
                 class="

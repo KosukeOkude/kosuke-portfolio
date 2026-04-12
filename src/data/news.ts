@@ -13,6 +13,7 @@ export interface NewsArchive {
   title: string; // "二人の窓の外"
   summary: string;
   thumbnailUrl: string;
+  thumbnailLightboxUrl: string;
   thumbnailAlt: string;
   videos?: YoutubeVideo[];
   slug: string;
@@ -27,7 +28,7 @@ export interface NewsPage extends NewsArchive {
   venue?: string; // 会場
   eventDate?: string; // イベント日時
   relatedLinks?: { label: string; url: string }[]; // 関連リンク（credits の代わり）
-  subImage?: { src: string; alt: string }[];
+  subImage?: { src: string; lightboxSrc: string; alt: string }[];
 }
 
 export { getAllNews, getNewsBySlug } from "@/sanity/news";
