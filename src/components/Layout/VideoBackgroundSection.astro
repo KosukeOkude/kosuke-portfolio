@@ -68,14 +68,33 @@ const fallbackSrc = videoSrc ?? '';
 
 <script>
   // “動画は嫌”なユーザー向けに prefers-reduced-motion のとき停止する
-  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>("video[data-video-bg]"));
-  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>(“video[data-video-bg]”));
+  const mq = window.matchMedia(“(prefers-reduced-motion: reduce)”);
+
+  // Microsoft Edge を UA で判定（Edg/ は Edge 固有のトークン）
+  const isEdge = /Edg\//.test(navigator.userAgent);
 
   const apply = () => {
     for (const v of videos) {
       if (!v) continue;
-      if (mq.matches) {
+      if (mq.matches || isEdge) {
         try { v.pause(); } catch {}
+        // poster が設定されていれば動画を非表示にして poster だけ見せる
+        if (isEdge) {
+          v.style.display = “none”;
+          // poster を背景画像として兄弟要素に表示する
+          const poster = v.getAttribute(“poster”);
+          if (poster) {
+            let posterEl = v.parentElement?.querySelector<HTMLDivElement>(“[data-video-poster-fallback]”);
+            if (!posterEl) {
+              posterEl = document.createElement(“div”);
+              posterEl.setAttribute(“data-video-poster-fallback”, “”);
+              posterEl.style.cssText = “position:absolute;inset:0;background-size:cover;background-position:center;”;
+              v.parentElement?.appendChild(posterEl);
+            }
+            posterEl.style.backgroundImage = `url(${poster})`;
+          }
+        }
       } else {
         // autoplay なので play 失敗は普通に起こりうる
         try { v.play(); } catch {}
@@ -83,6 +102,6 @@ const fallbackSrc = videoSrc ?? '';
     }
   };
 
-  mq.addEventListener?.("change", apply);
+  mq.addEventListener?.(“change”, apply);
   apply();
 </script>
