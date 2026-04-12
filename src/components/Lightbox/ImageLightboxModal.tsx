@@ -77,6 +77,19 @@ export default function ImageLightBoxModal({
   // 現在 index から表示対象アイテムを導出。
   const activeItem = useMemo(() => items[activeIndex], [activeIndex, items]);
 
+  // 前後2枚の画像を事前にロード（ちらつき防止）
+  useEffect(() => {
+    if (!isOpen) return;
+    [-2, -1, 1, 2].forEach((offset) => {
+      const index = activeIndex + offset;
+      if (index < 0 || index >= items.length) return;
+      const src = items[index]?.src;
+      if (!src) return;
+      const img = new Image();
+      img.src = src;
+    });
+  }, [activeIndex, isOpen, items]);
+
   // 画像表示レイヤー（アニメ対象）への参照。
   const imageAreaRef = useRef<HTMLDivElement>(null);
   // モーダル内に有効な表示対象があるか（アニメ実行条件）。
