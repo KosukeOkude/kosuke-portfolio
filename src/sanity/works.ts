@@ -59,7 +59,6 @@ export async function getAllWorks(): Promise<WorkForClient[]> {
     const thumbnailUrl =
       urlFor(item.thumbnail ?? undefined)
         ?.width(560)
-        .height(640)
         .auto("format")
         .url() ?? "";
     return {

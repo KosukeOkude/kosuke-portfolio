@@ -61,7 +61,6 @@ export async function getAllNews(): Promise<NewsArchive[]> {
     const thumbnailUrl =
       urlFor(item.thumbnailUrl ?? undefined)
         ?.width(560)
-        .height(640)
         .auto("format")
         .url() ?? "";
 
