@@ -1,4 +1,5 @@
 import "@/client/initLenis";
+import "@/client/initVideoBackground";
 // import "@/client/initDecorCursor";
 import "@/client/initHeader";
 import "@/client/initHamburgerMenu";
