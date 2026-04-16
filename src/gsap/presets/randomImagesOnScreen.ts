@@ -1,5 +1,6 @@
 import { whenDomReady } from "@/gsap/core/whenDomReady";
 import { gsap, Draggable } from "@/gsap/core/setup";
+import { animationHeroIntro } from "@/gsap/presets/pin/hero.animation";
 
 /**
  * 指定したlayer（親要素）の中で、画像要素(el)をスロット制約なしに
@@ -87,6 +88,7 @@ export default function randomImagesOnScreen(): void {
   gsap.set(Object.values(gridLines), {
     opacity: 1,
   });
+  gsap.set(root, { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" });
 
   const tl = gsap.timeline();
 
@@ -129,27 +131,42 @@ export default function randomImagesOnScreen(): void {
       },
     );
 
-  gsap.fromTo(
-    root,
-    { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" },
-    {
+  const isTouchDevice = navigator.maxTouchPoints > 0;
+
+  if (isTouchDevice) {
+    // モバイル: スクロールなしでクリップパスを自動再生してヒーローへ
+    tl.to({}, { duration: 0.2 }).to(root, {
       clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
       ease: "power2.inOut",
-      scrollTrigger: {
-        trigger: document.body,
-        start: "top top",
-        end: "+=300",
-        scrub: true,
-        invalidateOnRefresh: true,
-        onLeave() {
-          gsap.set(root, { display: "none" });
-        },
-        onEnterBack() {
-          gsap.set(root, { display: "block" });
+      duration: 0.2,
+      onComplete() {
+        gsap.set(root, { display: "none" });
+        animationHeroIntro();
+      },
+    });
+  } else {
+    gsap.fromTo(
+      root,
+      { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" },
+      {
+        clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
+        ease: "power2.inOut",
+        scrollTrigger: {
+          trigger: document.body,
+          start: "top top",
+          end: "+=300",
+          scrub: true,
+          invalidateOnRefresh: true,
+          onLeave() {
+            gsap.set(root, { display: "none" });
+          },
+          onEnterBack() {
+            gsap.set(root, { display: "block" });
+          },
         },
       },
-    },
-  );
+    );
+  }
 
   films.forEach((film) => {
     placeImageAtRandomPosition(root, film, 0.05);

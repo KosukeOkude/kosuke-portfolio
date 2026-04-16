@@ -10,7 +10,10 @@ import { runWorksTopAnimation } from "@/gsap/presets/pin/worksTop.animation";
 import { isHomePath } from "@/utils/homePath";
 
 if (isHomePath()) {
-  whenDomReady(animationHeroIntro);
+  //PC時のみヒーロースクロールトリガー再生
+  if (navigator.maxTouchPoints === 0) {
+    whenDomReady(animationHeroIntro);
+  }
 
   whenDomReady(runWorksTopAnimation);
 
