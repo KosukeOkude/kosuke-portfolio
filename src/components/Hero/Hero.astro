@@ -8,6 +8,7 @@ import heroBackgroundVideoMp4 from '@/assets/movies/hhpp-1080.mp4';
 import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
 import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro';
+import ScrollLineVerticalForTop from '@/components/UI/ScrollLineVerticalForTop.astro';
 ---
 
 <VideoBackgroundSection
@@ -26,7 +27,7 @@ import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro
   </div>
 
     <div
-      class="hero__content layout-offset-top layout-padding-x relative z-20 flex min-h-svh flex-col items-center justify-center"
+      class="hero__content layout-offset-top layout-padding-x relative z-20 flex min-h-svh flex-col items-center justify-center max-[400px]:pb-[10px]"
     >
       <div data-hero-profile-wrap>
         <Picture
@@ -56,5 +57,5 @@ import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro
     </div>
   </div>
 
-  <ScrollLineOnlyVertical isHiddenText isMobile/>
+  <ScrollLineOnlyVertical/>
 </VideoBackgroundSection>
