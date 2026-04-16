@@ -335,6 +335,12 @@ body.lightbox-open [data-screen-overlay] {
   }
 }
 
+.fixed-bg-mobile {
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 @media (pointer: coarse) {
   .fixed-bg-mobile {
     height: 100lvh;
