@@ -4,18 +4,9 @@ const { class: className, pinOverlay = false, hideOnMobile = false, ...rest } = 
 
 
 <div class:list={[
-  "pointer-events-none fixed inset-0 -z-10 bg-black/30 w-full h-full",
-  hideOnMobile && "hide-on-mobile",
+  "pointer-events-none fixed inset-0 -z-10 bg-black/50 w-full h-full",
+  hideOnMobile && "opacity-0",
   className
 ]}
   data-screen-overlay
   {...rest}></div>
-
-
-  <style>
-    @media (hover: none) and (pointer: coarse) {
-      .hide-on-mobile {
-        opacity: 0;
-      }
-    }
-  </style>
