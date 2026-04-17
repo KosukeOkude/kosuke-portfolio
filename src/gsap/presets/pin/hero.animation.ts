@@ -14,21 +14,23 @@ export function animationHeroIntro(): void {
 
   if (!overlay || !profileWrap || !nameEl || !titleEl) return;
 
+  const isTouchDevice = navigator.maxTouchPoints > 0;
+
   if (prefersReducedMotion()) {
     gsap.set([profileWrap, nameEl, titleEl], { opacity: 1 });
     return;
   }
-  gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
-  const isTouchDevice = navigator.maxTouchPoints > 0;
-
-  const tl = gsap.timeline({ paused: true });
 
   if (isTouchDevice) {
-    tl.play();
-    tl.to(overlay, { opacity: 0, duration: 1 });
-    tl.to([nameEl, titleEl, profileWrap], { opacity: 1, duration: 0.45 }, "+=0.08");
+    gsap.set([profileWrap, nameEl, titleEl], { opacity: 0 });
+    const tl = gsap.timeline();
+    tl.to(profileWrap, { opacity: 1, duration: 0.8 });
+    tl.to([nameEl, titleEl], { opacity: 1, duration: 0.45 }, "+=0.08");
     return;
   }
+
+  gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
+  const tl = gsap.timeline({ paused: true });
 
   tl.to({}, { duration: 2 });
   tl.to(overlay, { opacity: 1, duration: 1 });
