@@ -2,10 +2,9 @@
 import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import LabeledSection from "@/components/UI/LabeledSection.astro";
-import MoreInCategory from "@/components/UI/MoreInCategory.astro";
 import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
-
+import DetailPagePrevNextNav from '@/components/UI/DetailPagePrevNextNav.astro';
 import DetailImageGalleryWithLightbox from "@/components/Lightbox/DetailImageGalleryWithLightbox";
 import { getAllNews, getNewsBySlug, newsPageConfig } from '@/data/news';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
@@ -29,7 +28,7 @@ if(!newsItem){
     throw new Error(`News not found for slug: ${slug}`);
 }
 const allNews = await getAllNews();
-const allCategories = ['All', ...new Set(allNews.map(n => n.category))]
+
 
 ---
 
@@ -129,8 +128,7 @@ const allCategories = ['All', ...new Set(allNews.map(n => n.category))]
             )}
           </section>
         </DetailImageGalleryWithLightbox>
-
-        <MoreInCategory baseHref="/news" allCategories={allCategories} />
+        <DetailPagePrevNextNav allItems={}/>
         <PageBottomNav label="news" href="/news" />
       </DetailPageLayout>
   </BackgroundSection>
