@@ -4,11 +4,9 @@ import heroBackgroundPoster from '@/assets/images/hhpp-poster.jpg';
 import heroProfileImage from '@/assets/images/hero-profile-img.jpg';
 import heroBackgroundVideoWebm from '@/assets/movies/hhpp-1080.webm';
 import heroBackgroundVideoMp4 from '@/assets/movies/hhpp-1080.mp4';
-// import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
 import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro';
-import ScrollLineVerticalForTop from '@/components/UI/ScrollLineVerticalForTop.astro';
 ---
 
 <VideoBackgroundSection
@@ -19,7 +17,7 @@ import ScrollLineVerticalForTop from '@/components/UI/ScrollLineVerticalForTop.a
   data-hero-root
 >
   <div class="relative z-0 min-h-svh">
-    <ScreenOverlay data-hero-overlay/>
+    <ScreenOverlay hideOnMobile  data-hero-overlay/>
     <div
       class="pointer-events-none absolute left-1/2 bottom-6 z-30  max-w-xs -translate-x-1/2 px-4 transform-gpu will-change-transform"
       aria-hidden="true"

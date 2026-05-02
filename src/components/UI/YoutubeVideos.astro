@@ -1,12 +1,30 @@
 ---
-import type { YoutubeVideo } from "@/type/youtubeVideo";
-import { getYouTubeEmbedUrl } from "@/utils/getYouTubeEmbedUrl";
+import type { YoutubeVideo } from "@/types";
 
 const { videos } = Astro.props as { videos?: YoutubeVideo[] };
+
+export function getYouTubeEmbedUrl(inputUrl: string) {
+  try {
+    const url = new URL(inputUrl);
+    const host = url.hostname.replace(/^www\./, "");
+    let videoId: string | null = url.searchParams.get("v");
+
+    if (!videoId && host === "youtu.be") {
+      videoId = url.pathname.split("/").filter(Boolean)[0] ?? null;
+    }
+
+    if (!videoId && url.pathname.startsWith("/embed/")) {
+      videoId = url.pathname.split("/embed/")[1]?.split("/")[0] ?? null;
+    }
+
+    if (!videoId) return inputUrl;
+
+    return `https://www.youtube-nocookie.com/embed/${videoId}`;
+  } catch {
+    return inputUrl;
+  }
+}
 ---
-
-
-
 
 {videos && videos.length > 0 && (
     <section class="space-y-6 mb-10" aria-label="Videos">

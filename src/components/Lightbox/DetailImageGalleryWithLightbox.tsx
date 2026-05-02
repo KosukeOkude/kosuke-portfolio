@@ -1,10 +1,15 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import ImageLightBoxModal from "@/components/Lightbox/ImageLightboxModal";
-import { mapDetailImagesToLightboxItems } from "@/components/Lightbox/utils/mapDetailImagesToLightboxItems";
-import type { DetailImageGalleryWithLightboxProps } from "@/type/detailImageSource";
-import { DetailSubImageGrid } from "@/components/Lightbox/parts/DetailGallerySubImageGrid";
-import { DetailGalleryMainImage } from "@/components/Lightbox/parts/DetailGalleryMainImage";
-import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
+import { mapDetailImagesToLightboxItems } from "@/components/Lightbox/mapDetailImagesToLightboxItems";
+import type { DetailImageSource } from "@/types";
+
+import { DetailSubImageGrid } from "@/components/Lightbox/DetailGallerySubImageGrid";
+import { DetailGalleryMainImage } from "@/components/Lightbox/DetailGalleryMainImage";
+import { useRevealDispatch } from "@/gsap/core";
+
+export type DetailImageGalleryWithLightboxProps = DetailImageSource & {
+  children?: ReactNode;
+};
 
 export default function DetailImageGalleryWithLightbox({
   mainImageUrl,

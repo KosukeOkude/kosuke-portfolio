@@ -1,4 +1,4 @@
-import type { DateSortOrder } from "@/type/DateSortOrder";
+import type { DateSortOrder } from "@/types";
 
 export interface ArchiveDateSortSelectProps {
   value: DateSortOrder;

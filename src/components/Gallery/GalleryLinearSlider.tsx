@@ -1,25 +1,27 @@
 import React, { useState, useMemo, useRef, useCallback } from "react";
 import { GalleryTrack } from "@/components/Gallery/GalleryTrack";
-import { sortByDate } from "@/utils/sortByDate";
-import { filterByCategory } from "@/utils/filterByCategory";
-import { type CategoryOption } from "@/type/category";
+import { sortByDate, buildArchiveListKey } from "@/utils";
+
 import ImageLightboxModal from "@/components/Lightbox/ImageLightboxModal";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
-import useGalleryLightboxScrollBridge from "@/components/Lightbox/hooks/useLightboxScrollBridge";
+import useGalleryLightboxScrollBridge from "@/components/Lightbox/hooks";
 import { ArchiveCategoryChips } from "@/components/UI/ArchiveCategoryChips";
 import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
-import type { DateSortOrder } from "@/type/DateSortOrder";
-import { toTimeMsOrZero } from "@/utils/toTimeMsOrZero";
-import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
-import { useRevealRefreshOnChange } from "@/hooks/useRevealRefreshOnChange";
-import { buildArchiveListKey } from "@/utils/archive/buildArchiveListKey";
-import { useHorizontalScrollTrigger } from "@/hooks/useHorizontalScrollTrigger";
-import { useScrollToPinStart } from "@/hooks/useScrollToPinStart";
+import type { DateSortOrder } from "@/types";
+import { toTimeMsOrZero, filterByCategory } from "@/utils";
+import { useRevealDispatch } from "@/gsap/core";
+import { useRevealRefreshOnChange, useHorizontalScrollTrigger } from "@/hooks";
+import { useScrollToPinStart } from "@/hooks";
 
 type GalleryLinearSliderProps = {
   items: GalleryLinearSliderItem[];
   categories: CategoryOption[];
   initialCategory?: string;
+};
+
+export type CategoryOption = {
+  slug: string;
+  label: string;
 };
 
 export const GalleryLinearSlider = ({

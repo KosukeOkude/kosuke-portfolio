@@ -1,4 +1,4 @@
-import { gsap, prefersReducedMotion } from "@/gsap/core/setup";
+import { gsap, prefersReducedMotion } from "@/gsap/core";
 
 export type lightboxIntroParams = {
   el: HTMLElement;

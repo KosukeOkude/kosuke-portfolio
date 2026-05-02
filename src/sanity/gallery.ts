@@ -1,6 +1,6 @@
 import type { GalleryCategory, GalleryLinearSliderItem } from "@/data/gallery";
 import { sanityClient, urlFor } from "@/sanity/client";
-import { normalizeSlug } from "@/utils/normalizeSlug";
+import { normalizeSlug } from "@/utils";
 
 export const galleryQuery = `*[_type == "gallery"] | order(title asc) {
     "slug": slug.current,

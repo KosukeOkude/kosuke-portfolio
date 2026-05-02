@@ -1,21 +1,14 @@
 import { useMemo, useState, useCallback } from "react";
-
 import { NewsList } from "@/components/News/NewsList";
 import { type NewsArchive } from "@/data/news";
-import { sortByDate } from "@/utils/sortByDate";
-import { filterByCategory } from "@/utils/filterByCategory";
-import { useAllCategories } from "@/utils/useAllCategories";
+import { sortByDate, formatArchiveCategoryLabel, buildArchiveListKey } from "@/utils";
+import { useAllCategories } from "@/hooks";
 import { ArchiveCategoryChips } from "@/components/UI/ArchiveCategoryChips";
-import { formatArchiveCategoryLabel } from "@/utils/archive/formatArchiveCategoryLabel";
 import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
-import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
-import { useRevealRefreshOnChange } from "@/hooks/useRevealRefreshOnChange";
-import { toTimeMsOrZero } from "@/utils/toTimeMsOrZero";
-import { useArchiveCategoryFromQuery } from "@/hooks/useArchiveCategoryFromQuery";
-import { useArchiveMoreInCategoryLanding } from "@/hooks/useArchiveMoreInCategoryLanding";
-import type { DateSortOrder } from "@/type/DateSortOrder";
-import { buildArchiveListKey } from "@/utils/archive/buildArchiveListKey";
-import { useScrollArchiveMainOnFilterChange } from "@/hooks/useScrollArchiveMainOnFilterChange";
+import { useRevealDispatch } from "@/gsap/core";
+import { toTimeMsOrZero, filterByCategory } from "@/utils";
+import { useRevealRefreshOnChange, useArchiveCategoryFromQuery, useArchiveMoreInCategoryLanding, useScrollArchiveMainOnFilterChange } from "@/hooks";
+import type { DateSortOrder } from "@/types";
 
 interface NewsArchiveProps {
   newsItems: NewsArchive[];
@@ -74,8 +67,10 @@ export const NewsArchiveSection = ({ newsItems }: NewsArchiveProps) => {
         onChange={setSortOrder}
       />
 
-        <NewsList newsItems={filteredNews} key={buildArchiveListKey(selectedCategory, sortOrder)}/>
-
+      <NewsList
+        newsItems={filteredNews}
+        key={buildArchiveListKey(selectedCategory, sortOrder)}
+      />
     </>
   );
 };

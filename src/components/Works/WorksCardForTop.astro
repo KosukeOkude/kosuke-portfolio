@@ -1,0 +1,78 @@
+---
+import type { WorkForClient } from "@/data/works";
+import { buildSrcSet } from "@/utils";
+
+interface Props {
+  work: WorkForClient;
+}
+
+const { work } = Astro.props;
+
+const {
+  title,
+  date,
+  slug,
+  tags = [],
+  thumbnailUrl,
+  thumbnailAlt,
+} = work;
+
+const srcSet = thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 300, 350, 560]) : undefined;
+---
+
+<article class="flex max-[400px]:w-[192px] w-[240px] flex-shrink-0 flex-col md:w-[280px]">
+  <a href={`/works/${slug}`} class="group block">
+    <div class="border-x border-t border-white/20 border-t-2 border-t-white">
+      <div
+        class="
+          relative flex max-[400px]:h-[160px] h-[200px] min-h-0 w-full flex-col justify-end
+          border-x border-t border-white/15 border-t-white/70
+          bg-black/35 px-3 py-3
+          backdrop-blur-md backdrop-saturate-150
+          md:h-[240px]
+        "
+      >
+        {tags.length > 0 && (
+          <div class="absolute right-3 top-3 z-10 flex flex-col items-end gap-1">
+            {tags.map((tag) => (
+              <span
+                class="text-body text-right text-[10px] font-medium leading-tight tracking-wide text-white/75 md:text-[11px]"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <h3
+          class="
+            mb-1.5 font-accent text-base font-semibold leading-tight
+            text-[var(--color-white)] md:text-[17px] md:text-lg md:leading-snug
+          "
+        >
+          {title}
+        </h3>
+
+        <p
+          class="
+            text-body text-[10px] uppercase tracking-[0.14em] text-white/60
+            md:text-[11px] md:text-xs
+          "
+        >
+          Date - {date}
+        </p>
+      </div>
+    </div>
+
+    <div class="aspect-[4/5] w-full flex-shrink-0 overflow-hidden rounded-b-normal bg-gray-800">
+      <img
+        src={thumbnailUrl}
+        srcset={srcSet}
+        sizes="(max-width: 400px) 192px, (max-width: 1280px) 300px, 350px"
+        alt={thumbnailAlt ?? ""}
+        loading="lazy"
+        class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+      />
+    </div>
+  </a>
+</article>

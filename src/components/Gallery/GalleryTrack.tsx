@@ -1,8 +1,8 @@
 import { type RefObject } from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
-import { useGalleryTrackScrollToItem } from "@/hooks/gallery/useGalleryTrackScrollToItem";
+import { useGalleryTrackScrollToItem } from "@/hooks";
 import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
-import { buildSrcSet } from "@/utils/buildSrcSet";
+import { buildSrcSet } from "@/utils";
 
 interface GalleryTrackProps {
   items: GalleryLinearSliderItem[];

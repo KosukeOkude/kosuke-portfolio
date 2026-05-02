@@ -1,20 +1,15 @@
 import { useMemo, useState, useCallback, useRef } from "react";
 import type { WorkForClient } from "@/data/works";
 import { WorksCardSlider } from "@/components/Works/WorksCardSlider";
-import { filterByCategory } from "@/utils/filterByCategory";
-import { sortByDate } from "@/utils/sortByDate";
-import { useAllCategories } from "@/utils/useAllCategories";
+
+import { sortByDate, filterByCategory, formatArchiveCategoryLabel,buildArchiveListKey } from "@/utils";
+import { useAllCategories } from "@/hooks";
 import { ArchiveCategoryChips } from "@/components/UI/ArchiveCategoryChips";
-import { formatArchiveCategoryLabel } from "@/utils/archive/formatArchiveCategoryLabel";
+
 import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
-import { useRevealDispatch } from "@/gsap/core/useRevealDispatch";
-import { useArchiveMoreInCategoryLanding } from "@/hooks/useArchiveMoreInCategoryLanding";
-import { useRevealRefreshOnChange } from "@/hooks/useRevealRefreshOnChange";
-import { buildArchiveListKey } from "@/utils/archive/buildArchiveListKey";
-import type { DateSortOrder } from "@/type/DateSortOrder";
-import { useArchiveCategoryFromQuery } from "@/hooks/useArchiveCategoryFromQuery";
-import { useScrollToPinStart } from "@/hooks/useScrollToPinStart";
-import { useHorizontalScrollTrigger } from "@/hooks/useHorizontalScrollTrigger";
+import { useRevealDispatch } from "@/gsap/core";
+import type { DateSortOrder } from "@/types";
+import { useArchiveMoreInCategoryLanding, useRevealRefreshOnChange, useArchiveCategoryFromQuery, useScrollToPinStart, useHorizontalScrollTrigger } from "@/hooks";
 import WorksArchiveHint from "@/components/Works/WorksArchiveHint";
 
 interface WorksArchiveSectionProps {

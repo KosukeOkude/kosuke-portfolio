@@ -1,6 +1,6 @@
 import { sanityClient, urlFor } from "@/sanity/client";
 import type { NewsArchive, NewsPage } from "@/data/news";
-import { normalizeSlug } from "@/utils/normalizeSlug";
+import { normalizeSlug } from "@/utils";
 
 export const newsListQuery = `*[_type == "news"] | order(date desc) {
   _id,
@@ -65,7 +65,7 @@ export async function getAllNews(): Promise<NewsArchive[]> {
         .url() ?? "";
 
     const normalizedSlug = normalizeSlug(item.slug);
-    const normalizeCategory = item.category.toLocaleLowerCase();
+    const normalizeCategory = (item.category ?? "").toLocaleLowerCase();
     return {
       id: item._id,
       date: item.date,
@@ -117,13 +117,13 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
       .url() ?? "";
 
   const normalizedSlug = normalizeSlug(doc.slug);
-  const normalizeCategory = doc.category.toLocaleLowerCase();
+  const normalizeCategory = (doc.category ?? "").toLocaleLowerCase();
 
-  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (doc.subImage ?? [])
+  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (
+    doc.subImage ?? []
+  )
     .filter(
-      (
-        s,
-      ): s is { asset: { _ref?: string; _id?: string }; alt: string | null } =>
+      (s): s is { asset: { _ref?: string; _id?: string }; alt: string | null } =>
         !!s.asset,
     )
     .map((s) => ({

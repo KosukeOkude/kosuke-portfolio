@@ -1,5 +1,5 @@
 import { urlFor, sanityClient } from '@/sanity/client';
-import { normalizeSlug } from '@/utils/normalizeSlug';
+import { normalizeSlug } from '@/utils';
 import type { GalleryCategory } from '@/data/gallery';
 import type { WorkForClient } from '@/data/works';
 import type { AboutPageContent } from '@/sanity/about';

@@ -1,10 +1,10 @@
-import worksBackgroundImage from "@/assets/images/works-image-3.jpg";
-import worksMobileBackgroundImage from "@/assets/images/about-background-image.jpg";
-import type { YoutubeVideo } from "@/type/youtubeVideo";
+import worksBackgroundImage from "@/assets/images/works-backrgound-image-pc.jpg";
+import worksMobileBackgroundImage from "@/assets/images/works-backrgound-image-mobile.jpg";
+import type { YoutubeVideo } from "@/types";
 
 export const worksPageConfig = {
   backgroundImage: worksBackgroundImage,
-  backgroundAlt: "カフェで抹茶のお菓子とティーセット",
+  backgroundAlt: "",
   mobileImage: worksMobileBackgroundImage,
 };
 

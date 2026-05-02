@@ -6,19 +6,15 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { type LightboxItem } from "@/type/lightbox";
-import { clampIndex } from "@/components/Lightbox/utils/clampIndex";
-import { useLightboxKeyboardAndSwipe } from "@/components/Lightbox/hooks/useLightboxKeyboardAndSwipe";
-import { useBodyScrollLock } from "@/components/Lightbox/hooks/useBodyScrollLock";
-import { useFocusElementWhenLightboxCloses } from "@/components/Lightbox/hooks/useFocusElementWhenLightboxCloses";
-import LightboxOverlay from "@/components/Lightbox/parts/LightboxOverlay";
-import LightboxImageStage from "@/components/Lightbox/parts/LightboxImageStage";
-import LightboxNavControls from "@/components/Lightbox/parts/LightboxNavControls";
-import { REVEAL_REFRESH_EVENT } from "@/gsap/core/useRevealDispatch";
-import { useLightboxImageIntroAnimation } from "@/components/Lightbox/hooks/useLightboxImageIntroAnimation";
+import { type LightboxItem } from "@/types";
+import { clampIndex } from "@/components/Lightbox/clampIndex";
+import { useLightboxKeyboardAndSwipe, useBodyScrollLock, useFocusElementWhenLightboxCloses, useLightboxImageIntroAnimation, useBodyBackgroundHide } from "@/components/Lightbox/hooks";
+import LightboxOverlay from "@/components/Lightbox/LightboxOverlay";
+import LightboxImageStage from "@/components/Lightbox/LightboxImageStage";
+import LightboxNavControls from "@/components/Lightbox/LightboxNavControls";
+import { REVEAL_REFRESH_EVENT } from "@/gsap/core";
 import { createPortal } from "react-dom";
 import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
-import { useBodyBackgroundHide } from "@/components/Lightbox/hooks/useBodyBackgroundHide";
 
 type ImageLightboxModalProps = {
   items: LightboxItem[];
@@ -54,7 +50,7 @@ export default function ImageLightBoxModal({
   /** body スクロールのロック制御（開いている間だけ固定）。 */
   useBodyScrollLock(isOpen);
 
-/* body にクラスがついている間、モーダル以外を隠す */
+  /* body にクラスがついている間、モーダル以外を隠す */
   useBodyBackgroundHide(isOpen);
 
   /** close 後にフォーカス復帰先（returnTargetId）へ戻す。 */
@@ -109,7 +105,6 @@ export default function ImageLightBoxModal({
 
   // 実際に body 直下へ転送するモーダル本体。
   // これを別変数に切り出すと、Portal 前後の責務（UI定義 / 転送）を分けて読める。
-
 
   const modalNode = (
     <div

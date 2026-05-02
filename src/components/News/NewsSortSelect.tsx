@@ -1,4 +1,4 @@
-import type { DateSortOrder } from '@/type/DateSortOrder';
+import type { DateSortOrder } from '@/types';
 
 interface NewsSortSelectProps {
     value: string

@@ -23,5 +23,16 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# Vercel
+.vercel/
+
+# IDE・エディタ設定
+.cursor/
+.claude/
+
+# バックアップ・個人用ドキュメント
+_original_backup/
+docs/
+
 # Sanity CMS（別リポジトリのため除外）
 photo-portfolio-cms/

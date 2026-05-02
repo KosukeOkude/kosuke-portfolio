@@ -1,6 +1,6 @@
 import type { Work, WorkForClient } from "@/data/works";
 import { sanityClient, urlFor } from "@/sanity/client";
-import { normalizeSlug } from "@/utils/normalizeSlug";
+import { normalizeSlug } from "@/utils";
 //一覧用ワーク全フィールド
 export const worksListQuery = `*[_type == "work"] | order(date desc) {
     _id,

@@ -1,5 +1,5 @@
 import type { WorkForClient } from "@/data/works";
-import { buildSrcSet } from "@/utils/buildSrcSet";
+import { buildSrcSet } from "@/utils";
 
 interface WorksCardProps {
   work: WorkForClient;
