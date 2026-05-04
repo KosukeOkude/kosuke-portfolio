@@ -343,7 +343,7 @@ body.lightbox-open [data-screen-overlay] {
 
 @media (pointer: coarse) {
   .fixed-bg-mobile {
-    height: 100lvh;
+    height: auto;
   }
 }
 

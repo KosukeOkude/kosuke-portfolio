@@ -1,7 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
-import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import SectionLayout from '@/components/Layout/SectionLayout.astro';
 import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
 
@@ -9,6 +8,7 @@ import profileImage from '@/assets/images/hero-profile-img.jpg';
 import { aboutPageConfig } from '@/data/about';
 import type { AboutPageContent } from '@/sanity/about';
 import { ContactSocialLinks } from '@/components/Contact/ContactSocialLinks';
+import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 
 interface Props {
     about?: AboutPageContent
@@ -20,6 +20,7 @@ const achievements = about?.achievementsList ?? [];
 
 ---
 <BackgroundSection image={ aboutPageConfig.backgroundImage } alt={aboutPageConfig.backgroundAlt} className={"min-h-svh"}>
+    <ScreenOverlay/>
         <SectionLayout>
             <div slot="sectionContent" data-reveal
                 class="text-[#1a1a1a] "
@@ -28,7 +29,7 @@ const achievements = about?.achievementsList ?? [];
                 <div
                     class="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-11"
                 >
-                    <aside class="lg:sticky lg:top-6" aria-label="プロフィール写真" >
+                    <aside class="lg:sticky lg:top-6 max-w-[500px] lg:max-w-none mx-auto" aria-label="プロフィール写真" >
                     <Picture
                         src={profileImage}
                         alt="カメラを構える写真家のポートレート"

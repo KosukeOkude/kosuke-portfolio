@@ -4,7 +4,7 @@ const { class: className, pinOverlay = false, hideOnMobile = false, ...rest } = 
 
 
 <div class:list={[
-  "pointer-events-none fixed inset-0 -z-10 bg-black/50 w-full h-full",
+  "pointer-events-none absolute inset-0 -z-10 bg-black/30",
   hideOnMobile && "opacity-0",
   className
 ]}
