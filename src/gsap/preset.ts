@@ -312,6 +312,7 @@ export function animationHeroIntro(): void {
   }
 
   if (isTouchDevice) {
+    gsap.set(overlay, { opacity: 1 });
     gsap.set([profileWrap, nameEl, titleEl], { opacity: 0 });
     const tl = gsap.timeline();
     tl.to(profileWrap, { opacity: 1, duration: 0.8 });

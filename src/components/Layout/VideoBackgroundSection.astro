@@ -3,6 +3,7 @@ interface Props {
   videoSrc?: string;
   alt: string;
   className?: string;
+  overlayClass?: string;
   pcVideoPoster?: string;
   pcVideoSrcWebm?: string;
   pcVideoSrcMp4?: string;
@@ -19,6 +20,7 @@ const {
   pcVideoPoster,
   alt,
   className,
+  overlayClass,
   ...rest
 } = Astro.props as Props & Record<string, unknown>;
 
@@ -56,6 +58,7 @@ const fallbackSrc = videoSrc ?? '';
 
     {/* 動画が再生できない/読み込み前のフォールバック */}
     <div class="absolute inset-0 -z-10 bg-black" aria-hidden="true" />
+    {overlayClass && <div class={`absolute inset-0 pointer-events-none ${overlayClass}`} data-hero-overlay data-screen-overlay />}
   </div>
 
   <slot />

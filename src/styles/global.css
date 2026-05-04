@@ -341,9 +341,9 @@ body.lightbox-open [data-screen-overlay] {
   backface-visibility: hidden;
 }
 
-@media (pointer: coarse) {
+@supports (-webkit-touch-callout: none) {
   .fixed-bg-mobile {
-    height: auto;
+    position: absolute;
   }
 }
 

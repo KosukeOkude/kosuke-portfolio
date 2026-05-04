@@ -21,9 +21,7 @@ whenDomReady(initRevealAnimation);
 
 // トップページ専用アニメーション
 if (isHomePath()) {
-  if (navigator.maxTouchPoints === 0) {
-    whenDomReady(animationHeroIntro);
-  }
+  whenDomReady(animationHeroIntro);
   whenDomReady(runWorksTopAnimation);
   whenDomReady(registerScrollTriggerRefreshOnResize);
   whenDomReady(registerScrollTriggerRefreshOnLoad);

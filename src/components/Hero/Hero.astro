@@ -6,7 +6,6 @@ import pcHeroBackgroundVideoWebm from '@/assets/movies/hero-movie-pc-1080.webm';
 import pcHeroBackgroundVideoMp4 from '@/assets/movies/hero-movie-pc-1080.mp4';
 import mobileHeroBackgroundVideoWebm from '@/assets/movies/hero-movie-mobile-720.webm';
 import mobileHeroBackgroundVideoMp4 from '@/assets/movies/hero-movie-mobile-720.mp4';
-import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
 import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro';
 
@@ -24,9 +23,9 @@ import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro
   mobileVideoSrcWebm={mobileHeroBackgroundVideoWebm}
   mobileVideoSrcMp4={mobileHeroBackgroundVideoMp4}
   alt="ヒーロー背景の説明文"
+  overlayClass="bg-black/50"
   data-hero-root
 >
-  <ScreenOverlay data-hero-overlay/>
   <div class="relative z-0 min-h-svh">
     <div
       class="pointer-events-none absolute left-1/2 bottom-6 z-30  max-w-xs -translate-x-1/2 px-4 transform-gpu will-change-transform"
