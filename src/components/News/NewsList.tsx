@@ -49,18 +49,18 @@ export function NewsList({ newsItems }: NewsListProps) {
 
           <div className="flex-1 min-w-0 flex flex-col justify-center px-4 py-4 sm:px-6 sm:py-5">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1.5">
-              <span className="text-[11px] md:text-xs text-[#737373] tracking-wide">
+              <span className="text-[10px] md:text-xs text-[#737373] tracking-wide">
                 {item.date}
               </span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {item.tags.map((tag) => (
                   <span
                     key={tag}
                     className="
                       inline-block
-                      px-2
+                      px-1
                       py-0.5
-                      text-[10px]
+                      text-[6px]
                       md:text-[11px]
                       font-medium
                       tracking-[0.06em]
@@ -79,7 +79,7 @@ export function NewsList({ newsItems }: NewsListProps) {
               className="
                 font-semibold
                 text-[#111]
-                text-sm
+                text-[12px]
                 md:text-base
                 leading-snug
                 mb-1.5
@@ -89,7 +89,7 @@ export function NewsList({ newsItems }: NewsListProps) {
             </h3>
             <p
               className="
-                text-xs
+                text-[12px]
                 md:text-sm
                 text-[#525252]
                 leading-relaxed
