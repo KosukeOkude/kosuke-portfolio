@@ -22,14 +22,16 @@ export const getStaticPaths = (async () => {
     }))
 });
 
+
 const { slug } = Astro.params;
 const newsItem = await getNewsBySlug(slug ?? '');
 if(!newsItem){
     throw new Error(`News not found for slug: ${slug}`);
 }
 const allNews = await getAllNews();
-
-
+const currentIndex = allNews.findIndex((item) => slug === normalizeSlug(item.slug))
+const prevItem = allNews[currentIndex - 1];
+const nextItem = allNews[currentIndex + 1];
 ---
 
 
@@ -128,7 +130,7 @@ const allNews = await getAllNews();
             )}
           </section>
         </DetailImageGalleryWithLightbox>
-        <DetailPagePrevNextNav allItems={}/>
+        <DetailPagePrevNextNav prevItem={prevItem} nextItem={nextItem} basePath="news"/>
         <PageBottomNav label="news" href="/news" />
       </DetailPageLayout>
   </BackgroundSection>

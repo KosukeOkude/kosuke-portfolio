@@ -1,21 +1,22 @@
 ---
-import { aboutFilmStripFrames } from '@/data/about';
-import { Picture } from 'astro:assets';
+import { displayAboutAnimationImages } from '@/sanity/site-settings';
+
+const SIZE_CLASS: Record<string, string> = {
+  sm: 'w-[120px] md:w-[280px]',
+  md: 'w-[180px] md:w-[450px]',
+  lg: 'w-[240px] md:w-[600px]',
+};
+
+const images = await displayAboutAnimationImages();
 ---
 
 <div class="overflow-hidden absolute w-full h-full">
-  {aboutFilmStripFrames.map((frame, i) => (
-    <div class="shrink-0 round-xs w-[180px] md:w-[450px] overflow-hidden [&_picture]:contents"
+  {images.map((image) => (
+    <div class={`shrink-0 round-xs overflow-hidden ${SIZE_CLASS[image.size] ?? SIZE_CLASS.md}`}
         data-about-images>
-      <Picture
-        src={frame.src}
-        alt={frame.alt}
-        formats={["avif", "webP"]}
-        width={1200}
-        height={1200}
-        layout="constrained"
-        fit="cover"
-        position='center'
+      <img
+        src={image.url}
+        alt=""
         class="h-full w-full object-cover block"
       />
     </div>

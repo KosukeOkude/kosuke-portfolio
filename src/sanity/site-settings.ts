@@ -1,9 +1,9 @@
-import { urlFor, sanityClient } from '@/sanity/client';
-import { normalizeSlug } from '@/utils';
-import type { GalleryCategory } from '@/data/gallery';
-import type { WorkForClient } from '@/data/works';
-import type { AboutPageContent } from '@/sanity/about';
-import type { NewsArchive } from '@/data/news';
+import { urlFor, sanityClient } from "@/sanity/client";
+import { normalizeSlug } from "@/utils";
+import type { GalleryCategory } from "@/data/gallery";
+import type { WorkForClient } from "@/data/works";
+import type { AboutPageContent } from "@/sanity/about";
+import type { NewsArchive } from "@/data/news";
 
 const siteSettingsWorksQuery = `*[_id == "siteSettings"][0] {
         topWorksItems[]->{
@@ -13,7 +13,7 @@ const siteSettingsWorksQuery = `*[_id == "siteSettings"][0] {
             tags,
             category,
             description,
-            "thumbnail": thumbnail.asset->,
+            "thumbnailUrl": thumbnail.asset->,
             thumbnailAlt
         }
 }`;
@@ -24,14 +24,16 @@ type SiteSettingWorksDoc = {
     title: string;
     date: string;
     tags: string[] | null;
-    thumbnail: { _ref?: string; _id?: string } | null;
+    thumbnailUrl: { _ref?: string; _id?: string } | null;
     thumbnailAlt: string | null;
     category: string | null;
   }[];
 };
 
 export async function displayTopWorks(): Promise<WorkForClient[]> {
-  const doc = await sanityClient.fetch<SiteSettingWorksDoc | null>(siteSettingsWorksQuery);
+  const doc = await sanityClient.fetch<SiteSettingWorksDoc | null>(
+    siteSettingsWorksQuery,
+  );
   const refs = doc?.topWorksItems ?? [];
   return refs.map((w) => ({
     slug: normalizeSlug(w.slug),
@@ -39,13 +41,13 @@ export async function displayTopWorks(): Promise<WorkForClient[]> {
     date: w.date,
     tags: w.tags ?? [],
     thumbnailUrl:
-      urlFor(w.thumbnail ?? undefined)
+      urlFor(w.thumbnailUrl ?? undefined)
         ?.width(560)
         .height(640)
-        .auto('format')
-        .url() ?? '',
-    thumbnailAlt: w.thumbnailAlt ?? '',
-    category: (w.category ?? '').toLocaleLowerCase(),
+        .auto("format")
+        .url() ?? "",
+    thumbnailAlt: w.thumbnailAlt ?? "",
+    category: (w.category ?? "").toLocaleLowerCase(),
   }));
 }
 
@@ -77,9 +79,9 @@ export async function displayTopGalleryCategories(): Promise<GalleryCategory[]> 
     imageUrl:
       urlFor(g.coverImage ?? undefined)
         ?.width(1200)
-        .auto('format')
-        .url() ?? '',
-    imageAlt: g.imageAlt ?? '',
+        .auto("format")
+        .url() ?? "",
+    imageAlt: g.imageAlt ?? "",
   }));
 }
 
@@ -120,7 +122,9 @@ type SiteSettingsAboutDoc = {
 };
 
 export async function displayTopAbout(): Promise<AboutPageContent> {
-  const doc = await sanityClient.fetch<SiteSettingsAboutDoc | null>(siteSettingsAboutQuery);
+  const doc = await sanityClient.fetch<SiteSettingsAboutDoc | null>(
+    siteSettingsAboutQuery,
+  );
   const block = doc?.topAbout;
 
   if (!block) {
@@ -182,13 +186,65 @@ export async function displayTopNews(): Promise<NewsArchive[]> {
     summary: n.summary,
     thumbnailUrl:
       urlFor(n.thumbnailUrl ?? undefined)
-      ?.width(560)
-      .height(640)
-      .auto('format')
-      .url() ?? '',
-    thumbnailAlt: n.thumbnailAlt ?? '',
+        ?.width(560)
+        .height(640)
+        .auto("format")
+        .url() ?? "",
+    thumbnailAlt: n.thumbnailAlt ?? "",
     slug: n.slug,
     tags: n.tags ?? [],
-    category: n.category
-  }))
+    category: n.category,
+  }));
+}
+
+const siteSettingsAboutAnimationImagesQuery = `*[_id == "siteSettings"][0]{
+  aboutAnimationImages[]{
+    "asset": image.asset->,
+    size
+  }
+}`;
+
+type SiteSettingsAboutAnimationImagesDoc = {
+  aboutAnimationImages?: {
+    asset: { _ref?: string; _id?: string } | null;
+    size: string | null;
+  }[];
+};
+
+export async function displayAboutAnimationImages(): Promise<{ url: string; size: string }[]> {
+  const doc = await sanityClient.fetch<SiteSettingsAboutAnimationImagesDoc | null>(siteSettingsAboutAnimationImagesQuery);
+  return (doc?.aboutAnimationImages ?? [])
+    .map((f) => ({
+      url: urlFor(f.asset ?? undefined)?.width(1200).auto('format').url() ?? '',
+      size: f.size ?? 'md',
+    }))
+    .filter((f) => f.url);
+}
+
+const siteSettingsEntranceFilmsQuery = `*[_id == "siteSettings"][0]{
+  entranceFilms[]{
+    "asset": image.asset->
+  }
+}`;
+
+type SiteSettingsEntranceFilmsDoc = {
+  entranceFilms?: {
+    asset: { _ref?: string; _id?: string } | null;
+  }[];
+};
+
+export async function displayEntranceFilms(): Promise<{ id: string; url: string }[]> {
+  const doc = await sanityClient.fetch<SiteSettingsEntranceFilmsDoc | null>(
+    siteSettingsEntranceFilmsQuery,
+  );
+  return (doc?.entranceFilms ?? [])
+    .map((f) => ({
+      id: f.asset?._id ?? "",
+      url:
+        urlFor(f.asset ?? undefined)
+          ?.width(400)
+          .auto("format")
+          .url() ?? "",
+    }))
+    .filter((f) => f.url);
 }

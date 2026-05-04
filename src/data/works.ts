@@ -1,5 +1,5 @@
 import worksBackgroundImage from "@/assets/images/works-backrgound-image-pc.jpg";
-import worksMobileBackgroundImage from "@/assets/images/works-backrgound-image-mobile.jpg";
+import worksMobileBackgroundImage from "@/assets/images/works-backrgound-image-pc.jpg";
 import type { YoutubeVideo } from "@/types";
 
 export const worksPageConfig = {
@@ -13,7 +13,7 @@ export interface Work {
   title: string;
   date: string;
   tags: string[];
-  thumbnail: string;
+  thumbnailUrl: string;
   thumbnailLightboxUrl: string;
   thumbnailAlt: string;
   videos?: YoutubeVideo[];
@@ -25,6 +25,7 @@ export interface Work {
   notes?: string;
   credits?: { label: string; value: string }[];
   subImage?: { src: string; lightboxSrc: string; alt: string }[];
+  links?: { label: string; url: string }[];
 }
 
 export interface WorkForClient {

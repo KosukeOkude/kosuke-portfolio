@@ -8,7 +8,13 @@ import {
 } from "react";
 import { type LightboxItem } from "@/types";
 import { clampIndex } from "@/components/Lightbox/clampIndex";
-import { useLightboxKeyboardAndSwipe, useBodyScrollLock, useFocusElementWhenLightboxCloses, useLightboxImageIntroAnimation, useBodyBackgroundHide } from "@/components/Lightbox/hooks";
+import {
+  useLightboxKeyboardAndSwipe,
+  useBodyScrollLock,
+  useFocusElementWhenLightboxCloses,
+  useLightboxImageIntroAnimation,
+  useBodyBackgroundHide,
+} from "@/components/Lightbox/hooks";
 import LightboxOverlay from "@/components/Lightbox/LightboxOverlay";
 import LightboxImageStage from "@/components/Lightbox/LightboxImageStage";
 import LightboxNavControls from "@/components/Lightbox/LightboxNavControls";
@@ -16,7 +22,7 @@ import { REVEAL_REFRESH_EVENT } from "@/gsap/core";
 import { createPortal } from "react-dom";
 import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
 
-type ImageLightboxModalProps = {
+export type ImageLightboxModalProps = {
   items: LightboxItem[];
   initialIndex: number;
   isOpen: boolean;
@@ -47,33 +53,25 @@ export default function ImageLightBoxModal({
     setActiveIndex(clampIndex(initialIndex, itemCount));
   }, [initialIndex, isOpen, itemCount]);
 
-  /** body スクロールのロック制御（開いている間だけ固定）。 */
   useBodyScrollLock(isOpen);
-
-  /* body にクラスがついている間、モーダル以外を隠す */
   useBodyBackgroundHide(isOpen);
-
-  /** close 後にフォーカス復帰先（returnTargetId）へ戻す。 */
   useFocusElementWhenLightboxCloses(isOpen, returnTargetId);
 
-  // キーボード左右・スワイプ・ESC を束ねる入力ハンドラ群。
   const { goPrev, goNext } = useLightboxKeyboardAndSwipe({
     isOpen,
     itemCount,
     setActiveIndex,
     onRequestClose: requestClose,
+    items,
+    activeIndex,
   });
 
-  // ライトボックス表示時に reveal 再計算イベントを発火（必要な要素だけ再スキャン）。
   useEffect(() => {
     if (!isOpen) return;
     window.dispatchEvent(new CustomEvent(REVEAL_REFRESH_EVENT));
   }, [isOpen]);
 
-  // 現在 index から表示対象アイテムを導出。
   const activeItem = useMemo(() => items[activeIndex], [activeIndex, items]);
-
-  // 前後2枚の画像を事前にロード（ちらつき防止）
   useEffect(() => {
     if (!isOpen) return;
     [-2, -1, 1, 2].forEach((offset) => {

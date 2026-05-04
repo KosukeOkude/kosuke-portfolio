@@ -44,7 +44,7 @@ async function fetchGalleryData() {
         ?.width(800)
         .auto("format")
         .url() ?? "",
-    imageAlt: g.imageAlt ?? "",
+    imageAlt: g.imageAlt ?? g.title,
   }));
   // 3. GalleryLinearSliderItem に変換（フラット化）
   const sliderItems: GalleryLinearSliderItem[] = [];
@@ -65,7 +65,7 @@ async function fetchGalleryData() {
               ?.width(2000)
               .auto("format")
               .url() ?? "",
-          imageAlt: img.alt ?? "",
+          imageAlt: img.alt ?? `${gallery.title} - ${i + 1}`,
           size: (img.size ?? "md") as "sm" | "md" | "xl" | "2xl" | "3xl",
           createdAt: img.createdAt ?? "",
         });

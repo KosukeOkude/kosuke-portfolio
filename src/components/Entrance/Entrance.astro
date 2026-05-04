@@ -1,11 +1,11 @@
 ---
-import { Picture } from 'astro:assets';
-
-import { aboutFilmStripFrames } from '@/data/about';
 import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro';
-
+import { displayEntranceFilms } from '@/sanity/site-settings'
 const sprocketClass =
   'sprocket h-3.5 border-y border-white/5 bg-[radial-gradient(circle_at_50%_50%,transparent_4px,#141414_4.5px)] bg-[length:20px_14px] bg-repeat-x bg-[position:10px_50%]';
+
+const films = await displayEntranceFilms();
+
 ---
 
 <div data-entrance-root class="fixed inset-0 z-[9999] overflow-hidden">
@@ -28,15 +28,14 @@ const sprocketClass =
     <h1 class="font-accent text-2xl font-bold tracking-widest text-white text-center md:text-5xl">Kosuke's Portfolio</h1>
   </div>
 
-  {aboutFilmStripFrames.map((frame) => (
+  {films.map((film) => (
     <div data-entrance-film class='absolute opacity-0 grayscale w-[100px] md:w-[160px] shrink-0 border-x border-white/12 bg-black shadow-[0_12px_40px_rgba(0,0,0,0.45)]' data-film-frame>
       <div class={sprocketClass} aria-hidden="true"></div>
-      <Picture
-          src={frame.src}
-          alt={frame.alt}
+      <img
+          src={film.url}
+          alt=""
           width={360}
           height={240}
-          formats={['avif', 'webp']}
           class="block aspect-[3/2] h-auto w-full object-cover"
       />
       <div

@@ -1,8 +1,16 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
 import lightboxImageIntro from "@/components/Lightbox/lightboxImageIntro";
 import { clampIndex } from "@/components/Lightbox/clampIndex";
 import { mapGalleryItemsToLightboxItems } from "@/components/Lightbox/mapItemsToLightboxItems";
+import type { LightboxItem } from "@/types";
 
 // --- スクロールロック・背景 ---
 
@@ -61,9 +69,21 @@ export function useLightboxWindowKeyboard({
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { e.preventDefault(); onRequestClose(); return; }
-      if (e.key === "ArrowLeft") { e.preventDefault(); goPrev(); return; }
-      if (e.key === "ArrowRight") { e.preventDefault(); goNext(); return; }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onRequestClose();
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goPrev();
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goNext();
+        return;
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -82,8 +102,12 @@ export function useLightboxWheelNavigation({
 }) {
   const goPrevRef = useRef(goPrev);
   const goNextRef = useRef(goNext);
-  useEffect(() => { goPrevRef.current = goPrev; }, [goPrev]);
-  useEffect(() => { goNextRef.current = goNext; }, [goNext]);
+  useEffect(() => {
+    goPrevRef.current = goPrev;
+  }, [goPrev]);
+  useEffect(() => {
+    goNextRef.current = goNext;
+  }, [goNext]);
 
   let lastWheelTime = 0;
 
@@ -120,8 +144,12 @@ export function useLightboxHorizontalSwipe({
 }) {
   const goPrevRef = useRef(goPrev);
   const goNextRef = useRef(goNext);
-  useEffect(() => { goPrevRef.current = goPrev; }, [goPrev]);
-  useEffect(() => { goNextRef.current = goNext; }, [goNext]);
+  useEffect(() => {
+    goPrevRef.current = goPrev;
+  }, [goPrev]);
+  useEffect(() => {
+    goNextRef.current = goNext;
+  }, [goNext]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -150,7 +178,8 @@ export function useLightboxHorizontalSwipe({
       const deltaY = t.clientY - startY;
       startX = null;
       startY = null;
-      if (Math.abs(deltaX) < Math.abs(deltaY) || Math.abs(deltaX) < swipeThresholdPx) return;
+      if (Math.abs(deltaX) < Math.abs(deltaY) || Math.abs(deltaX) < swipeThresholdPx)
+        return;
       const now = Date.now();
       if (now - lastSwipeTime < THROTTLE_MS) return;
       lastSwipeTime = now;
@@ -176,22 +205,36 @@ export function useLightboxKeyboardAndSwipe({
   setActiveIndex,
   onRequestClose,
   swipeThresholdPx = 40,
+  items,
+  activeIndex,
 }: {
   isOpen: boolean;
   itemCount: number;
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
   onRequestClose: () => void;
   swipeThresholdPx?: number;
+  items: LightboxItem[];
+  activeIndex: number;
 }) {
-  const goPrev = useCallback(() => {
+  const goPrev = useCallback(async () => {
     if (itemCount <= 0) return;
-    setActiveIndex((prev) => clampIndex(prev - 1, itemCount));
-  }, [itemCount, setActiveIndex]);
+    const newIndex = clampIndex(activeIndex - 1, itemCount);
+    const src = items[newIndex].src;
+    const img = new Image();
+    img.src = src;
+    await img.decode();
+    setActiveIndex(newIndex);
+  }, [itemCount, setActiveIndex, items, activeIndex]);
 
-  const goNext = useCallback(() => {
+  const goNext = useCallback(async () => {
     if (itemCount <= 0) return;
-    setActiveIndex((next) => clampIndex(next + 1, itemCount));
-  }, [itemCount, setActiveIndex]);
+    const newIndex = clampIndex(activeIndex + 1, itemCount);
+    const src = items[newIndex].src;
+    const img = new Image();
+    img.src = src;
+    await img.decode();
+    setActiveIndex(newIndex);
+  }, [itemCount, setActiveIndex, items, activeIndex]);
 
   useLightboxWindowKeyboard({ isOpen, onRequestClose, goPrev, goNext });
   useLightboxHorizontalSwipe({ isOpen, itemCount, swipeThresholdPx, goPrev, goNext });
@@ -283,5 +326,15 @@ export default function useGalleryLightboxScrollBridge(
     [displayItems],
   );
 
-  return { isOpen, initialIndex, returnTargetId, scrollToId, scrollToken, lightboxItems, openAt, closeAt, clearScrollTarget };
+  return {
+    isOpen,
+    initialIndex,
+    returnTargetId,
+    scrollToId,
+    scrollToken,
+    lightboxItems,
+    openAt,
+    closeAt,
+    clearScrollTarget,
+  };
 }

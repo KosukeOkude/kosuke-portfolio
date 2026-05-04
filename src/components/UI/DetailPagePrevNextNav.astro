@@ -1,25 +1,50 @@
 ---
+
 interface DetailPagePrevNextNavProps {
     title: string;
     slug: string;
     date: string;
-    thumbnailUrl:string;
+    thumbnailUrl: string;
+    basePath: 'works' | 'news';
 }
+
+const { prevItem, nextItem, basePath } = Astro.props;
 
 ---
 
-<section class="border-t border-white/10 pt-8 space-y-4" data-reveal>
-    <h2 class="text-xs md:text-sm uppercase tracking-[0.25em] text-white/60">
-        More in this category
-    </h2>
-    <div class="flex flex-wrap gap-2">
-        <a  href="#"
-        class="text-xs md:text-sm px-3 py-1 rounded-full border border-white/30 bg-white/5 hover:bg-white/10 transition-colors">
-            前
-        </a>
-        <a  href="#"
-            class="text-xs md:text-sm px-3 py-1 rounded-full border border-white/30 bg-white/5 hover:bg-white/10 transition-colors">
-                次
-        </a>
+<section class="border-t border-white/10 pt-8" data-reveal>
+    <div class="flex gap-3 w-full">
+  
+      <div class="flex-1">
+        {prevItem && (
+          <a href={`/${basePath}/${prevItem.slug}`}
+            class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/15 backdrop-blur-sm hover:bg-white/10 transition-colors h-full">
+            <img src={prevItem.thumbnailUrl} alt={prevItem.title}
+              class="w-16 h-16 object-cover rounded-lg shrink-0" />
+            <div class="flex flex-col justify-center gap-1 min-w-0">
+              <p class="text-[10px] text-white/40 uppercase tracking-widest">← Prev</p>
+              <p class="text-[10px] text-white/50">{prevItem.date}</p>
+              <p class="text-xs text-white font-medium line-clamp-2">{prevItem.title}</p>
+            </div>
+          </a>
+        )}
+      </div>
+  
+      <div class="flex-1 flex justify-end">
+        {nextItem && (
+          <a href={`/${basePath}/${nextItem.slug}`}
+            class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/15 backdrop-blur-sm hover:bg-white/10 transition-colors w-full">
+            <img src={nextItem.thumbnailUrl} alt={nextItem.title}
+              class="w-16 h-16 object-cover rounded-lg shrink-0" />
+            <div class="flex flex-col justify-center gap-1 min-w-0">
+              <p class="text-[10px] text-white/40 uppercase tracking-widest">Next →</p>
+              <p class="text-[10px] text-white/50">{nextItem.date}</p>
+              <p class="text-xs text-white font-medium line-clamp-2">{nextItem.title}</p>
+            </div>
+          </a>
+        )}
+      </div>
+  
     </div>
-    </section>
+  </section>
+  

@@ -121,7 +121,11 @@ type ApplyRevealOptions = {
   started: WeakSet<Element>;
 };
 
-export function applyRevealBySelector({ selector, options, started }: ApplyRevealOptions): void {
+export function applyRevealBySelector({
+  selector,
+  options,
+  started,
+}: ApplyRevealOptions): void {
   const targetElements = Array.from(document.querySelectorAll<HTMLElement>(selector));
   const visibleTargets = options?.skipInsideAstroIslands
     ? targetElements.filter((el) => !skipInsideAstroIslands(el))
@@ -171,7 +175,15 @@ function placeImageInHorizontalSlot(
   const minY = slotTop;
   const maxY = Math.max(minY, slotTop + slotH - eh);
   const y = minY + (maxY > minY ? Math.random() * (maxY - minY) : 0);
-  gsap.set(el, { position: "absolute", left: x, top: y, margin: 0, opacity: 0, y: 12, scale: 0.96 });
+  gsap.set(el, {
+    position: "absolute",
+    left: x,
+    top: y,
+    margin: 0,
+    opacity: 0,
+    y: 12,
+    scale: 0.96,
+  });
 }
 
 export function initImageReveal(): void {
@@ -182,13 +194,14 @@ export function initImageReveal(): void {
 
   images.forEach((el, i) => placeImageInHorizontalSlot(root, el, i, images.length));
   images.forEach((el, i) => {
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: i === images.length - 1 ? "center center+=250" : "center center",
-        toggleActions: "play none none reverse",
-      },
-    })
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: i === images.length - 1 ? "center center+=250" : "center center",
+          toggleActions: "play none none reverse",
+        },
+      })
       .to(el, { opacity: 1, y: 12, scale: 1, duration: 1, ease: "power2.out" })
       .to(el, { opacity: 0, duration: 1, ease: "power2.in" });
   });
@@ -217,20 +230,27 @@ export function scrollPinTo(pinEl: HTMLElement, endTriggerEl: HTMLElement | null
   });
 }
 
-export function scrollPinFromTo(pinEl: HTMLElement, endTriggerEl: HTMLElement | null): void {
+export function scrollPinFromTo(
+  pinEl: HTMLElement,
+  endTriggerEl: HTMLElement | null,
+): void {
   if (window.matchMedia("(pointer: coarse)").matches) return;
-  gsap.fromTo(pinEl, { y: 0 }, {
-    y: "+=100vh",
-    ease: "none",
-    scrollTrigger: {
-      trigger: pinEl,
-      start: "top top",
-      endTrigger: endTriggerEl,
-      end: "top top",
-      scrub: true,
-      invalidateOnRefresh: true,
+  gsap.fromTo(
+    pinEl,
+    { y: 0 },
+    {
+      y: "+=100vh",
+      ease: "none",
+      scrollTrigger: {
+        trigger: pinEl,
+        start: "top top",
+        endTrigger: endTriggerEl,
+        end: "top top",
+        scrub: true,
+        invalidateOnRefresh: true,
+      },
     },
-  });
+  );
 }
 
 export function initScrollPin(): void {
@@ -250,7 +270,9 @@ export function scrollPinFromPin(
   animationEnd: () => string | number,
 ): void {
   if (window.matchMedia("(pointer: coarse)").matches) return;
-  const elements = wrapperEls.filter((el): el is HTMLElement => el !== null && el !== undefined);
+  const elements = wrapperEls.filter(
+    (el): el is HTMLElement => el !== null && el !== undefined,
+  );
   if (elements.length === 0) return;
   gsap.to(elements, {
     y: "+=100vh",
@@ -300,16 +322,14 @@ export function animationHeroIntro(): void {
 
   gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
   const tl = gsap.timeline({ paused: true });
-  tl.to({}, { duration: 2 });
   tl.to(overlay, { opacity: 1, duration: 1 });
   tl.to(profileWrap, { opacity: 1, duration: 0.8 }, "-=0.5");
   tl.to([nameEl, titleEl], { opacity: 1, duration: 0.45 }, "+=0.08");
-  tl.to({}, { duration: 1 });
 
   const introSt = ScrollTrigger.create({
     trigger: root,
     start: "top top",
-    end: "+=1700",
+    end: "+=1000",
     pin: true,
     scrub: 1,
     animation: tl,
@@ -337,7 +357,9 @@ export function runWorksTopAnimation(): void {
   const cta = root.querySelector<HTMLElement>("[data-works-cta]");
 
   if (window.matchMedia("(pointer: coarse)").matches) {
-    [titleBlock, hint, cardSlider, cta].forEach((el) => { if (el) playRevealSingle(el); });
+    [titleBlock, hint, cardSlider, cta].forEach((el) => {
+      if (el) playRevealSingle(el);
+    });
     return;
   }
 
@@ -354,12 +376,29 @@ export function runWorksTopAnimation(): void {
   const scroller = cardSlider.querySelector<HTMLElement>(".works-card-slider-scroll");
   if (!scroller) return;
 
-  gsap.set([titleBlock, overlay, hint, cardSlider].filter(Boolean), { opacity: 0 });
+  gsap.set([titleBlock, overlay, hint, cardSlider, cta].filter(Boolean), { opacity: 0 });
 
   const headingTl = gsap.timeline({ paused: true });
-  if (overlay) headingTl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 1, ease: "power2.out" });
-  if (titleBlock) headingTl.fromTo(titleBlock, { opacity: 0 }, { opacity: 1, duration: 1, ease: "power2.out" }, "<");
-  if (hint) headingTl.fromTo(hint, { opacity: 0 }, { opacity: 1, duration: 1, ease: "power2.out" }, "<");
+  if (overlay)
+    headingTl.fromTo(
+      overlay,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+    );
+  if (titleBlock)
+    headingTl.fromTo(
+      titleBlock,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+      "<",
+    );
+  if (hint)
+    headingTl.fromTo(
+      hint,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+      "<",
+    );
 
   ScrollTrigger.create({
     trigger: root,
@@ -372,7 +411,12 @@ export function runWorksTopAnimation(): void {
 
   const cardTl = gsap.timeline({ paused: true });
   cardTl.to(cardSlider, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
-  cardTl.to(scroller, { scrollLeft: () => getMaxScrollLeft(scroller), duration: 7, ease: "none" }, 0);
+  cardTl.to(
+    scroller,
+    { scrollLeft: () => getMaxScrollLeft(scroller), duration: 7, ease: "none" },
+    0,
+  )
+  cardTl.to(cta, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
   cardTl.to({}, { duration: 2 });
 
   const worksSt = ScrollTrigger.create({
@@ -385,7 +429,11 @@ export function runWorksTopAnimation(): void {
     invalidateOnRefresh: true,
   });
 
-  scrollPinFromPin([bgWrapper, cardSlider, titleBlock, cta, hint], next, () => worksSt.end);
+  scrollPinFromPin(
+    [bgWrapper, cardSlider, titleBlock, cta, hint],
+    next,
+    () => worksSt.end,
+  );
 }
 
 // ============================================================
@@ -399,12 +447,20 @@ function attachTooltipOnHover(hoverEls: HTMLElement[], tip: HTMLElement): void {
     tip.style.top = `${e.clientY + 25}px`;
   });
   hoverEls.forEach((el) => {
-    el.addEventListener("mouseenter", () => { tip.style.opacity = "1"; });
-    el.addEventListener("mouseleave", () => { tip.style.opacity = "0"; });
+    el.addEventListener("mouseenter", () => {
+      tip.style.opacity = "1";
+    });
+    el.addEventListener("mouseleave", () => {
+      tip.style.opacity = "0";
+    });
   });
 }
 
-function placeImageAtRandomPosition(layer: HTMLElement, el: HTMLElement, marginRatio = 0.05) {
+function placeImageAtRandomPosition(
+  layer: HTMLElement,
+  el: HTMLElement,
+  marginRatio = 0.05,
+) {
   const w = layer.clientWidth;
   const h = layer.clientHeight;
   const ew = el.offsetWidth || 220;
@@ -418,7 +474,12 @@ function placeImageAtRandomPosition(layer: HTMLElement, el: HTMLElement, marginR
 }
 
 function createDraggable(draggableEls: HTMLElement[], boundsEl: HTMLElement) {
-  Draggable.create(draggableEls, { type: "x,y", edgeResistance: 0.65, bounds: boundsEl, inertia: true });
+  Draggable.create(draggableEls, {
+    type: "x,y",
+    edgeResistance: 0.65,
+    bounds: boundsEl,
+    inertia: true,
+  });
 }
 
 export default function randomImagesOnScreen(): void {
@@ -440,12 +501,39 @@ export default function randomImagesOnScreen(): void {
   gsap.set(root, { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" });
 
   const tl = gsap.timeline();
-  tl.fromTo(gridLines.v1, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" })
-    .fromTo(gridLines.v2, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" }, "<")
-    .fromTo(gridLines.h1, { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" }, "-=0.4")
-    .fromTo(gridLines.h2, { clipPath: "inset(0% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" }, "<")
-    .fromTo(title, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
-    .fromTo(films, { opacity: 0, filter: "grayscale(100%)" }, { opacity: 1, filter: "grayscale(0%)", duration: 0.8, ease: "power2.inOut" });
+  tl.fromTo(
+    gridLines.v1,
+    { clipPath: "inset(0% 0% 100% 0%)" },
+    { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" },
+  )
+    .fromTo(
+      gridLines.v2,
+      { clipPath: "inset(100% 0% 0% 0%)" },
+      { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" },
+      "<",
+    )
+    .fromTo(
+      gridLines.h1,
+      { clipPath: "inset(0% 100% 0% 0%)" },
+      { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" },
+      "-=0.4",
+    )
+    .fromTo(
+      gridLines.h2,
+      { clipPath: "inset(0% 0% 0% 100%)" },
+      { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "power2.inOut" },
+      "<",
+    )
+    .fromTo(
+      title,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+    )
+    .fromTo(
+      films,
+      { opacity: 0, filter: "grayscale(100%)" },
+      { opacity: 1, filter: "grayscale(0%)", duration: 0.8, ease: "power2.inOut" },
+    );
 
   const isTouchDevice = navigator.maxTouchPoints > 0;
 
@@ -460,7 +548,8 @@ export default function randomImagesOnScreen(): void {
       },
     });
   } else {
-    gsap.fromTo(root,
+    gsap.fromTo(
+      root,
       { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" },
       {
         clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
@@ -471,8 +560,12 @@ export default function randomImagesOnScreen(): void {
           end: "+=300",
           scrub: true,
           invalidateOnRefresh: true,
-          onLeave() { gsap.set(root, { display: "none" }); },
-          onEnterBack() { gsap.set(root, { display: "block" }); },
+          onLeave() {
+            gsap.set(root, { display: "none" });
+          },
+          onEnterBack() {
+            gsap.set(root, { display: "block" });
+          },
         },
       },
     );

@@ -1,4 +1,8 @@
+---
+import { ContactSocialLinks } from "@/components/Contact/ContactSocialLinks";
 
+
+---
 
 <section id="contact-form" class="mt-12 md:mt-16 lg:mt-24">
     <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
@@ -16,17 +20,7 @@
         <p class="mt-4 text-sm leading-relaxed text-black/70 md:text-base">
           直接メールでのお問い合わせも可能です。
         </p>
-        <p class="mt-4 text-sm font-medium text-black/90 md:text-base">
-          <a
-            href={`mailto:hello@example.com`}
-            class="underline underline-offset-4 hover:text-black"
-          >
-          hello@example.com
-          </a>
-        </p>
-        <p class="mt-6 text-xs text-black/50 md:text-sm">
-            2〜3営業日以内にご返信いたします。
-        </p>
+        <ContactSocialLinks client:load/>
       </div>
     </div>
   </section>

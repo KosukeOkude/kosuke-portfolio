@@ -72,7 +72,7 @@ export async function getAllNews(): Promise<NewsArchive[]> {
       title: item.title,
       summary: item.summary,
       thumbnailUrl,
-      thumbnailAlt: item.thumbnailAlt,
+      thumbnailAlt: item.thumbnailAlt ?? item.title,
       slug: normalizedSlug,
       tags: item.tags ?? [],
       category: normalizeCategory,
@@ -126,10 +126,10 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
       (s): s is { asset: { _ref?: string; _id?: string }; alt: string | null } =>
         !!s.asset,
     )
-    .map((s) => ({
+    .map((s, i) => ({
       src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
       lightboxSrc: urlFor(s.asset)?.width(2000).auto("format").url() ?? "",
-      alt: s.alt ?? "",
+      alt: s.alt ?? `${doc.title}-${1 + i}`,
     }));
 
   // 追加：YouTubeだけ拾って WorkVideo に寄せる
@@ -149,7 +149,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     summary: doc.summary,
     thumbnailUrl,
     thumbnailLightboxUrl,
-    thumbnailAlt: doc.thumbnailAlt ?? "",
+    thumbnailAlt: doc.thumbnailAlt ?? doc.title,
     videos: videos.length > 0 ? videos : undefined,
     slug: normalizedSlug,
     tags: doc.tags ?? [],

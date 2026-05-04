@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { GalleryTrack } from "@/components/Gallery/GalleryTrack";
 import { sortByDate, buildArchiveListKey } from "@/utils";
 
@@ -107,9 +107,7 @@ export const GalleryLinearSlider = ({
           items={displayItems}
           resetKey={buildArchiveListKey(selectedCategory, sortOrder)}
           onOpenImage={lightboxBridge.openAt}
-          // Lightboxを閉じた位置までトラックを戻すためのターゲットID
           scrollToId={lightboxBridge.scrollToId}
-          // 同じIDでも再スクロールを起こすためのトリガー
           scrollToken={lightboxBridge.scrollToken}
           scrollerRef={scrollerRef}
           maxScrollLeft={maxScrollLeft}

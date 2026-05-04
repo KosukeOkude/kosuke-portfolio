@@ -18,7 +18,7 @@ export const WorksCardSlider = ({ works, scrollerRef }: WorksCardSliderProps) =>
     >
       <div
         ref={scrollerRef}
-        className="works-card-slider-scroll min-w-0 flex-1 overflow-x-auto "
+        className="works-card-slider-scroll min-w-0 flex-1 overflow-x-auto"
       >
         <div className="flex gap-5 md:gap-10">
           <div className="hidden [@media(pointer:fine)]:block w-10 shrink-0"></div>

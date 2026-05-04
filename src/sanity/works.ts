@@ -10,7 +10,7 @@ export const worksListQuery = `*[_type == "work"] | order(date desc) {
     tags,
     category,
     description,
-    "thumbnail": thumbnail.asset->,
+    "thumbnailUrl": thumbnail.asset->,
     thumbnailAlt
   }`;
 
@@ -29,7 +29,7 @@ export const workBySlugQuery = `*[_type == "work" && slug.current == $slug][0] {
     role,
     notes,
     credits,
-    "thumbnail": thumbnail.asset->,
+    "thumbnailUrl": thumbnail.asset->,
     thumbnailAlt,
     videos[] {
       type,
@@ -38,7 +38,8 @@ export const workBySlugQuery = `*[_type == "work" && slug.current == $slug][0] {
     "subImages": subImages[] {
       "asset": asset->,
       alt
-    }
+    },
+    links
   }`;
 
 export async function getAllWorks(): Promise<WorkForClient[]> {
@@ -50,14 +51,14 @@ export async function getAllWorks(): Promise<WorkForClient[]> {
       tags: string[] | null;
       category: string | null;
       description: string | null;
-      thumbnail: { _ref: string } | null;
+      thumbnailUrl: { _ref: string } | null;
       thumbnailAlt: string | null;
     }[]
   >(worksListQuery);
   // auto('format') を使う AVIF → WebP → PNG/JPEG
   return list.map((item) => {
     const thumbnailUrl =
-      urlFor(item.thumbnail ?? undefined)
+      urlFor(item.thumbnailUrl ?? undefined)
         ?.width(560)
         .auto("format")
         .url() ?? "";
@@ -67,7 +68,7 @@ export async function getAllWorks(): Promise<WorkForClient[]> {
       date: item.date,
       tags: item.tags ?? [],
       thumbnailUrl,
-      thumbnailAlt: item.thumbnailAlt ?? "",
+      thumbnailAlt: item.thumbnailAlt ?? item.title,
       category: (item.category ?? "").toLocaleLowerCase(),
     } satisfies WorkForClient;
   });
@@ -86,34 +87,35 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
     role: string[] | null;
     notes: string | null;
     credits: { label: string; value: string }[] | null;
-    thumbnail: { _ref: string } | null;
+    thumbnailUrl: { _ref: string } | null;
     thumbnailAlt: string | null;
     videos: { type: string; youtubeUrl: string }[] | null;
     subImages: { asset: { _ref: string } | null; alt: string | null }[] | null;
+    links: { label: string; url: string }[] | null;
   } | null>(workBySlugQuery, { slug });
 
   if (!doc) return null;
 
   const thumbnailUrl =
-    urlFor(doc.thumbnail ?? undefined)
+    urlFor(doc.thumbnailUrl ?? undefined)
       ?.width(1200)
       .auto("format")
       .url() ?? "";
 
   const thumbnailLightboxUrl =
-    urlFor(doc.thumbnail ?? undefined)
+    urlFor(doc.thumbnailUrl ?? undefined)
       ?.width(2000)
       .auto("format")
       .url() ?? "";
 
-  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (doc.subImages ?? [])
-    .filter(
-      (s): s is { asset: { _ref: string }; alt: string | null } => !!s.asset,
-    )
-    .map((s) => ({
+  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (
+    doc.subImages ?? []
+  )
+    .filter((s): s is { asset: { _ref: string }; alt: string | null } => !!s.asset)
+    .map((s, i) => ({
       src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
       lightboxSrc: urlFor(s.asset)?.width(2000).auto("format").url() ?? "",
-      alt: s.alt ?? "",
+      alt: s.alt ?? `${doc.title}-${i + 1}`,
     }));
 
   // 追加：YouTubeだけ拾って WorkVideo に寄せる
@@ -131,9 +133,9 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
     title: doc.title,
     date: doc.date,
     tags: doc.tags ?? [],
-    thumbnail: thumbnailUrl,
+    thumbnailUrl: thumbnailUrl,
     thumbnailLightboxUrl,
-    thumbnailAlt: doc.thumbnailAlt ?? "",
+    thumbnailAlt: doc.thumbnailAlt ?? doc.title,
     videos: videos.length > 0 ? videos : undefined,
     description: doc.description ?? "",
     category: doc.category ?? "",
@@ -143,5 +145,6 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
     notes: doc.notes ?? undefined,
     credits: doc.credits ?? undefined,
     subImage: subImage.length > 0 ? subImage : undefined,
+    links: doc.links ?? undefined,
   } satisfies Work;
 }

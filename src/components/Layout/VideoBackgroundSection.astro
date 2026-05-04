@@ -1,35 +1,28 @@
 ---
 interface Props {
-  /** 動画URL（MP4/フォールバック） */
   videoSrc?: string;
-  /** 軽量 WebM（優先して再生される想定） */
-  videoSrcWebmLight?: string;
-  /** 通常 WebM */
-  videoSrcWebm?: string;
-  /** MP4（フォールバック） */
-  videoSrcMp4?: string;
-  /** まだ動画が出ない間の見た目 */
-  videoPoster?: string;
-
-  /** アクセシビリティ用の説明（video に alt は無いので aria-label / sr-only で渡す） */
   alt: string;
-
-  /** 任意で className を追加 */
   className?: string;
+  pcVideoPoster?: string;
+  pcVideoSrcWebm?: string;
+  pcVideoSrcMp4?: string;
+  mobileVideoSrcWebm? :string;
+  mobileVideoSrcMp4? :string;
 }
 
 const {
   videoSrc,
-  videoSrcWebmLight,
-  videoSrcWebm,
-  videoSrcMp4,
-  videoPoster,
+  pcVideoSrcWebm,
+  pcVideoSrcMp4,
+  mobileVideoSrcWebm,
+  mobileVideoSrcMp4,
+  pcVideoPoster,
   alt,
   className,
   ...rest
 } = Astro.props as Props & Record<string, unknown>;
 
-const hasSources = Boolean(videoSrcWebm || videoSrcMp4);
+const hasSources = Boolean(pcVideoSrcWebm || pcVideoSrcMp4);
 const fallbackSrc = videoSrc ?? '';
 ---
 
@@ -42,7 +35,7 @@ const fallbackSrc = videoSrc ?? '';
     <video
       data-video-bg
       {...(!hasSources && fallbackSrc ? { src: fallbackSrc } : {})}
-      poster={videoPoster}
+      poster={pcVideoPoster}
       muted
       autoplay
       loop
@@ -53,8 +46,10 @@ const fallbackSrc = videoSrc ?? '';
     >
       {hasSources && (
         <>
-          {videoSrcWebm && <source src={videoSrcWebm} type="video/webm" />}
-          {videoSrcMp4 && <source src={videoSrcMp4} type="video/mp4" />}
+          {pcVideoSrcWebm && <source data-src={pcVideoSrcWebm} data-pc-movie type="video/webm" />}
+          {pcVideoSrcMp4 && <source data-src={pcVideoSrcMp4} data-pc-movie type="video/mp4" />}
+          {mobileVideoSrcWebm && <source data-src={mobileVideoSrcWebm} data-mobile-movie type="video/webm" />}
+          {mobileVideoSrcMp4 && <source data-src={mobileVideoSrcMp4} data-mobile-movie type="video/mp4" />}
         </>
       )}
     </video>
@@ -66,3 +61,26 @@ const fallbackSrc = videoSrc ?? '';
   <slot />
 </section>
 
+<script>
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  const mobileMovieData = document.querySelectorAll('[data-mobile-movie]');
+  const pcMovieData = document.querySelectorAll('[data-pc-movie]');
+  if(isMobile && mobileMovieData.length > 0){
+    mobileMovieData.forEach((source) => {
+      const sourceEl = source as HTMLSourceElement;
+      sourceEl.src = sourceEl.dataset.src ?? '';
+    })}else{
+      pcMovieData.forEach((source) => {
+        const sourceEl = source as HTMLSourceElement;
+        sourceEl.src = sourceEl.dataset.src ?? '';
+    })
+  }
+
+  const video = document.querySelector('[data-video-bg]') as HTMLVideoElement;
+  if(video){
+    video.load();
+    video.addEventListener('canplay', () => {
+      video.play().catch(() => {})
+    }, {once: true})
+  }
+</script>

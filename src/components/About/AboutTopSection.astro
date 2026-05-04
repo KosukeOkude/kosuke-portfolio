@@ -8,6 +8,7 @@ import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
 import profileImage from '@/assets/images/hero-profile-img.jpg';
 import { aboutPageConfig } from '@/data/about';
 import type { AboutPageContent } from '@/sanity/about';
+import { ContactSocialLinks } from '@/components/Contact/ContactSocialLinks';
 
 interface Props {
     about?: AboutPageContent
@@ -19,7 +20,6 @@ const achievements = about?.achievementsList ?? [];
 
 ---
 <BackgroundSection image={ aboutPageConfig.backgroundImage } alt={aboutPageConfig.backgroundAlt} className={"min-h-svh"}>
-    <ScreenOverlay/>
         <SectionLayout>
             <div slot="sectionContent" data-reveal
                 class="text-[#1a1a1a] "
@@ -92,13 +92,8 @@ const achievements = about?.achievementsList ?? [];
                         <p class="mb-2 text-[0.88rem] leading-relaxed text-[#333]">
                             {about?.contactMessage ?? '撮影のご依頼やご相談など、まずはお気軽にご連絡ください。'}
                         </p>
-                        <p class="text-[0.9rem] font-medium break-all">
-                        <a
-                            href="mailto:hello@example.com"
-                            class="text-[#1a1a1a] underline decoration-1 underline-offset-[3px]"
-                            >{about?.contactEmail ?? 'hello@example.com'}</a
-                        >
-                        </p>
+
+                        <ContactSocialLinks email={about?.contactEmail} client:load/>
                         <div class="mt-7 flex justify-center md:block">
                         <a
                             href="/contact#contact-form"

@@ -5,6 +5,7 @@ import SectionTitle from '@/components/UI/SectionTitle.astro';
 import SectionCtaLink from '@/components/UI/SectionCtaLink.astro';
 import GalleryCategoryGrid from '@/components/Gallery/GalleryCategoryGrid.astro';
 import { type GalleryCategory, galleryPageConfig } from '@/data/gallery';
+import AnimationScreenOverlay from '@/components/UI/AnimationScreenOverlay.astro';
 
 interface Props {
     galleryCategories: GalleryCategory[];
@@ -14,11 +15,10 @@ const { galleryCategories } = Astro.props;
 ---
 
 
-
 <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} className={"z-20  min-h-svh"}>
+    <AnimationScreenOverlay/>
 
-<SectionLayout addClass="z-20 min-h-svh">
-
+<SectionLayout addClass="z-20 min-h-svh relative">
     <div class="z-20 flex flex-col justify-between my-auto gap-10" slot="sectionContent">
         <SectionTitle title="GALLERY" data-reveal>
             Photographs and moments, collected over time.

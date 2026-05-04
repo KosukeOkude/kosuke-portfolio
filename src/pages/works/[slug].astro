@@ -3,7 +3,6 @@ import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import LabeledSection from "@/components/UI/LabeledSection.astro";
-import MoreInCategory from "@/components/UI/MoreInCategory.astro";
 import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 
@@ -13,6 +12,7 @@ import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { normalizeSlug } from "@/utils";
 import YoutubeVideos from "@/components/UI/YoutubeVideos.astro";
 import ScreenOverlay from "@/components/UI/ScreenOverlay.astro";
+import DetailPagePrevNextNav from "@/components/UI/DetailPagePrevNextNav.astro";
 
 
 export const getStaticPaths = (async () => {
@@ -24,11 +24,11 @@ export const getStaticPaths = (async () => {
 
 const { slug } = Astro.params;
 const work = await getWorkBySlug(slug);
-
 const allWorks = await getAllWorks();
-// カテゴリ一覧（'All' + 小文字カテゴリの Set）
-const categorySet = new Set(allWorks.map(w => w.category))
-const allCategories = ['All', ...categorySet];
+
+const currentIndex = allWorks.findIndex((item) => normalizeSlug(item.slug) === slug);
+const prevItem = allWorks[currentIndex - 1];
+const nextItem = allWorks[currentIndex + 1];
 
 if(!work){
   throw new Error(`Work not found for slug: ${slug}`);
@@ -56,7 +56,7 @@ if(!work){
       />
 
       <DetailImageGalleryWithLightbox
-        mainImageUrl={work.thumbnail}
+        mainImageUrl={work.thumbnailUrl}
         mainImageLightboxUrl={work.thumbnailLightboxUrl}
         mainImageAlt={work.thumbnailAlt}
         subImages={work.subImage ?? []}
@@ -111,13 +111,27 @@ if(!work){
           )}
           </LabeledSection>
         )}
+
+        {work.links && work.links.length > 0 && (
+          <LabeledSection label="関連リンク">
+            <ul class="text-white/80 space-y-2">
+              {work.links.map((link) => (
+                <li>
+                  <a
+                    href={link.url}
+                    class="underline underline-offset-2 hover:text-white"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </LabeledSection>
+        )}
       </section>
-
-      <MoreInCategory
-        baseHref="/works"
-        allCategories={allCategories}
-      />
-
+      <DetailPagePrevNextNav prevItem={prevItem} nextItem={nextItem} basePath="works"/>
       <PageBottomNav
         label="works"
         href="/works"

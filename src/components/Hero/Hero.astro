@@ -1,18 +1,28 @@
 ---
 import { Picture } from 'astro:assets';
-import heroBackgroundPoster from '@/assets/images/hhpp-poster.jpg';
+import heroBackgroundPoster from '@/assets/images/hero-poster.jpg';
 import heroProfileImage from '@/assets/images/hero-profile-img.jpg';
-import heroBackgroundVideoWebm from '@/assets/movies/hhpp-1080.webm';
-import heroBackgroundVideoMp4 from '@/assets/movies/hhpp-1080.mp4';
+import pcHeroBackgroundVideoWebm from '@/assets/movies/hero-movie-pc-1080.webm';
+import pcHeroBackgroundVideoMp4 from '@/assets/movies/hero-movie-pc-1080.mp4';
+import mobileHeroBackgroundVideoWebm from '@/assets/movies/hero-movie-mobile-720.webm';
+import mobileHeroBackgroundVideoMp4 from '@/assets/movies/hero-movie-mobile-720.mp4';
 import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
 import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro';
+
+// hero-movie-pc-1080.webm	12MB
+// hero-movie-pc-1080.mp4	8.1MB
+// hero-movie-mobile-720.webm	5.7MB
+// hero-movie-mobile-720.mp4	5.0MB
+
 ---
 
 <VideoBackgroundSection
-  videoPoster={heroBackgroundPoster.src}
-  videoSrcWebm={heroBackgroundVideoWebm}
-  videoSrcMp4={heroBackgroundVideoMp4}
+  pcVideoPoster={heroBackgroundPoster.src}
+  pcVideoSrcWebm={pcHeroBackgroundVideoWebm}
+  pcVideoSrcMp4={pcHeroBackgroundVideoMp4}
+  mobileVideoSrcWebm={mobileHeroBackgroundVideoWebm}
+  mobileVideoSrcMp4={mobileHeroBackgroundVideoMp4}
   alt="ヒーロー背景の説明文"
   data-hero-root
 >
