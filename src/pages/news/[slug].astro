@@ -10,7 +10,6 @@ import { getAllNews, getNewsBySlug, newsPageConfig } from '@/data/news';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { normalizeSlug } from "@/utils";
 import YoutubeVideos from "@/components/UI/YoutubeVideos.astro";
-import ScreenOverlay from "@/components/UI/ScreenOverlay.astro";
 
 
 
@@ -38,8 +37,7 @@ const nextItem = allNews[currentIndex + 1];
 
 
 <BaseLayout>
-  <BackgroundSection mobileImage={newsPageConfig.mobileBackgroundImage} image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager>
-    <ScreenOverlay/>
+  <BackgroundSection mobileImage={newsPageConfig.mobileBackgroundImage} image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager overlayClass="bg-black/50">
   <DetailPageLayout>
         <Breadcrumbs items={[{ label: 'News', href: '/news' },{ label: newsItem.title },]}/>
 

@@ -11,7 +11,6 @@ import { getAllWorks, getWorkBySlug, worksPageConfig } from '@/data/works';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { normalizeSlug } from "@/utils";
 import YoutubeVideos from "@/components/UI/YoutubeVideos.astro";
-import ScreenOverlay from "@/components/UI/ScreenOverlay.astro";
 import DetailPagePrevNextNav from "@/components/UI/DetailPagePrevNextNav.astro";
 
 
@@ -37,8 +36,7 @@ if(!work){
 
 
 <BaseLayout>
-  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} fixedBackground eager>
-    <ScreenOverlay/>
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} fixedBackground eager overlayClass="bg-black/50">
   <DetailPageLayout>
       <Breadcrumbs
       items={[

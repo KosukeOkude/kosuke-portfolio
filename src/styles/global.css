@@ -344,7 +344,6 @@ body.lightbox-open [data-screen-overlay] {
 @media (pointer: coarse) {
   .fixed-bg-mobile {
     height: auto;
-    transition: height 0.25s ease;
   }
 }
 

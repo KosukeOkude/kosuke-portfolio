@@ -312,11 +312,10 @@ export function animationHeroIntro(): void {
   }
 
   if (isTouchDevice) {
-    gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
+    gsap.set([profileWrap, nameEl, titleEl], { opacity: 0 });
     const tl = gsap.timeline();
     tl.to(profileWrap, { opacity: 1, duration: 0.8 });
     tl.to([nameEl, titleEl], { opacity: 1, duration: 0.45 }, "+=0.08");
-    tl.to(overlay, { opacity: 0, duration: 1 });
     return;
   }
 

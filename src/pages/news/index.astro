@@ -6,8 +6,6 @@ import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { getAllNews, newsPageConfig } from '@/data/news';
 import { NewsArchiveSection } from '@/components/News/NewsArchiveSection';
 import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
-import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
-
 const newsItems = await getAllNews();
 ---
 
@@ -16,7 +14,6 @@ const newsItems = await getAllNews();
 
 <BaseLayout>
   <BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager>
-    <ScreenOverlay/>
   <ArchiveLayout>
 
     <Breadcrumbs items={[{label: 'News'}]}/>

@@ -5,7 +5,7 @@ import { getImage } from 'astro:assets';
 // ファイル	渡している属性
 // src/components/Hero/Hero.astro	data-hero-root
 // src/components/Works/home/WorksTopSection.astro	data-works-top-root
-const { image, alt, className, fixedBackground, mobileImage, eager, ...rest } = Astro.props;
+const { image, alt, className, fixedBackground, mobileImage, eager, overlayClass, ...rest } = Astro.props;
 const bgPositionClass = fixedBackground ? "fixed" : "absolute";
 
 // デスクトップ用（AVIF / WebP）
@@ -36,6 +36,7 @@ const mobileWebp = mobileImage ? (await getImage({ src: mobileImage, format: 'we
         decoding="async"
       />
     </picture>
+    {fixedBackground && <div class={`absolute inset-0 pointer-events-none ${overlayClass ?? 'bg-black/30'}`} data-screen-overlay />}
   </div>
   <slot />
 </section>

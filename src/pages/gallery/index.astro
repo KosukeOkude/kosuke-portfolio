@@ -6,8 +6,6 @@ import ArchiveLayout from '@/components/Layout/ArchiveLayout.astro';
 import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 import { getGalleryCategories, galleryPageConfig } from '@/data/gallery';
 import GalleryCategoryGrid from '@/components/Gallery/GalleryCategoryGrid.astro';
-import ScreenOverlay from '@/components/UI/ScreenOverlay.astro';
-
 const galleryCategories = await getGalleryCategories();
 
 ---
@@ -16,7 +14,6 @@ const galleryCategories = await getGalleryCategories();
 
 
 <BaseLayout>
-  <ScreenOverlay/>
   <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} fixedBackground eager>
     <ArchiveLayout>
       <Breadcrumbs items={[{label: 'Gallery'}]}/>
