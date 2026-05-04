@@ -312,31 +312,54 @@ export function animationHeroIntro(): void {
   }
 
   if (isTouchDevice) {
-    gsap.set(overlay, { opacity: 1 });
-    gsap.set([profileWrap, nameEl, titleEl], { opacity: 0 });
     const tl = gsap.timeline();
-    tl.to(profileWrap, { opacity: 1, duration: 0.8 });
+    tl.fromToto(
+      overlay,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+      },
+    );
+    tl.fromToto(
+      profileWrap,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+      },
+    );
+    tl.fromToto(
+      [nameEl, titleEl],
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+      },
+    );
+  } else {
+    gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
+    const tl = gsap.timeline({ paused: true });
+    tl.to(overlay, { opacity: 1, duration: 1 });
+    tl.to(profileWrap, { opacity: 1, duration: 0.8 }, "-=0.5");
     tl.to([nameEl, titleEl], { opacity: 1, duration: 0.45 }, "+=0.08");
-    return;
+
+    const introSt = ScrollTrigger.create({
+      trigger: root,
+      start: "top top",
+      end: "+=1000",
+      pin: true,
+      scrub: 1,
+      animation: tl,
+      invalidateOnRefresh: true,
+    });
+
+    scrollPinFromPin([videoWrap], next, () => introSt.end);
   }
 
-  gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
-  const tl = gsap.timeline({ paused: true });
-  tl.to(overlay, { opacity: 1, duration: 1 });
-  tl.to(profileWrap, { opacity: 1, duration: 0.8 }, "-=0.5");
-  tl.to([nameEl, titleEl], { opacity: 1, duration: 0.45 }, "+=0.08");
-
-  const introSt = ScrollTrigger.create({
-    trigger: root,
-    start: "top top",
-    end: "+=1000",
-    pin: true,
-    scrub: 1,
-    animation: tl,
-    invalidateOnRefresh: true,
-  });
-
-  scrollPinFromPin([videoWrap], next, () => introSt.end);
   ScrollTrigger.refresh();
 }
 
@@ -415,7 +438,7 @@ export function runWorksTopAnimation(): void {
     scroller,
     { scrollLeft: () => getMaxScrollLeft(scroller), duration: 7, ease: "none" },
     0,
-  )
+  );
   cardTl.to(cta, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
   cardTl.to({}, { duration: 2 });
 

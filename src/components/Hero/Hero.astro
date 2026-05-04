@@ -34,9 +34,10 @@ import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro
   </div>
 
     <div
-      class="hero__content layout-offset-top layout-padding-x relative z-20 flex min-h-svh flex-col items-center justify-center max-[400px]:pb-[10px]"
+    data-hero-profile-content
+      class="hero__content  layout-offset-top layout-padding-x relative z-20 flex min-h-svh flex-col items-center justify-center max-[400px]:pb-[10px]"
     >
-      <div data-hero-profile-wrap>
+      <div data-hero-profile-wrap class="">
         <Picture
           src={heroProfileImage}
           formats={['avif', 'webp']}
@@ -46,12 +47,12 @@ import ScrollLineOnlyVertical from '@/components/UI/ScrollLineOnlyVertical.astro
           layout="constrained"
           fit="cover"
           position="center"
-          class="mb-10 h-[200px] w-[200px] rounded-xl object-cover md:mb-[60px] md:h-[300px] md:w-[300px]"
+          class="mb-10  h-[200px] w-[200px] rounded-xl object-cover md:mb-[60px] md:h-[300px] md:w-[300px]"
         />
       </div>
       <h2
         data-hero-name
-        class="hero__name font-accent mb-4 text-2xl font-bold text-[var(--color-white)] md:mb-6 md:text-5xl lg:text-5xl"
+        class="hero__name  font-accent mb-4 text-2xl font-bold text-[var(--color-white)] md:mb-6 md:text-5xl lg:text-5xl"
       >
         KOSUKE OKUDE
       </h2>

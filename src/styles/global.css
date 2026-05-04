@@ -278,7 +278,6 @@ h1,
   }
 }
 
-
 @keyframes scrollLineHorizontal {
   0% {
     transform: scaleX(0);
@@ -348,7 +347,6 @@ body.lightbox-open [data-screen-overlay] {
 }
 
 @media (pointer: coarse) {
-
   .scroll-line-horizontal {
     width: 50px;
     height: 1px;
