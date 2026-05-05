@@ -21,7 +21,10 @@ whenDomReady(initRevealAnimation);
 
 // トップページ専用アニメーション
 if (isHomePath()) {
-  whenDomReady(animationHeroIntro);
+  // タッチデバイスは randomImagesOnScreen の onComplete 内で呼ぶため除外
+  if (navigator.maxTouchPoints === 0) {
+    whenDomReady(animationHeroIntro);
+  }
   whenDomReady(runWorksTopAnimation);
   whenDomReady(registerScrollTriggerRefreshOnResize);
   whenDomReady(registerScrollTriggerRefreshOnLoad);

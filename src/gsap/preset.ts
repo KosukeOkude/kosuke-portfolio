@@ -298,6 +298,7 @@ export function animationHeroIntro(): void {
   const videoWrap = root.querySelector<HTMLElement>("[data-hero-bg-parallax]");
   const overlay = root.querySelector<HTMLElement>("[data-hero-overlay]");
   const profileWrap = root.querySelector<HTMLElement>("[data-hero-profile-wrap]");
+  const content = root.querySelector<HTMLElement>("[data-hero-profile-content]");
   const nameEl = root.querySelector<HTMLElement>("[data-hero-name]");
   const titleEl = root.querySelector<HTMLElement>("[data-hero-title]");
   const next = root.nextElementSibling as HTMLElement | null;
@@ -313,32 +314,14 @@ export function animationHeroIntro(): void {
 
   if (isTouchDevice) {
     const tl = gsap.timeline();
-    tl.fromToto(
-      overlay,
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-      },
-    );
-    tl.fromToto(
-      profileWrap,
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-      },
-    );
-    tl.fromToto(
+    tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" });
+    if (content) tl.fromTo(content, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "<");
+    tl.fromTo(profileWrap, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "<");
+    tl.fromTo(
       [nameEl, titleEl],
-      { opacity: 0 },
-      {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-      },
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+      "+=0.08",
     );
   } else {
     gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
