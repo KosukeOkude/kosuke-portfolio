@@ -129,12 +129,7 @@ export default function ImageLightBoxModal({
         onClose={requestClose}
       />
 
-      {/* PC: 上部に縦スクロール表示 */}
-      <span className="hidden md:block pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 z-10 font-body text-[0.6rem] tracking-[0.3em] uppercase text-white/60">
-        ↑ Scroll ↓
-      </span>
-
-    </div>
+</div>
   );
 
   // Portal: DOM だけ document.body へ描画し、親の transform / overflow の影響を受けない全画面モーダルにする。
