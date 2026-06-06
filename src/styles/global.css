@@ -104,37 +104,14 @@ h1,
   transform: translateY(-100%);
 }
 
-/* Works カード横スライダー用（横スクロールバー） */
+/* Works カード横スライダー用 */
 .works-card-slider-scroll {
   overflow-x: auto;
-  /* カードとバーの間の余白（数値は好みで） */
-  padding-bottom: 14px;
-  /* Firefox */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.45) rgba(255, 255, 255, 0.08);
+  scrollbar-width: none; /* Firefox */
 }
 
 .works-card-slider-scroll::-webkit-scrollbar {
-  height: 6px;
-}
-
-.works-card-slider-scroll::-webkit-scrollbar-track {
-  margin-inline: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 9999px;
-}
-
-.works-card-slider-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-.works-card-slider-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.55);
-  border: 2px solid transparent;
-  background-clip: padding-box;
+  display: none; /* Chrome / Safari */
 }
 
 [data-archive-heading-block],

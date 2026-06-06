@@ -17,16 +17,14 @@ const workForClient = await getAllWorks();
 
 
 <BaseLayout>
-  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} mobileImage={worksPageConfig.mobileImage} works-archive-root eager>
+  <BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} mobileImage={worksPageConfig.mobileImage} mobileBlack works-archive-root eager>
       <ScreenOverlay/>
       <ArchiveLayout>
         <Breadcrumbs items={[{label: 'Works'}]}/>
         <!-- タイトルエリア -->
         <ArchivePageHeader
-          label="works"
           title="works &amp; archives"
         >
-        Client commissions and personal work, documented.
         </ArchivePageHeader>
         <div id="archive-main">
           <WorksArchiveSection works={workForClient} client:load/>

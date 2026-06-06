@@ -33,11 +33,11 @@ export const GalleryTrack = ({
 
   return (
     <>
-      <div className="relative w-full mt-10 h-[60vh]">
+      <div className="relative w-full mt-5 md:mt-10 h-[290px] min-[390px]:h-[360px] md:h-[60vh]">
         <div
           ref={scrollerRef}
           data-gallery-scroller
-          className="h-full flex items-center gap-10 pl-6 overflow-x-auto overflow-y-hidden"
+          className="h-full flex items-center gap-10 pl-6 overflow-x-auto overflow-y-hidden [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20"
         >
           <div className="h-full flex items-center gap-10 pl-6 w-max">
             {items.map((item, index) => (
@@ -55,7 +55,7 @@ export const GalleryTrack = ({
                     src={item.imageUrl}
                     alt={item.imageAlt}
                     loading={index < 3 ? "eager" : "lazy"}
-                    className="h-[250px] sm:h-[min(600px,55vh)] w-auto rounded-md object-cover shadow-xl"
+                    className="h-[250px] min-[390px]:h-[320px] md:h-[min(600px,55vh)] w-auto rounded-md object-cover shadow-xl"
                   />
                 </button>
               </article>

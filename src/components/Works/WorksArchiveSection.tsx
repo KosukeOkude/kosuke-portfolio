@@ -10,7 +10,6 @@ import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
 import { useRevealDispatch } from "@/gsap/core";
 import type { DateSortOrder } from "@/types";
 import { useArchiveMoreInCategoryLanding, useRevealRefreshOnChange, useArchiveCategoryFromQuery, useScrollToPinStart, useHorizontalScrollTrigger } from "@/hooks";
-import WorksArchiveHint from "@/components/Works/WorksArchiveHint";
 
 interface WorksArchiveSectionProps {
   works: WorkForClient[];
@@ -63,8 +62,9 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
   const { pinSt } = useHorizontalScrollTrigger(
     scrollerRef,
     listKey,
-    "[data-card-slider]",
+    "#archive-main",
     "[works-archive-root]",
+    "top top+=20",
   );
 
   // カテゴリ／ソート変更時に PIN 開始位置（Works 一覧先頭）へ戻す
@@ -86,8 +86,7 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
         aria-label="Works archive"
         className="space-y-4"
       >
-        <WorksArchiveHint />
-        <WorksCardSlider
+<WorksCardSlider
           key={buildArchiveListKey(selectedCategory, sortOrder)}
           works={filteredWorks}
           scrollerRef={scrollerRef}

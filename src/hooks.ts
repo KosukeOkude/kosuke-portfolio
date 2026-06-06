@@ -152,6 +152,7 @@ export function useHorizontalScrollTrigger(
   resetKey: string,
   triggerSelector: string,
   pinSelector: string,
+  start = "top top+=80",
 ) {
   const stRef = useRef<ScrollTrigger>(null);
   const maxScrollLeftRef = useRef(0);
@@ -191,7 +192,7 @@ export function useHorizontalScrollTrigger(
 
       stRef.current = ScrollTrigger.create({
         trigger: triggerEl,
-        start: "top top+=80",
+        start,
         end: () => `+=${scroller.scrollWidth - scroller.clientWidth}`,
         pin: root,
         scrub: true,

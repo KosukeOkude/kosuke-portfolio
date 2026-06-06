@@ -5,7 +5,7 @@ import { getImage } from 'astro:assets';
 // ファイル	渡している属性
 // src/components/Hero/Hero.astro	data-hero-root
 // src/components/Works/home/WorksTopSection.astro	data-works-top-root
-const { image, alt, className, fixedBackground, mobileImage, eager, overlayClass, ...rest } = Astro.props;
+const { image, alt, className, fixedBackground, mobileImage, mobileBlack, eager, overlayClass, ...rest } = Astro.props;
 const bgPositionClass = fixedBackground ? "fixed" : "absolute";
 
 // デスクトップ用（AVIF / WebP）
@@ -18,8 +18,8 @@ const mobileWebp = mobileImage ? (await getImage({ src: mobileImage, format: 'we
 ---
 
 <section class={`${className ?? ''} relative`} {...rest}>
-  <div class={`${bgPositionClass} inset-0 -z-20 ${fixedBackground ? 'min-[3000px]:max-w-[2400px] min-[3000px]:left-1/2 min-[3000px]:-translate-x-1/2 min-[3000px]:top-0 min-[3000px]:bottom-0 fixed-bg-mobile ' : ''}`} data-background-wrapper>
-    <picture class="w-full h-full">
+  <div class={`${bgPositionClass} inset-0 -z-20 ${mobileBlack ? 'bg-black' : ''} ${fixedBackground ? 'min-[3000px]:max-w-[2400px] min-[3000px]:left-1/2 min-[3000px]:-translate-x-1/2 min-[3000px]:top-0 min-[3000px]:bottom-0 fixed-bg-mobile ' : ''}`} data-background-wrapper>
+    <picture class={`w-full h-full ${mobileBlack ? 'hidden md:block' : ''}`}>
       {/* モバイル画像がある場合のみ出力（767px以下で優先される）*/}
       {mobileAvif && <source media="(max-width: 767px)" type="image/avif" srcset={mobileAvif} />}
       {mobileWebp && <source media="(max-width: 767px)" type="image/webp" srcset={mobileWebp} />}

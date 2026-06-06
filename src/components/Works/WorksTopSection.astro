@@ -8,7 +8,6 @@ import { type WorkForClient, worksPageConfig } from "@/data/works";
 import SectionCtaLink from "@/components/UI/SectionCtaLink.astro";
 import WorksCardSliderForTop from "@/components/Works/WorksCardSliderForTop.astro";
 import AnimationScreenOverlay from "@/components/UI/AnimationScreenOverlay.astro";
-import WorksHintForTop from "@/components/Works/WorksHintForTop.astro";
 
 interface Props {
     works: WorkForClient[];
@@ -18,17 +17,13 @@ const { works } = Astro.props;
 ---
 
 
-<BackgroundSection image={worksPageConfig.backgroundImage}  alt={worksPageConfig.backgroundAlt} data-works-top-root className="min-h-svh relative z-10">
+<BackgroundSection image={worksPageConfig.backgroundImage} alt={worksPageConfig.backgroundAlt} mobileBlack data-works-top-root className="min-h-svh relative z-10">
     <AnimationScreenOverlay/>
     <SectionLayout>
         <div slot="sectionContent"
              class="z-20 flex flex-col justify-between my-auto min-[375px]:gap-4 gap-5">
-            <SectionTitle title="WORKS" data-works-top-title>
-            Step into my world through selected works.<br>
-            —or an intimate collection of moments across genres.
-            </SectionTitle>
-            <WorksHintForTop data-works-top-hint />
-            <WorksCardSliderForTop works={works}/>
+            <SectionTitle title="WORKS" data-works-top-title />
+<WorksCardSliderForTop works={works}/>
         </div>
         <SectionCtaLink
         slot="sectionCta"
