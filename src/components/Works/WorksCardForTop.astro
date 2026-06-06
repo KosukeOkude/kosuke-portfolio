@@ -36,7 +36,7 @@ const srcSet = thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 300, 350, 560]) : 
           <div class="absolute right-3 top-3 z-10 flex flex-col items-end gap-1">
             {tags.map((tag) => (
               <span
-                class="text-body text-right text-[10px] font-medium leading-tight tracking-wide text-white/75 md:text-[11px]"
+                class="text-body text-right text-[10px] font-medium leading-tight tracking-wide text-white/75 xl:text-[11px]"
               >
                 #{tag}
               </span>
@@ -46,8 +46,8 @@ const srcSet = thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 300, 350, 560]) : 
 
         <h3
           class="
-            mb-1.5 font-accent text-base font-semibold leading-tight
-            text-[var(--color-white)] md:text-[17px] md:text-lg md:leading-snug
+            mb-1.5 font-accent text-[12px] font-semibold leading-tight
+            text-[var(--color-white)] md:text-[14px] xl:text-lg xl:leading-snug
           "
         >
           {title}
@@ -56,7 +56,7 @@ const srcSet = thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 300, 350, 560]) : 
         <p
           class="
             text-body text-[10px] uppercase tracking-[0.14em] text-white/60
-            md:text-[11px] md:text-xs
+            md:text-[11px] xl:text-xs
           "
         >
           Date - {date}

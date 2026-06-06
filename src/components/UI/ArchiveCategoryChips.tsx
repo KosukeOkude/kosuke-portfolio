@@ -16,7 +16,7 @@ export const ArchiveCategoryChips = ({
   selectedCategory,
   onSelect,
 }: ArchiveCategoryChipsProps) => (
-  <div className="flex xl:flex-wrap gap-3 py-5 mb-5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-scrollable>
+  <div className="flex xl:flex-wrap gap-3 mb-5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-scrollable>
     {categories.map((category) => {
       const isActive = category.slug === selectedCategory;
       return (
@@ -25,7 +25,7 @@ export const ArchiveCategoryChips = ({
           type="button"
           onClick={() => onSelect(category.slug)}
           className={clsx(
-            "cursor-pointer shrink-0 rounded-full border px-4 py-1.5 text-xs transition-colors md:text-sm",
+            "cursor-pointer shrink-0 rounded-full border px-4 py-1.5 text-[12px] transition-colors md:text-sm",
             isActive
               ? "border-white/60 bg-white/25 text-white hover:bg-white/30"
               : "border-white/15 bg-white/5 text-white/90 hover:border-white/25 hover:bg-white/15",

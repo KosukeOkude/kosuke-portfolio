@@ -46,8 +46,8 @@ export default function WorksCard({ work }: WorksCardProps) {
             )}
             <h3
               className="
-                mb-1.5 font-accent text-base font-semibold leading-tight
-                text-[var(--color-white)] md:text-[17px] xl:text-lg xl:leading-snug
+                mb-1.5 font-accent text-[12px] font-semibold leading-tight
+                text-[var(--color-white)] md:text-[14px] xl:text-lg xl:leading-snug
                 "
             >
               {title}

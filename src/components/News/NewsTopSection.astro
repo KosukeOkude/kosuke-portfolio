@@ -14,13 +14,12 @@ const { newsItems } = Astro.props;
 ---
 
 
-<BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} className="min-h-svh">
+<BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} mobileImage={newsPageConfig.mobileBackgroundImage} className="min-h-svh">
   <ScreenOverlay/>
   <SectionLayout addClass="pb-30">
     <div slot="sectionContent" class="z-20 flex-1 flex flex-col gap-10 my-auto">
       <!-- タイトル -->
       <SectionTitle title="NEWS" data-reveal>
-        Updates on upcoming shoots, exhibitions, and other latest news.
       </SectionTitle>
 
       <NewsListForTop

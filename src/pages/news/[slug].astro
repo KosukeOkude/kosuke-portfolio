@@ -37,7 +37,7 @@ const nextItem = allNews[currentIndex + 1];
 
 
 <BaseLayout>
-  <BackgroundSection mobileImage={newsPageConfig.mobileBackgroundImage} image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager overlayClass="bg-black/50">
+  <BackgroundSection mobileImage={newsPageConfig.mobileBackgroundImage} image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager overlayClass="bg-black/50" mobileBlack>
   <DetailPageLayout>
         <Breadcrumbs items={[{ label: 'News', href: '/news' },{ label: newsItem.title },]}/>
 

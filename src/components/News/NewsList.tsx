@@ -79,7 +79,7 @@ export function NewsList({ newsItems }: NewsListProps) {
               className="
                 font-semibold
                 text-[#111]
-                text-[12px]
+                text-[10px]
                 md:text-base
                 leading-snug
                 mb-1.5
@@ -89,7 +89,7 @@ export function NewsList({ newsItems }: NewsListProps) {
             </h3>
             <p
               className="
-                text-[12px]
+                text-[10px]
                 md:text-sm
                 text-[#525252]
                 leading-relaxed

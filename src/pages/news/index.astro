@@ -13,7 +13,7 @@ const newsItems = await getAllNews();
 
 
 <BaseLayout>
-  <BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} fixedBackground eager>
+  <BackgroundSection image={newsPageConfig.backgroundImage} alt={newsPageConfig.backgroundAlt} mobileImage={newsPageConfig.mobileBackgroundImage} fixedBackground eager>
   <ArchiveLayout>
 
     <Breadcrumbs items={[{label: 'News'}]}/>

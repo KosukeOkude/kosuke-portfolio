@@ -1,11 +1,11 @@
 import type { YoutubeVideo } from "@/types";
 import newsBackgroundImage from "@/assets/images/news-background-pc.jpg";
-import newsBackgroundImagePc from "@/assets/images/news-background.jpg";
+import newsMobileBackgroundImage from "@/assets/images/news-mobile-image.jpg";
 
 export const newsPageConfig = {
   backgroundImage: newsBackgroundImage,
   backgroundAlt: "News background",
-  mobileBackgroundImage: newsBackgroundImagePc,
+  mobileBackgroundImage: newsMobileBackgroundImage,
 };
 
 export interface NewsArchive {

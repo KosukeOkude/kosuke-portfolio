@@ -1,5 +1,5 @@
 import worksBackgroundImage from "@/assets/images/works-backrgound-image-pc.jpg";
-import worksMobileBackgroundImage from "@/assets/images/works-backrgound-image-pc.jpg";
+import worksMobileBackgroundImage from "@/assets/images/works-mobile-image.jpg";
 import type { YoutubeVideo } from "@/types";
 
 export const worksPageConfig = {

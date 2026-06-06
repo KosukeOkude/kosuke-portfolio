@@ -522,6 +522,19 @@ export default function randomImagesOnScreen(): void {
 
   if (films.length === 0 || !tooltip) return;
 
+  const isTouchDevice = navigator.maxTouchPoints > 0;
+  const STORAGE_KEY = "entrance_last_shown";
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+  if (isTouchDevice) {
+    const lastShown = localStorage.getItem(STORAGE_KEY);
+    if (lastShown === today) {
+      gsap.set(root, { display: "none" });
+      animationHeroIntro();
+      return;
+    }
+  }
+
   gsap.set(Object.values(gridLines), { opacity: 1 });
   gsap.set(root, { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" });
 
@@ -560,9 +573,8 @@ export default function randomImagesOnScreen(): void {
       { opacity: 1, filter: "grayscale(0%)", duration: 0.8, ease: "power2.inOut" },
     );
 
-  const isTouchDevice = navigator.maxTouchPoints > 0;
-
   if (isTouchDevice) {
+    localStorage.setItem(STORAGE_KEY, today);
     tl.to({}, { duration: 1.5 }).to(root, {
       clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
       ease: "power2.inOut",

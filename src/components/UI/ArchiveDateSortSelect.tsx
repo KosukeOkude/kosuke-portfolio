@@ -18,7 +18,7 @@ export const ArchiveDateSortSelect = ({
   id = 'archive-date-sort',
   name
 }: ArchiveDateSortSelectProps) => (
-  <div className={`${className ?? ''} mb-10`}>
+  <div className={`${className ?? ''} mb-5 md:10`}>
     <label
       htmlFor={id}
       className="sr-only"
@@ -30,7 +30,7 @@ export const ArchiveDateSortSelect = ({
       value={value}
       name={name}
       onChange={(e) => onChange(e.target.value as DateSortOrder)}
-      className="cursor-pointer text-xs md:text-sm bg-white/10 border border-white/30 rounded px-3 py-1.5 text-white"
+      className="cursor-pointer text-[12px] md:text-sm bg-white/10 border border-white/30 rounded px-3 py-1.5 text-white"
     >
       <option value="date-asc">新着順</option>
       <option value="date-desc">古い順</option>

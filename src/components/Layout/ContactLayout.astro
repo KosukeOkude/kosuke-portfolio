@@ -1,26 +1,40 @@
 ---
 import { ContactSocialLinks } from "@/components/Contact/ContactSocialLinks";
-
-
 ---
 
 <section id="contact-form" class="mt-12 md:mt-16 lg:mt-24">
-    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-      <!-- 左: フォーム -->
-      <div>
 
-        <slot/>
+  <!-- モバイルのみ: フォームの上にメッセージ -->
+  <div class="lg:hidden mb-8">
+    <h2 class="font-accent text-lg font-bold tracking-wide text-black">
+      Contact
+    </h2>
+    <p class="mt-4 text-sm leading-relaxed text-black/70">
+      直接メールでのお問い合わせも可能です。
+    </p>
+  </div>
 
-      </div>
-      <!-- 右: メール・返信目安 -->
-      <div class="flex flex-col justify-start">
-        <h2 class="font-accent text-lg font-bold tracking-wide text-black md:text-xl lg:text-2xl">
-          Contact
-        </h2>
-        <p class="mt-4 text-sm leading-relaxed text-black/70 md:text-base">
-          直接メールでのお問い合わせも可能です。
-        </p>
-        <ContactSocialLinks client:load/>
-      </div>
+  <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <!-- フォーム -->
+    <div>
+      <slot/>
     </div>
-  </section>
+
+    <!-- PC のみ: 右カラムにメッセージ + CTA -->
+    <div class="hidden lg:flex flex-col justify-start">
+      <h2 class="font-accent text-lg font-bold tracking-wide text-black md:text-xl lg:text-2xl">
+        Contact
+      </h2>
+      <p class="mt-4 text-sm leading-relaxed text-black/70 md:text-base">
+        直接メールでのお問い合わせも可能です。
+      </p>
+      <ContactSocialLinks client:load/>
+    </div>
+  </div>
+
+  <!-- モバイルのみ: フォームの下に CTA -->
+  <div class="lg:hidden mt-10">
+    <ContactSocialLinks client:load/>
+  </div>
+
+</section>
