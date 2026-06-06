@@ -1,7 +1,6 @@
 import { type RefObject } from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
 import { useGalleryTrackScrollToItem } from "@/hooks";
-import { buildSrcSet } from "@/utils";
 
 interface GalleryTrackProps {
   items: GalleryLinearSliderItem[];
@@ -54,7 +53,6 @@ export const GalleryTrack = ({
                 >
                   <img
                     src={item.imageUrl}
-                    srcSet={buildSrcSet(item.imageUrl, [600, 1200])}
                     alt={item.imageAlt}
                     loading={index < 3 ? "eager" : "lazy"}
                     className="h-[250px] sm:h-[min(600px,55vh)] w-auto rounded-md object-cover shadow-xl"
