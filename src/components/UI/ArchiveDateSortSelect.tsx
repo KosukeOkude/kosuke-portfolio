@@ -18,7 +18,7 @@ export const ArchiveDateSortSelect = ({
   id = 'archive-date-sort',
   name
 }: ArchiveDateSortSelectProps) => (
-  <div className={`${className ?? ''} mb-5 md:10`}>
+  <div className={`${className ?? ''} mb-5 md:mb-10`}>
     <label
       htmlFor={id}
       className="sr-only"

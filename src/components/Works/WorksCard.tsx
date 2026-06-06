@@ -62,7 +62,7 @@ export default function WorksCard({ work }: WorksCardProps) {
             </p>
           </div>
         </div>
-        <div className="aspect-[4/5] w-full flex-shrink-0 overflow-hidden rounded-b-normal bg-gray-800">
+        <div className="aspect-[4/5] w-full flex-shrink-0 overflow-hidden rounded-b-normal bg-gray-800 border-x border-b border-white/20">
           <img
             src={thumbnailUrl}
             srcSet={thumbnailUrl ? buildSrcSet(thumbnailUrl, [192, 300, 350, 560]) : undefined}
