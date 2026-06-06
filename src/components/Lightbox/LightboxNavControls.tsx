@@ -29,7 +29,7 @@ export default function LightboxNavControls({
       <button
         type="button"
         onClick={withStopPropagation(onPrev)}
-        className={`hidden md:flex cursor-pointer fixed top-1/2 z-20 h-[3.25rem] min-w-[3.25rem] -translate-y-1/2 px-1 text-[1.65rem] font-extralight leading-none tracking-tight ${LIGHTBOX_CONTROL_CLASS}`}
+        className={`hidden cursor-pointer fixed top-1/2 z-20 h-[3.25rem] min-w-[3.25rem] -translate-y-1/2 px-1 text-[1.65rem] font-extralight leading-none tracking-tight ${LIGHTBOX_CONTROL_CLASS}`}
         style={{
           left: "max(1rem, env(safe-area-inset-left), calc((100vw - 2400px) / 2 + 1rem))",
         }}
@@ -41,7 +41,7 @@ export default function LightboxNavControls({
       <button
         type="button"
         onClick={withStopPropagation(onNext)}
-        className={`hidden md:flex cursor-pointer fixed top-1/2 z-20 h-[3.25rem] min-w-[3.25rem] -translate-y-1/2 px-1 text-[1.65rem] font-extralight leading-none tracking-tight ${LIGHTBOX_CONTROL_CLASS}`}
+        className={`hidden cursor-pointer fixed top-1/2 z-20 h-[3.25rem] min-w-[3.25rem] -translate-y-1/2 px-1 text-[1.65rem] font-extralight leading-none tracking-tight ${LIGHTBOX_CONTROL_CLASS}`}
         style={{
           right:
             "max(1rem, env(safe-area-inset-right), calc((100vw - 2400px) / 2 + 1rem))",
@@ -54,7 +54,7 @@ export default function LightboxNavControls({
       <button
         type="button"
         onClick={onClose}
-        className={`hidden md:flex cursor-pointer fixed z-20 h-[3.25rem] min-w-[3.25rem] text-[1.35rem] font-light leading-none ${LIGHTBOX_CONTROL_CLASS}`}
+        className={`hidden cursor-pointer fixed z-20 h-[3.25rem] min-w-[3.25rem] text-[1.35rem] font-light leading-none ${LIGHTBOX_CONTROL_CLASS}`}
         style={{
           top: "max(1rem, env(safe-area-inset-top))",
           right:
