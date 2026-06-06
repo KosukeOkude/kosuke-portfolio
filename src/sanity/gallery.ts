@@ -7,13 +7,8 @@ export const galleryQuery = `*[_type == "gallery"] | order(title asc) {
     title,
     "coverImage": coverImage.asset->,
     imageAlt,
-    blocks[]{
-        images[]{
-            "asset": image.asset->,
-            alt,
-            size,
-            createdAt
-        }
+    images[]{
+        "asset": asset->
     }
 }`;
 
@@ -22,20 +17,14 @@ type GalleryDoc = {
   title: string;
   coverImage: { _ref?: string; _id?: string } | null;
   imageAlt: string | null;
-  blocks?: {
-    images?: {
-      asset?: { _ref?: string; _id?: string } | null;
-      alt?: string | null;
-      size?: string | null;
-      createdAt?: string | null;
-    }[];
+  images?: {
+    asset?: { _ref?: string; _id?: string } | null;
   }[];
 };
 
 async function fetchGalleryData() {
-  // 1. 全 Gallery を取得
   const galleries = await sanityClient.fetch<GalleryDoc[]>(galleryQuery);
-  // 2. GalleryCategory に変換
+
   const categories: GalleryCategory[] = galleries.map((g) => ({
     slug: normalizeSlug(g.slug),
     title: g.title,
@@ -46,32 +35,29 @@ async function fetchGalleryData() {
         .url() ?? "",
     imageAlt: g.imageAlt ?? g.title,
   }));
-  // 3. GalleryLinearSliderItem に変換（フラット化）
+
   const sliderItems: GalleryLinearSliderItem[] = [];
   for (const gallery of galleries) {
-    for (const block of gallery.blocks ?? []) {
-      for (let i = 0; i < (block.images ?? []).length; i++) {
-        const img = block.images![i]!;
-        sliderItems.push({
-          id: img.asset?._id ?? `${gallery.slug}-${i}`,
-          categorySlug: normalizeSlug(gallery.slug),
-          imageUrl:
-            urlFor(img.asset ?? undefined)
-              ?.width(800)
-              .auto("format")
-              .url() ?? "",
-          lightboxImageUrl:
-            urlFor(img.asset ?? undefined)
-              ?.width(2000)
-              .auto("format")
-              .url() ?? "",
-          imageAlt: img.alt ?? `${gallery.title} - ${i + 1}`,
-          size: (img.size ?? "md") as "sm" | "md" | "xl" | "2xl" | "3xl",
-          createdAt: img.createdAt ?? "",
-        });
-      }
+    for (let i = 0; i < (gallery.images ?? []).length; i++) {
+      const img = gallery.images![i]!;
+      sliderItems.push({
+        id: img.asset?._id ?? `${gallery.slug}-${i}`,
+        categorySlug: normalizeSlug(gallery.slug),
+        imageUrl:
+          urlFor(img.asset ?? undefined)
+            ?.width(800)
+            .auto("format")
+            .url() ?? "",
+        lightboxImageUrl:
+          urlFor(img.asset ?? undefined)
+            ?.width(1700)
+            .auto("format")
+            .url() ?? "",
+        imageAlt: `${gallery.title} - ${i + 1}`,
+      });
     }
   }
+
   return { categories, sliderItems };
 }
 

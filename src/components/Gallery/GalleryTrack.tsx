@@ -15,13 +15,6 @@ interface GalleryTrackProps {
   pinSt: RefObject<ScrollTrigger | null>;
 }
 
-const SIZE_CLASS: Record<GalleryLinearSliderItem["size"], string> = {
-  sm: "h-40",
-  md: "h-52",
-  xl: "h-64",
-  "2xl": "h-76",
-  "3xl": "h-88",
-};
 
 export const GalleryTrack = ({
   items,
@@ -64,7 +57,8 @@ export const GalleryTrack = ({
                   src={item.imageUrl}
                   srcSet={buildSrcSet(item.imageUrl, [400, 800])}
                   alt={item.imageAlt}
-                  className={`${SIZE_CLASS[item.size]} w-auto rounded-md object-cover shadow-xl`}
+                  loading={index < 3 ? "eager" : "lazy"}
+                  className="h-[600px] w-auto rounded-md object-cover shadow-xl"
                 />
               </button>
             </article>

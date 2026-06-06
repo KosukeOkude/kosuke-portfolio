@@ -5,10 +5,9 @@ import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
 import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 import { GalleryLinearSlider } from '@/components/Gallery/GalleryLinearSlider';
-import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems, galleryPageConfig } from '@/data/gallery';
+import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems } from '@/data/gallery';
 import { normalizeSlug } from "@/utils";
 import DetailPageLayout from "@/components/Layout/DetailPageLayout.astro";
-import BackgroundSection from '@/components/Layout/BackgroundSection.astro';
 
 export const getStaticPaths = (async() => {
     const galleryCategories = await getGalleryCategories();
@@ -25,19 +24,19 @@ if(!category){
     throw new Error(`Gallery category not found for slug: ${slug}`);
 }
 
-const categories = [
-  { slug: 'All', label: 'All'},
-  ...(await getGalleryCategories()).map(category => ({
-    slug: normalizeSlug(category.slug),
-    label: category.title
-  }))
-];
+const categories = (await getGalleryCategories()).map(category => ({
+  slug: normalizeSlug(category.slug),
+  label: category.title
+}));
 
 const allItems = await getLinearSliderItems();
 ---
 
 <BaseLayout>
-  <BackgroundSection image={galleryPageConfig.backgroundImage} alt={galleryPageConfig.backgroundAlt} fixedBackground eager overlayClass="bg-black/50">
+  <section class="relative bg-black">
+    <div class="fixed inset-0 -z-20 bg-black" data-background-wrapper>
+      <div class="absolute inset-0" data-screen-overlay></div>
+    </div>
   <DetailPageLayout data-gallery-slug-root className="max-w-[1680px]">
         <Breadcrumbs
         items={[
@@ -64,5 +63,5 @@ const allItems = await getLinearSliderItems();
           href="/gallery"
         />
   </DetailPageLayout>
-  </BackgroundSection>
+  </section>
 </BaseLayout>

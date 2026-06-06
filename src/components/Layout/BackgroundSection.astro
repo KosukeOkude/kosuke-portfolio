@@ -12,7 +12,7 @@ const bgPositionClass = fixedBackground ? "fixed" : "absolute";
 const desktopAvif = (await getImage({ src: image, format: 'avif', widths: [640, 1280, 1920], quality: 80 })).src;
 const desktopWebp = (await getImage({ src: image, format: 'webp', widths: [640, 1280, 1920], quality: 80 })).src;
 
-// モバイル用（指定がある場合のみ） 
+// モバイル用（指定がある場合のみ）
 const mobileAvif = mobileImage ? (await getImage({ src: mobileImage, format: 'avif', width: 768, quality: 80 })).src : null;
 const mobileWebp = mobileImage ? (await getImage({ src: mobileImage, format: 'webp', width: 768, quality: 80 })).src : null;
 ---

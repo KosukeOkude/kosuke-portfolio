@@ -20,8 +20,6 @@ export interface GalleryLinearSliderItem {
   imageUrl: string;
   lightboxImageUrl: string;
   imageAlt: string;
-  size: "sm" | "md" | "xl" | "2xl" | "3xl";
-  createdAt: string;
 }
 
 export {
