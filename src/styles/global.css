@@ -9,6 +9,20 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* ギャラリー横スクロールバー非表示 */
+[data-gallery-scroller] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+[data-gallery-scroller]::-webkit-scrollbar {
+  display: none;
 }
 
 /* 画像のドラッグ・選択を無効化 */
