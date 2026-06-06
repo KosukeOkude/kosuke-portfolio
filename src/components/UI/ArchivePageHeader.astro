@@ -4,14 +4,11 @@ interface ArchivePageHeaderProps {
     title: string;
 }
 
-const { label, title } = Astro.props as ArchivePageHeaderProps;
+const { title } = Astro.props as ArchivePageHeaderProps;
 ---
 
 <header class="space-y-6 max-w-3xl" data-reveal-once>
     <div class="space-y-2">
-        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50 mb-1">
-            { label }
-        </p>
       <h1 class="font-accent text-3xl md:text-4xl lg:text-[40px] font-bold">
         { title }
       </h1>

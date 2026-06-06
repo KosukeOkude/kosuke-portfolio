@@ -53,15 +53,12 @@ const nextItem = allNews[currentIndex + 1];
       />
           <!-- A案② タイトル・日付・タグ -->
           <header class="space-y-4">
-            <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-white/50">
-              News
-            </p>
             <h1
-              class="font-accent font-semibold text-xl md:text-2xl lg:text-[26px] leading-snug text-white"
+              class="font-accent font-semibold text-sm md:text-2xl lg:text-[26px] leading-snug text-white"
             >
               {newsItem.title}
             </h1>
-            <p class="text-[11px] md:text-xs tracking-[0.16em] uppercase text-white/60">
+            <p class="text-[12px] md:text-xs tracking-[0.16em] uppercase text-white/60">
               {newsItem.date}
               {newsItem.category && (
                 <>
@@ -82,7 +79,7 @@ const nextItem = allNews[currentIndex + 1];
           </header>
           <!-- A案③ リード（説明） -->
           {newsItem.description && (
-            <p class="text-sm md:text-base text-white/80 leading-relaxed max-w-3xl">
+            <p class="text-[12px] md:text-base text-white/80 leading-relaxed max-w-3xl">
               {newsItem.description}
             </p>
           )}
@@ -90,22 +87,22 @@ const nextItem = allNews[currentIndex + 1];
           <section class="space-y-10 text-sm md:text-base leading-relaxed">
             {newsItem.body && (
               <LabeledSection label="本文">
-                <p class="text-white/80 whitespace-pre-line">{newsItem.body}</p>
+                <p class="text-[12px] text-white/80 whitespace-pre-line">{newsItem.body}</p>
               </LabeledSection>
             )}
             {newsItem.details && (
               <LabeledSection label="詳細">
-                <p class="text-white/80 whitespace-pre-line">{newsItem.details}</p>
+                <p class="text-[12px] text-white/80 whitespace-pre-line">{newsItem.details}</p>
               </LabeledSection>
             )}
             {newsItem.venue && (
               <LabeledSection label="会場">
-                <p class="text-white/80">{newsItem.venue}</p>
+                <p class="text-[12px] text-white/80">{newsItem.venue}</p>
               </LabeledSection>
             )}
             {newsItem.eventDate && (
               <LabeledSection label="日時">
-                <p class="text-white/80">{newsItem.eventDate}</p>
+                <p class="text-[12px] text-white/80">{newsItem.eventDate}</p>
               </LabeledSection>
             )}
             {newsItem.relatedLinks && newsItem.relatedLinks.length > 0 && (
@@ -115,7 +112,7 @@ const nextItem = allNews[currentIndex + 1];
                     <li>
                       <a
                         href={link.url}
-                        class="underline underline-offset-2 hover:text-white"
+                        class="underline underline-offset-2 hover:text-white text-[12px]"
                         target="_blank"
                         rel="noopener noreferrer"
                       >

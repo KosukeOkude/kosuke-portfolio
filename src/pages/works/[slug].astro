@@ -45,7 +45,6 @@ if(!work){
       ]}/>
 
       <DetailPageHeader
-        label="Work detail"
         title={work.title}
         date={work.date}
         category={work.category}
@@ -64,11 +63,11 @@ if(!work){
       <YoutubeVideos
         videos={work.videos}
       />
-      <section class="space-y-10 text-sm md:text-base leading-relaxed">
+      <section class="space-y-10 text-[12px] md:text-base leading-relaxed">
         {work.concept && (
           <LabeledSection
             label="Concept">
-              <p class="text-white/80">{work.concept}</p>
+              <p class="text-white/80 text-[12px]">{work.concept}</p>
           </LabeledSection>
         )}
 
