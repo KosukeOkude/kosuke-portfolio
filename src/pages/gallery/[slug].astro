@@ -2,7 +2,6 @@
 import type { GetStaticPaths } from "astro";
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
-import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 import { GalleryLinearSlider } from '@/components/Gallery/GalleryLinearSlider';
 import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems } from '@/data/gallery';
 import { normalizeSlug } from "@/utils";
@@ -53,10 +52,6 @@ const allItems = await getLinearSliderItems();
         </div>
 
 
-        <PageBottomNav
-          label="gallery"
-          href="/gallery"
-        />
   </DetailPageLayout>
   </section>
 </BaseLayout>
