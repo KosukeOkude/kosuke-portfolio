@@ -69,6 +69,11 @@ export const GalleryTrack = ({
           </div>
         </div>
       </div>
+      <div className="flex md:hidden justify-center py-4 pointer-events-none">
+        <span className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-white font-bold">
+          Scroll →
+        </span>
+      </div>
       <div className="hidden md:flex justify-center py-4 pointer-events-none">
         <span className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-white font-bold">
           ↑ Scroll ↓

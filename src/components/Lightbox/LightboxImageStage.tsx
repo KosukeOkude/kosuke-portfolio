@@ -1,5 +1,3 @@
-import { buildSrcSet } from "@/utils";
-
 type LightboxImageStageProps = {
   src: string;
   alt?: string;
@@ -14,9 +12,7 @@ export default function LightboxImageStage({ src, alt }: LightboxImageStageProps
       <div className="pointer-events-auto max-h-[92vh] max-w-[92vw]">
         <img
           src={src}
-          srcSet={src ? buildSrcSet(src, [800, 1200, 1700]) : undefined}
-          sizes="92vw"
-          alt={alt ?? ""}
+alt={alt ?? ""}
           className="max-h-[92vh] max-w-[92vw] object-contain rounded-md"
           draggable={false}
         />

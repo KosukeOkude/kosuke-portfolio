@@ -14,7 +14,7 @@ const showBackToTop = !isSlugDetailPage;
 
 ---
 
-<footer class:list={["-mt-20 relative z-[9999] bg-transparent pointer-events-none",
+<footer class:list={["-mt-20 relative z-[9999] bg-transparent pointer-events-none", isSlugDetailPage && "hidden",
   isHome ? "text-black" : "text-white"
 ]}>
   <div
