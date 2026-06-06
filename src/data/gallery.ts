@@ -18,7 +18,6 @@ export interface GalleryLinearSliderItem {
   id: string;
   categorySlug: GalleryCategorySlug;
   imageUrl: string;
-  lightboxImageUrl: string;
   imageAlt: string;
 }
 

@@ -45,12 +45,7 @@ async function fetchGalleryData() {
         categorySlug: normalizeSlug(gallery.slug),
         imageUrl:
           urlFor(img.asset ?? undefined)
-            ?.width(800)
-            .auto("format")
-            .url() ?? "",
-        lightboxImageUrl:
-          urlFor(img.asset ?? undefined)
-            ?.width(1700)
+            ?.width(1200)
             .auto("format")
             .url() ?? "",
         imageAlt: `${gallery.title} - ${i + 1}`,

@@ -187,9 +187,11 @@ export function useHorizontalScrollTrigger(
         },
       );
 
+      const triggerEl = document.querySelector<HTMLElement>(triggerSelector) ?? root;
+
       stRef.current = ScrollTrigger.create({
-        trigger: root,
-        start: "bottom bottom",
+        trigger: triggerEl,
+        start: "top top+=80",
         end: () => `+=${scroller.scrollWidth - scroller.clientWidth}`,
         pin: root,
         scrub: true,

@@ -20,7 +20,6 @@ import LightboxImageStage from "@/components/Lightbox/LightboxImageStage";
 import LightboxNavControls from "@/components/Lightbox/LightboxNavControls";
 import { REVEAL_REFRESH_EVENT } from "@/gsap/core";
 import { createPortal } from "react-dom";
-import ScrollLineVertical from "@/components/UI/ScrollLineVertical";
 
 export type ImageLightboxModalProps = {
   items: LightboxItem[];
@@ -130,7 +129,10 @@ export default function ImageLightBoxModal({
         onClose={requestClose}
       />
 
-      <ScrollLineVertical isHiddenText={false} />
+      {/* Scroll Up — モーダル上部の隙間に配置 */}
+      <span className="pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 z-10 font-body text-[0.6rem] tracking-[0.3em] uppercase text-white/60">
+        ↑ Scroll ↓
+      </span>
     </div>
   );
 

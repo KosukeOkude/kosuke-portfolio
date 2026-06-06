@@ -6,7 +6,7 @@ export function mapGalleryItemsToLightboxItems(
   items: GalleryLinearSliderItem[],
 ): LightboxItem[] {
   return items.map((item) => ({
-    src: item.lightboxImageUrl,
+    src: item.imageUrl,
     alt: item.imageAlt ?? "",
   }));
 }

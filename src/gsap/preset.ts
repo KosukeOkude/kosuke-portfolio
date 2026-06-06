@@ -13,6 +13,9 @@ import type { RunGlobalRevealOptions } from "@/types";
 // ============================================================
 
 // 子要素を順番にフェードインする
+const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
+const revealStart = () => (isTouchDevice() ? "top 75%" : "top 90%");
+
 export function playRevealEach(container: HTMLElement) {
   const children = Array.from(container.children) as HTMLElement[];
   if (children.length === 0) return;
@@ -27,7 +30,7 @@ export function playRevealEach(container: HTMLElement) {
       immediateRender: false,
       scrollTrigger: {
         trigger: item,
-        start: "top 90%",
+        start: revealStart(),
         end: "bottom top",
         toggleActions: "play reverse play reverse",
         invalidateOnRefresh: true,
@@ -46,7 +49,7 @@ export function playRevealSingle(target: HTMLElement) {
     ease: "power2.out",
     scrollTrigger: {
       trigger: target,
-      start: "top 90%",
+      start: revealStart(),
       toggleActions: "play reverse play reverse",
       invalidateOnRefresh: true,
     },
@@ -189,10 +192,11 @@ function placeImageInHorizontalSlot(
 export function initImageReveal(): void {
   const root = document.querySelector<HTMLElement>("[data-about-root]");
   if (!root) return;
+  const layer = root.querySelector<HTMLElement>("main") ?? root;
   const images = root.querySelectorAll<HTMLElement>("[data-about-images]");
   if (!images.length) return;
 
-  images.forEach((el, i) => placeImageInHorizontalSlot(root, el, i, images.length));
+  images.forEach((el, i) => placeImageInHorizontalSlot(layer, el, i, images.length));
   images.forEach((el, i) => {
     gsap
       .timeline({
@@ -462,21 +466,36 @@ function attachTooltipOnHover(hoverEls: HTMLElement[], tip: HTMLElement): void {
   });
 }
 
-function placeImageAtRandomPosition(
+// タイトル（中央）の周り固定6ポジション（xRatio/yRatio はコンテナに対する割合）
+const FIXED_FILM_POSITIONS: Array<{ xRatio: number; yRatio: number; rotation: number }> = [
+  { xRatio: 0.07, yRatio: 0.09, rotation: -12 }, // 左上
+  { xRatio: 0.63, yRatio: 0.06, rotation:   8 }, // 右上
+  { xRatio: 0.03, yRatio: 0.46, rotation:  15 }, // 左中
+  { xRatio: 0.80, yRatio: 0.42, rotation: -10 }, // 右中
+  { xRatio: 0.14, yRatio: 0.68, rotation:  -7 }, // 左下
+  { xRatio: 0.63, yRatio: 0.67, rotation:  11 }, // 右下
+];
+
+// スマホ用（左中を上・右中を下に広げる）
+const FIXED_FILM_POSITIONS_SP: Array<{ xRatio: number; yRatio: number; rotation: number }> = [
+  { xRatio: 0.07, yRatio: 0.09, rotation: -12 }, // 左上
+  { xRatio: 0.63, yRatio: 0.06, rotation:   8 }, // 右上
+  { xRatio: 0.03, yRatio: 0.30, rotation:  15 }, // 左中（上へ）
+  { xRatio: 0.80, yRatio: 0.50, rotation: -10 }, // 右中（下へ）
+  { xRatio: 0.14, yRatio: 0.68, rotation:  -7 }, // 左下
+  { xRatio: 0.63, yRatio: 0.67, rotation:  11 }, // 右下
+];
+
+function placeImageAtFixedPosition(
   layer: HTMLElement,
   el: HTMLElement,
-  marginRatio = 0.05,
+  index: number,
 ) {
-  const w = layer.clientWidth;
-  const h = layer.clientHeight;
-  const ew = el.offsetWidth || 220;
-  const eh = el.offsetHeight || 160;
-  const padX = w * marginRatio;
-  const padY = h * marginRatio;
-  const x = padX + Math.random() * Math.max(0, w - ew - padX * 2);
-  const y = padY + Math.random() * Math.max(0, h - eh - padY * 2);
-  const rotation = (Math.random() - 0.5) * 30;
-  gsap.set(el, { position: "absolute", left: x, top: y, rotation });
+  const positions = window.innerWidth < 768 ? FIXED_FILM_POSITIONS_SP : FIXED_FILM_POSITIONS;
+  const pos = positions[index % positions.length];
+  const x = layer.clientWidth  * pos.xRatio;
+  const y = layer.clientHeight * pos.yRatio;
+  gsap.set(el, { position: "absolute", left: x, top: y, rotation: pos.rotation });
 }
 
 function createDraggable(draggableEls: HTMLElement[], boundsEl: HTMLElement) {
@@ -544,7 +563,7 @@ export default function randomImagesOnScreen(): void {
   const isTouchDevice = navigator.maxTouchPoints > 0;
 
   if (isTouchDevice) {
-    tl.to({}, { duration: 0.2 }).to(root, {
+    tl.to({}, { duration: 1.5 }).to(root, {
       clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
       ease: "power2.inOut",
       duration: 0.2,
@@ -577,7 +596,7 @@ export default function randomImagesOnScreen(): void {
     );
   }
 
-  films.forEach((film) => placeImageAtRandomPosition(root, film, 0.05));
+  films.forEach((film, i) => placeImageAtFixedPosition(root, film, i));
   createDraggable(Array.from(films), root);
   attachTooltipOnHover(Array.from(films), tooltip);
 }

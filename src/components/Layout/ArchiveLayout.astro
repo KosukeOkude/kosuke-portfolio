@@ -7,7 +7,7 @@ const { extraClass, ...rest } = Astro.props as Props;
 ---
 
 <div class=`overflow-hidden relative min-h-svh text-[var(--color-white)] ${extraClass}` {...rest}>
-    <main class="max-w-[1680px] my-auto mx-auto px-5 xl:px-20 py-24 space-y-10">
+    <main class="relative max-w-[1680px] my-auto mx-auto px-5 xl:px-20 py-24 space-y-10">
         <slot/>
     </main>
 </div>

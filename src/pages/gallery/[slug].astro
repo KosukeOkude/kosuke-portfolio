@@ -2,7 +2,6 @@
 import type { GetStaticPaths } from "astro";
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from "@/components/UI/Breadcrumbs.astro";
-import DetailPageHeader from "@/components/UI/DetailPageHeader.astro";
 import PageBottomNav from "@/components/UI/PageBottomNav.astro";
 import { GalleryLinearSlider } from '@/components/Gallery/GalleryLinearSlider';
 import { getGalleryCategories, getGalleryCategoryBySlug, getLinearSliderItems } from '@/data/gallery';
@@ -44,11 +43,7 @@ const allItems = await getLinearSliderItems();
           {label: category.title}
         ]}/>
 
-        <DetailPageHeader
-        label="GALLERY"
-        title="Selected category archive"
-        />
-        <div id="archive-main">
+<div id="archive-main">
           <GalleryLinearSlider
           client:load
           items={allItems}

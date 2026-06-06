@@ -54,7 +54,7 @@ export const GalleryLinearSlider = ({
   const { maxScrollLeft, pinSt } = useHorizontalScrollTrigger(
     scrollerRef,
     listKey,
-    "[data-gallery-scroller]",
+    "[data-gallery-section]",
     "[data-gallery-slug-root]",
   );
 
@@ -77,7 +77,7 @@ export const GalleryLinearSlider = ({
   );
 
   return (
-    <section className="w-full">
+    <section className="w-full" data-gallery-section>
       <ArchiveCategoryChips
         categories={categories}
         selectedCategory={selectedCategory}
@@ -110,6 +110,7 @@ export const GalleryLinearSlider = ({
         onClose={lightboxBridge.closeAt}
         returnTargetId={lightboxBridge.returnTargetId}
       />
+      
     </section>
   );
 };
