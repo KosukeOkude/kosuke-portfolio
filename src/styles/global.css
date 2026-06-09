@@ -159,14 +159,12 @@ h1,
   }
 }
 
-[data-hero-root] [data-hero-overlay],
 [data-hero-root] [data-hero-profile-wrap],
 [data-hero-root] [data-hero-name],
 [data-hero-root] [data-hero-title] {
   opacity: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-hero-root] [data-hero-overlay],
   [data-hero-root] [data-hero-profile-wrap],
   [data-hero-root] [data-hero-name],
   [data-hero-root] [data-hero-title] {

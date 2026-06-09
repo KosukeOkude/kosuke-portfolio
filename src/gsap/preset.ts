@@ -299,55 +299,28 @@ export function scrollPinFromPin(
 export function animationHeroIntro(): void {
   const root = document.querySelector<HTMLElement>("[data-hero-root]");
   if (!root) return;
-  const videoWrap = root.querySelector<HTMLElement>("[data-hero-bg-parallax]");
-  const overlay = root.querySelector<HTMLElement>("[data-hero-overlay]");
   const profileWrap = root.querySelector<HTMLElement>("[data-hero-profile-wrap]");
   const content = root.querySelector<HTMLElement>("[data-hero-profile-content]");
   const nameEl = root.querySelector<HTMLElement>("[data-hero-name]");
   const titleEl = root.querySelector<HTMLElement>("[data-hero-title]");
   const next = root.nextElementSibling as HTMLElement | null;
 
-  if (!overlay || !profileWrap || !nameEl || !titleEl) return;
-
-  const isTouchDevice = navigator.maxTouchPoints > 0;
+  if (!profileWrap || !nameEl || !titleEl) return;
 
   if (prefersReducedMotion()) {
     gsap.set([profileWrap, nameEl, titleEl], { opacity: 1 });
     return;
   }
 
-  if (isTouchDevice) {
-    const tl = gsap.timeline();
-    tl.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" });
-    if (content) tl.fromTo(content, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "<");
-    tl.fromTo(profileWrap, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "<");
-    tl.fromTo(
-      [nameEl, titleEl],
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
-      "+=0.08",
-    );
-  } else {
-    gsap.set([overlay, profileWrap, nameEl, titleEl], { opacity: 0 });
-    const tl = gsap.timeline({ paused: true });
-    tl.to(overlay, { opacity: 1, duration: 1 });
-    tl.to(profileWrap, { opacity: 1, duration: 0.8 }, "-=0.5");
-    tl.to([nameEl, titleEl], { opacity: 1, duration: 0.45 }, "+=0.08");
-
-    const introSt = ScrollTrigger.create({
-      trigger: root,
-      start: "top top",
-      end: "+=1000",
-      pin: true,
-      scrub: 1,
-      animation: tl,
-      invalidateOnRefresh: true,
-    });
-
-    scrollPinFromPin([videoWrap], next, () => introSt.end);
-  }
-
-  ScrollTrigger.refresh();
+  const tl = gsap.timeline();
+  if (content) tl.fromTo(content, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" });
+  tl.fromTo(profileWrap, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "<");
+  tl.fromTo(
+    [nameEl, titleEl],
+    { opacity: 0, y: 16 },
+    { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+    "+=0.08",
+  );
 }
 
 // ============================================================
@@ -366,84 +339,9 @@ export function runWorksTopAnimation(): void {
   const hint = root.querySelector<HTMLElement>("[data-works-top-hint]");
   const cta = root.querySelector<HTMLElement>("[data-works-cta]");
 
-  if (window.matchMedia("(pointer: coarse)").matches) {
-    [titleBlock, hint, cardSlider, cta].forEach((el) => {
-      if (el) playRevealSingle(el);
-    });
-    return;
-  }
-
-  const bgWrapper = root.querySelector<HTMLElement>("[data-background-wrapper]");
-  const overlay = root.querySelector<HTMLElement>("[data-animation-overlay]");
-  const next = root.nextElementSibling as HTMLElement;
-
-  if (!cardSlider || !bgWrapper || !next) return;
-  if (prefersReducedMotion()) {
-    gsap.set([titleBlock, hint, cta, cardSlider].filter(Boolean), { opacity: 1 });
-    return;
-  }
-
-  const scroller = cardSlider.querySelector<HTMLElement>(".works-card-slider-scroll");
-  if (!scroller) return;
-
-  gsap.set([titleBlock, overlay, hint, cardSlider, cta].filter(Boolean), { opacity: 0 });
-
-  const headingTl = gsap.timeline({ paused: true });
-  if (overlay)
-    headingTl.fromTo(
-      overlay,
-      { opacity: 0 },
-      { opacity: 1, duration: 1, ease: "power2.out" },
-    );
-  if (titleBlock)
-    headingTl.fromTo(
-      titleBlock,
-      { opacity: 0 },
-      { opacity: 1, duration: 1, ease: "power2.out" },
-      "<",
-    );
-  if (hint)
-    headingTl.fromTo(
-      hint,
-      { opacity: 0 },
-      { opacity: 1, duration: 1, ease: "power2.out" },
-      "<",
-    );
-
-  ScrollTrigger.create({
-    trigger: root,
-    start: "top -2%",
-    end: "+=50",
-    animation: headingTl,
-    scrub: true,
-    toggleActions: "play none none reverse",
+  [titleBlock, hint, cardSlider, cta].forEach((el) => {
+    if (el) playRevealSingle(el);
   });
-
-  const cardTl = gsap.timeline({ paused: true });
-  cardTl.to(cardSlider, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
-  cardTl.to(
-    scroller,
-    { scrollLeft: () => getMaxScrollLeft(scroller), duration: 7, ease: "none" },
-    0,
-  );
-  cardTl.to(cta, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
-  cardTl.to({}, { duration: 2 });
-
-  const worksSt = ScrollTrigger.create({
-    trigger: root,
-    start: "bottom bottom",
-    end: "+=1200",
-    pin: root,
-    scrub: 1,
-    animation: cardTl,
-    invalidateOnRefresh: true,
-  });
-
-  scrollPinFromPin(
-    [bgWrapper, cardSlider, titleBlock, cta, hint],
-    next,
-    () => worksSt.end,
-  );
 }
 
 // ============================================================
@@ -522,17 +420,14 @@ export default function randomImagesOnScreen(): void {
 
   if (films.length === 0 || !tooltip) return;
 
-  const isTouchDevice = navigator.maxTouchPoints > 0;
   const STORAGE_KEY = "entrance_last_shown";
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
-  if (isTouchDevice) {
-    const lastShown = localStorage.getItem(STORAGE_KEY);
-    if (lastShown === today) {
-      gsap.set(root, { display: "none" });
-      animationHeroIntro();
-      return;
-    }
+  const lastShown = localStorage.getItem(STORAGE_KEY);
+  if (lastShown === today) {
+    gsap.set(root, { display: "none" });
+    animationHeroIntro();
+    return;
   }
 
   gsap.set(Object.values(gridLines), { opacity: 1 });
@@ -573,40 +468,16 @@ export default function randomImagesOnScreen(): void {
       { opacity: 1, filter: "grayscale(0%)", duration: 0.8, ease: "power2.inOut" },
     );
 
-  if (isTouchDevice) {
-    localStorage.setItem(STORAGE_KEY, today);
-    tl.to({}, { duration: 1.5 }).to(root, {
-      clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
-      ease: "power2.inOut",
-      duration: 0.2,
-      onComplete() {
-        gsap.set(root, { display: "none" });
-        animationHeroIntro();
-      },
-    });
-  } else {
-    gsap.fromTo(
-      root,
-      { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" },
-      {
-        clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
-        ease: "power2.inOut",
-        scrollTrigger: {
-          trigger: document.body,
-          start: "top top",
-          end: "+=300",
-          scrub: true,
-          invalidateOnRefresh: true,
-          onLeave() {
-            gsap.set(root, { display: "none" });
-          },
-          onEnterBack() {
-            gsap.set(root, { display: "block" });
-          },
-        },
-      },
-    );
-  }
+  localStorage.setItem(STORAGE_KEY, today);
+  tl.to({}, { duration: 1.5 }).to(root, {
+    clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
+    ease: "power2.inOut",
+    duration: 0.2,
+    onComplete() {
+      gsap.set(root, { display: "none" });
+      animationHeroIntro();
+    },
+  });
 
   films.forEach((film, i) => placeImageAtFixedPosition(root, film, i));
   createDraggable(Array.from(films), root);

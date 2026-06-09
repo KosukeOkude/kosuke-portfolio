@@ -113,14 +113,15 @@ export function useLightboxWheelNavigation({
 
   useEffect(() => {
     if (!isOpen) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
     const THROTTLE_MS = 600;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 30) return;
+      if (Math.abs(e.deltaX) < 30) return;
       const now = Date.now();
       if (now - lastWheelTime < THROTTLE_MS) return;
       lastWheelTime = now;
-      if (e.deltaY > 0) goNextRef.current();
+      if (e.deltaX > 0) goNextRef.current();
       else goPrevRef.current();
     };
     window.addEventListener("wheel", onWheel, { passive: false });

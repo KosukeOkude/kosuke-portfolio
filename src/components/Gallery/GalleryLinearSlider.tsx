@@ -9,8 +9,7 @@ import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
 import type { DateSortOrder } from "@/types";
 import { filterByCategory } from "@/utils";
 import { useRevealDispatch } from "@/gsap/core";
-import { useRevealRefreshOnChange, useHorizontalScrollTrigger } from "@/hooks";
-import { useScrollToPinStart } from "@/hooks";
+import { useRevealRefreshOnChange } from "@/hooks";
 
 type GalleryLinearSliderProps = {
   items: GalleryLinearSliderItem[];
@@ -51,15 +50,6 @@ export const GalleryLinearSlider = ({
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
 
-  const { maxScrollLeft, pinSt } = useHorizontalScrollTrigger(
-    scrollerRef,
-    listKey,
-    "[data-gallery-section]",
-    "[data-gallery-slug-root]",
-  );
-
-  useScrollToPinStart(pinSt, [selectedCategory, sortOrder], "#archive-main");
-
   const handleCategorySelect = useCallback(
     (cat: string) => {
       lightboxBridge.clearScrollTarget();
@@ -98,8 +88,6 @@ export const GalleryLinearSlider = ({
           scrollToId={lightboxBridge.scrollToId}
           scrollToken={lightboxBridge.scrollToken}
           scrollerRef={scrollerRef}
-          maxScrollLeft={maxScrollLeft}
-          pinSt={pinSt}
         />
       </div>
 

@@ -267,17 +267,13 @@ type UseGalleryTrackScrollToItemOptions = {
   scrollerRef: RefObject<HTMLDivElement | null>;
   scrollToId: string | null;
   scrollToken: number;
-  maxScrollLeft: RefObject<number | null>;
-  pinSt: RefObject<ScrollTrigger | null>;
 };
 
-// Lightbox を閉じたとき、元の画像が中央に来る縦座標へ lenis でスクロールする
+// Lightbox を閉じたとき、元の画像が中央に来る横座標へスクロールする
 export function useGalleryTrackScrollToItem({
   scrollerRef,
   scrollToId,
   scrollToken,
-  maxScrollLeft,
-  pinSt,
 }: UseGalleryTrackScrollToItemOptions) {
   useEffect(() => {
     if (!scrollToId) return;
@@ -295,34 +291,16 @@ export function useGalleryTrackScrollToItem({
       return Math.max(0, rawTargetLeft);
     }
 
-    let innerFrameId: number | null = null;
-    const frameId = requestAnimationFrame(async () => {
-      const { lenis } = await import("@/client");
-
+    const frameId = requestAnimationFrame(() => {
       const scrollerElement = scrollerRef.current;
       if (!scrollerElement) return;
 
       const targetElement = document.getElementById(scrollToId);
       if (!targetElement) return;
 
-      const targetLeft = computeScrollLeftToCenterChild(scrollerElement, targetElement);
-
-      const st = pinSt.current;
-      const max = maxScrollLeft.current;
-
-      if (!st || !max || max <= 0 || !lenis) return;
-
-      const ratio = Math.min(targetLeft / max, 1);
-      const targetScrollY = st.start + ratio * (st.end - st.start);
-
-      innerFrameId = requestAnimationFrame(() => {
-        lenis.scrollTo(targetScrollY);
-      });
+      scrollerElement.scrollLeft = computeScrollLeftToCenterChild(scrollerElement, targetElement);
     });
 
-    return () => {
-      cancelAnimationFrame(frameId);
-      if (innerFrameId !== null) cancelAnimationFrame(innerFrameId);
-    };
-  }, [scrollToId, scrollToken, scrollerRef, maxScrollLeft, pinSt]);
+    return () => cancelAnimationFrame(frameId);
+  }, [scrollToId, scrollToken, scrollerRef]);
 }

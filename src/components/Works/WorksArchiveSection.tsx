@@ -9,7 +9,7 @@ import { ArchiveCategoryChips } from "@/components/UI/ArchiveCategoryChips";
 import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
 import { useRevealDispatch } from "@/gsap/core";
 import type { DateSortOrder } from "@/types";
-import { useArchiveMoreInCategoryLanding, useRevealRefreshOnChange, useArchiveCategoryFromQuery, useScrollToPinStart, useHorizontalScrollTrigger } from "@/hooks";
+import { useArchiveMoreInCategoryLanding, useRevealRefreshOnChange, useArchiveCategoryFromQuery } from "@/hooks";
 
 interface WorksArchiveSectionProps {
   works: WorkForClient[];
@@ -53,22 +53,7 @@ export const WorksArchiveSection = ({ works }: WorksArchiveSectionProps) => {
   // GSAP の reveal（`initRevealAnimation`）に DOM を全文再スキャンさせる。
   useRevealRefreshOnChange([selectedCategory, sortOrder]);
 
-  // 横スクロール領域の ref（GSAP と scrollTo 共用）
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-
-  const listKey = buildArchiveListKey(selectedCategory, sortOrder);
-
-  // 横スクロールを縦スクロールに変換する GSAP ScrollTrigger を設定
-  const { pinSt } = useHorizontalScrollTrigger(
-    scrollerRef,
-    listKey,
-    "#archive-main",
-    "[works-archive-root]",
-    "top top+=20",
-  );
-
-  // カテゴリ／ソート変更時に PIN 開始位置（Works 一覧先頭）へ戻す
-  useScrollToPinStart(pinSt, [selectedCategory, sortOrder], "#archive-main");
 
   return (
     <>
