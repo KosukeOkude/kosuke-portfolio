@@ -1,0 +1,28 @@
+---
+import SectionLayout from '@/components/Layout/SectionLayout.astro';
+import SectionTitle from '@/components/UI/SectionTitle.astro';
+import { MovieEmbed } from '@/components/Movie/MovieEmbed';
+import type { TopMovie } from '@/data/movie';
+
+interface Props {
+    movie: TopMovie;
+}
+
+const { movie } = Astro.props;
+---
+
+
+<section id="movie" class="relative bg-black z-20 min-h-lvh">
+
+<SectionLayout addClass="z-20 min-h-lvh relative">
+    <div class="z-20 flex h-full flex-col gap-8 my-auto" slot="sectionContent">
+        <SectionTitle title="MOVIE" data-reveal>
+            {movie.title}
+        </SectionTitle>
+        <div class="relative w-full aspect-video" data-reveal>
+            <MovieEmbed client:visible videoId={movie.videoId} title={movie.title} />
+        </div>
+    </div>
+</SectionLayout>
+
+</section>

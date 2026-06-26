@@ -30,7 +30,7 @@ async function fetchGalleryData() {
     title: g.title,
     imageUrl:
       urlFor(g.coverImage ?? undefined)
-        ?.width(800)
+        ?.width(1200)
         .auto("format")
         .url() ?? "",
     imageAlt: g.imageAlt ?? g.title,

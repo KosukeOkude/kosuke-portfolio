@@ -29,6 +29,7 @@ pnpm-debug.log*
 # IDE・エディタ設定
 .cursor/
 .claude/
+CLAUDE.md
 
 # バックアップ・個人用ドキュメント
 _original_backup/

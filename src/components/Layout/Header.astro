@@ -1,7 +1,11 @@
 ---
 import MainNav from "@/components/Layout/MainNav.astro";
 import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro";
+import { navItems } from "@/data/nav";
+import { displayTopMovie } from "@/sanity/site-settings";
 
+const topMovie = await displayTopMovie();
+const visibleNavItems = navItems.filter((item) => item.key !== 'movie' || Boolean(topMovie));
 ---
 
 <header
@@ -21,8 +25,8 @@ import HamburgerMenu from "@/components/Layout/HamburgerMenu.astro";
     </h1>
 
     <nav class="header__nav" aria-label="メインナビゲーション">
-      <MainNav />
-      <HamburgerMenu />
+      <MainNav navItems={visibleNavItems} />
+      <HamburgerMenu navItems={visibleNavItems} />
     </nav>
   </div>
 </header>

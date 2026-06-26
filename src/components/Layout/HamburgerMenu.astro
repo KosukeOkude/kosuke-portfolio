@@ -1,8 +1,14 @@
 ---
-import { navItems } from "@/data/nav";
+import type { navItem } from "@/data/nav";
 
 import BackButtonIcon from "@/components/Icons/BackButtonIcon";
 import HamburgerIcon from "@/components/Icons/HamburgerIcon";
+
+interface Props {
+  navItems: navItem[];
+}
+
+const { navItems } = Astro.props;
 ---
 
 <div

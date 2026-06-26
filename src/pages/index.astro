@@ -7,7 +7,9 @@ import { getAllWorks } from "@/data/works";
 
 import GalleryTopSection from "@/components/Gallery/GalleryTopSection.astro";
 import { getGalleryCategories } from "@/data/gallery";
-import { displayTopWorks, displayTopGalleryCategories, displayTopAbout, displayTopNews } from '@/sanity/site-settings';
+import { displayTopWorks, displayTopGalleryCategories, displayTopMovie, displayTopAbout, displayTopNews } from '@/sanity/site-settings';
+
+import MovieTopSection from "@/components/Movie/MovieTopSection.astro";
 
 import AboutTopSection from "@/components/About/AboutTopSection.astro";
 
@@ -33,6 +35,8 @@ if (displayGalleryCategoriesForTop.length === 0){
     displayGalleryCategoriesForTop = all.slice(0, 6);
 }
 
+const displayMovieForTop = await displayTopMovie();
+
 const displayAboutForTop = await displayTopAbout();
 
 //トップページのギャラリーの表示数を取得する関数-siteSetting.tsを参照してます
@@ -49,6 +53,7 @@ if (displayNewsForTop.length === 0){
 	<Hero/>
 	<WorksTopSection works={ displayWorksForTop }/>
 	<GalleryTopSection galleryCategories={ displayGalleryCategoriesForTop }/>
+	{displayMovieForTop && <MovieTopSection movie={displayMovieForTop}/>}
 	<AboutTopSection about={displayAboutForTop}/>
 	<NewsTopSection newsItems={displayNewsForTop}/>
 	<ArchiveLayout extraClass="bg-white">

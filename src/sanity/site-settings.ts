@@ -1,9 +1,11 @@
 import { urlFor, sanityClient } from "@/sanity/client";
 import { normalizeSlug } from "@/utils";
+import { getYouTubeVideoId } from "@/utils/youtube";
 import type { GalleryCategory } from "@/data/gallery";
 import type { WorkForClient } from "@/data/works";
 import type { AboutPageContent } from "@/sanity/about";
 import type { NewsArchive } from "@/data/news";
+import type { TopMovie } from "@/data/movie";
 
 const siteSettingsWorksQuery = `*[_id == "siteSettings"][0] {
         topWorksItems[]->{
@@ -83,6 +85,35 @@ export async function displayTopGalleryCategories(): Promise<GalleryCategory[]> 
         .url() ?? "",
     imageAlt: g.imageAlt ?? "",
   }));
+}
+
+const siteSettingsMovieQuery = `*[_id == "siteSettings"][0]{
+    topMovie{
+      title,
+      youtubeUrl
+    }
+}`;
+
+type SiteSettingsMovieDoc = {
+  topMovie?: {
+    title: string | null;
+    youtubeUrl: string | null;
+  };
+};
+
+export async function displayTopMovie(): Promise<TopMovie | null> {
+  const doc = await sanityClient.fetch<SiteSettingsMovieDoc | null>(
+    siteSettingsMovieQuery,
+  );
+  const block = doc?.topMovie;
+  const videoId = block?.youtubeUrl ? getYouTubeVideoId(block.youtubeUrl) : null;
+
+  if (!videoId) return null;
+
+  return {
+    title: block?.title ?? "",
+    videoId,
+  };
 }
 
 const siteSettingsAboutQuery = `*[_id == "siteSettings"][0]{
@@ -219,6 +250,35 @@ export async function displayAboutAnimationImages(): Promise<{ url: string; size
       size: f.size ?? 'md',
     }))
     .filter((f) => f.url);
+}
+
+const siteSettingsHeroVideoQuery = `*[_id == "siteSettings"][0]{
+  heroVideo{
+    "videoUrl": video.asset->url,
+    "posterAsset": poster.asset->
+  }
+}`;
+
+type SiteSettingsHeroVideoDoc = {
+  heroVideo?: {
+    videoUrl: string | null;
+    posterAsset: { _ref?: string; _id?: string } | null;
+  };
+};
+
+export async function displayHeroVideo(): Promise<{ videoUrl: string; posterUrl: string }> {
+  const doc = await sanityClient.fetch<SiteSettingsHeroVideoDoc | null>(
+    siteSettingsHeroVideoQuery,
+  );
+  const block = doc?.heroVideo;
+  return {
+    videoUrl: block?.videoUrl ?? "",
+    posterUrl:
+      urlFor(block?.posterAsset ?? undefined)
+        ?.width(1920)
+        .auto("format")
+        .url() ?? "",
+  };
 }
 
 const siteSettingsEntranceFilmsQuery = `*[_id == "siteSettings"][0]{
