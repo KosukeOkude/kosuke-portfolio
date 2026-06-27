@@ -255,27 +255,42 @@ export async function displayAboutAnimationImages(): Promise<{ url: string; size
 const siteSettingsHeroVideoQuery = `*[_id == "siteSettings"][0]{
   heroVideo{
     "videoUrl": video.asset->url,
-    "posterAsset": poster.asset->
+    "mobileVideoUrl": mobileVideo.asset->url,
+    "posterAsset": poster.asset->,
+    "mobilePosterAsset": mobilePoster.asset->
   }
 }`;
 
 type SiteSettingsHeroVideoDoc = {
   heroVideo?: {
     videoUrl: string | null;
+    mobileVideoUrl: string | null;
     posterAsset: { _ref?: string; _id?: string } | null;
+    mobilePosterAsset: { _ref?: string; _id?: string } | null;
   };
 };
 
-export async function displayHeroVideo(): Promise<{ videoUrl: string; posterUrl: string }> {
+export async function displayHeroVideo(): Promise<{
+  videoUrl: string;
+  mobileVideoUrl: string;
+  posterUrl: string;
+  mobilePosterUrl: string;
+}> {
   const doc = await sanityClient.fetch<SiteSettingsHeroVideoDoc | null>(
     siteSettingsHeroVideoQuery,
   );
   const block = doc?.heroVideo;
   return {
     videoUrl: block?.videoUrl ?? "",
+    mobileVideoUrl: block?.mobileVideoUrl ?? "",
     posterUrl:
       urlFor(block?.posterAsset ?? undefined)
         ?.width(1920)
+        .auto("format")
+        .url() ?? "",
+    mobilePosterUrl:
+      urlFor(block?.mobilePosterAsset ?? undefined)
+        ?.width(1280)
         .auto("format")
         .url() ?? "",
   };

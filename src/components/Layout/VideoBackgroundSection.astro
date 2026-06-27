@@ -5,6 +5,7 @@ interface Props {
   className?: string;
   overlayClass?: string;
   pcVideoPoster?: string;
+  mobileVideoPoster?: string;
   pcVideoSrcWebm?: string;
   pcVideoSrcMp4?: string;
   mobileVideoSrcWebm? :string;
@@ -18,6 +19,7 @@ const {
   mobileVideoSrcWebm,
   mobileVideoSrcMp4,
   pcVideoPoster,
+  mobileVideoPoster,
   alt,
   className,
   overlayClass,
@@ -36,6 +38,7 @@ const fallbackSrc = videoSrc ?? '';
     {/* 背景動画。object-cover で領域に合わせる */}
     <video
       data-video-bg
+      data-mobile-poster={mobileVideoPoster}
       {...(!hasSources && fallbackSrc ? { src: fallbackSrc } : {})}
       poster={pcVideoPoster}
       muted
@@ -81,6 +84,9 @@ const fallbackSrc = videoSrc ?? '';
 
   const video = document.querySelector('[data-video-bg]') as HTMLVideoElement;
   if(video){
+    if(isMobile && video.dataset.mobilePoster){
+      video.poster = video.dataset.mobilePoster;
+    }
     video.load();
     video.addEventListener('canplay', () => {
       video.play().catch(() => {})

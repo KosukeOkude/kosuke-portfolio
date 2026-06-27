@@ -1,19 +1,25 @@
 ---
 import { Picture } from 'astro:assets';
 import heroBackgroundPoster from '@/assets/images/hero-poster.jpg';
+import heroMobileBackgroundPoster from '@/assets/images/hero-poster-mobile.jpg';
 import heroProfileImage from '@/assets/images/hero-profile-img.jpg';
 import pcHeroBackgroundVideoMp4 from '@/assets/movies/hero-movie-pc-1080.mp4';
+import mobileHeroBackgroundVideoMp4 from '@/assets/movies/hero-movie-mobile-720.mp4';
 import VideoBackgroundSection from '@/components/Layout/VideoBackgroundSection.astro';
 import { displayHeroVideo } from '@/sanity/site-settings';
 
 const heroVideo = await displayHeroVideo();
 const heroVideoSrc = heroVideo.videoUrl || pcHeroBackgroundVideoMp4;
+const heroMobileVideoSrc = heroVideo.mobileVideoUrl || mobileHeroBackgroundVideoMp4;
 const heroVideoPoster = heroVideo.posterUrl || heroBackgroundPoster.src;
+const heroMobileVideoPoster = heroVideo.mobilePosterUrl || heroMobileBackgroundPoster.src;
 ---
 
 <VideoBackgroundSection
   pcVideoPoster={heroVideoPoster}
-  videoSrc={heroVideoSrc}
+  mobileVideoPoster={heroMobileVideoPoster}
+  pcVideoSrcMp4={heroVideoSrc}
+  mobileVideoSrcMp4={heroMobileVideoSrc}
   alt="ヒーロー背景の説明文"
   overlayClass="bg-black/30"
   data-hero-root
