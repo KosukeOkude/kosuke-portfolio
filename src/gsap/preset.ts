@@ -6,6 +6,7 @@ import {
   whenDomReady,
   skipInsideAstroIslands,
 } from "@/gsap/core";
+import { showHScrollHint } from "@/gsap/hscrollHint";
 import type { RunGlobalRevealOptions } from "@/types";
 
 // ============================================================
@@ -339,9 +340,97 @@ export function runWorksTopAnimation(): void {
   const hint = root.querySelector<HTMLElement>("[data-works-top-hint]");
   const cta = root.querySelector<HTMLElement>("[data-works-cta]");
 
-  [titleBlock, hint, cardSlider, cta].forEach((el) => {
-    if (el) playRevealSingle(el);
+  if (window.matchMedia("(pointer: coarse)").matches) {
+    [titleBlock, hint, cardSlider, cta].forEach((el) => {
+      if (el) playRevealSingle(el);
+    });
+    return;
+  }
+
+  const bgWrapper = root.querySelector<HTMLElement>("[data-background-wrapper]");
+  const overlay = root.querySelector<HTMLElement>("[data-animation-overlay]");
+  const next = root.nextElementSibling as HTMLElement;
+
+  if (!cardSlider || !bgWrapper || !next) return;
+  if (prefersReducedMotion()) {
+    gsap.set([titleBlock, hint, cta, cardSlider].filter(Boolean), { opacity: 1 });
+    return;
+  }
+
+  const scroller = cardSlider.querySelector<HTMLElement>(".works-card-slider-scroll");
+  if (!scroller) return;
+
+  gsap.set([titleBlock, overlay, hint, cardSlider, cta].filter(Boolean), { opacity: 0 });
+
+  const headingTl = gsap.timeline({ paused: true });
+  if (overlay)
+    headingTl.fromTo(
+      overlay,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+    );
+  if (titleBlock)
+    headingTl.fromTo(
+      titleBlock,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+      "<",
+    );
+  if (hint)
+    headingTl.fromTo(
+      hint,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" },
+      "<",
+    );
+
+  ScrollTrigger.create({
+    trigger: root,
+    start: "top -2%",
+    end: "+=50",
+    animation: headingTl,
+    scrub: true,
+    toggleActions: "play none none reverse",
   });
+
+  const cardTl = gsap.timeline({ paused: true });
+  cardTl.to(cardSlider, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
+  cardTl.to(
+    scroller,
+    { scrollLeft: () => getMaxScrollLeft(scroller), duration: 7, ease: "none" },
+    0,
+  );
+  cardTl.to(cta, { opacity: 1, duration: 1, ease: "power2.out" }, 0);
+  cardTl.to({}, { duration: 2 });
+
+  const worksSt = ScrollTrigger.create({
+    trigger: root,
+    start: "bottom bottom",
+    end: "+=1200",
+    pin: root,
+    scrub: 1,
+    animation: cardTl,
+    invalidateOnRefresh: true,
+  });
+
+  // ScrollTrigger が存在する間は手動横スクロールをブロックし、縦スクロールを促す
+  scroller.style.overflowX = "hidden";
+  scroller.addEventListener(
+    "wheel",
+    (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > 10) {
+        e.preventDefault();
+        showHScrollHint();
+      }
+    },
+    { passive: false },
+  );
+
+  scrollPinFromPin(
+    [bgWrapper, cardSlider, titleBlock, cta, hint],
+    next,
+    () => worksSt.end,
+  );
 }
 
 // ============================================================

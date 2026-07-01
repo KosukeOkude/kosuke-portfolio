@@ -68,7 +68,7 @@ const fallbackSrc = videoSrc ?? '';
 </section>
 
 <script>
-  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  const isMobile = window.matchMedia("(max-width: 475px)").matches;
   const mobileMovieData = document.querySelectorAll('[data-mobile-movie]');
   const pcMovieData = document.querySelectorAll('[data-pc-movie]');
   if(isMobile && mobileMovieData.length > 0){
