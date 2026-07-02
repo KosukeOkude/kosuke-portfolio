@@ -24,7 +24,7 @@ const { prevItem, nextItem, basePath } = Astro.props;
             <div class="flex flex-col justify-center gap-1 min-w-0 p-1">
               <p class="text-[8px] text-white/40 uppercase tracking-widest">← Prev</p>
               <p class="text-[8px] text-white/50">{prevItem.date}</p>
-              <p class="text-[8px] text-white font-medium line-clamp-2">{prevItem.title}</p>
+              <p class="text-[8px] md:text-[10px] text-white font-medium line-clamp-2">{prevItem.title}</p>
             </div>
           </a>
         )}
@@ -39,7 +39,7 @@ const { prevItem, nextItem, basePath } = Astro.props;
             <div class="flex flex-col justify-center gap-1 min-w-0 p-1">
               <p class="text-[8px] text-white/40 uppercase tracking-widest">Next →</p>
               <p class="text-[8px] text-white/50">{nextItem.date}</p>
-              <p class="text-[8px] text-white font-medium line-clamp-2">{nextItem.title}</p>
+              <p class="text-[8px] md:text-[10px] text-white font-medium line-clamp-2">{nextItem.title}</p>
             </div>
           </a>
         )}

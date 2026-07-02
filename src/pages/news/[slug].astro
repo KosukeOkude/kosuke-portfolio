@@ -87,22 +87,22 @@ const nextItem = allNews[currentIndex + 1];
           <section class="space-y-10 text-sm md:text-base leading-relaxed">
             {newsItem.body && (
               <LabeledSection label="本文">
-                <p class="text-[12px] text-white/80 whitespace-pre-line">{newsItem.body}</p>
+                <p class="text-[12px] md:text-[14px] text-white/80 whitespace-pre-line">{newsItem.body}</p>
               </LabeledSection>
             )}
             {newsItem.details && (
               <LabeledSection label="詳細">
-                <p class="text-[12px] text-white/80 whitespace-pre-line">{newsItem.details}</p>
+                <p class="text-[12px] md:text-[14px] text-white/80 whitespace-pre-line">{newsItem.details}</p>
               </LabeledSection>
             )}
             {newsItem.venue && (
               <LabeledSection label="会場">
-                <p class="text-[12px] text-white/80">{newsItem.venue}</p>
+                <p class="text-[12px] md:text-[14px] text-white/80">{newsItem.venue}</p>
               </LabeledSection>
             )}
             {newsItem.eventDate && (
               <LabeledSection label="日時">
-                <p class="text-[12px] text-white/80">{newsItem.eventDate}</p>
+                <p class="text-[12px] md:text-[14px] text-white/80">{newsItem.eventDate}</p>
               </LabeledSection>
             )}
             {newsItem.relatedLinks && newsItem.relatedLinks.length > 0 && (
@@ -112,7 +112,7 @@ const nextItem = allNews[currentIndex + 1];
                     <li>
                       <a
                         href={link.url}
-                        class="underline underline-offset-2 hover:text-white text-[12px]"
+                        class="underline underline-offset-2 hover:text-white text-[12px] md:text-[14px]"
                         target="_blank"
                         rel="noopener noreferrer"
                       >

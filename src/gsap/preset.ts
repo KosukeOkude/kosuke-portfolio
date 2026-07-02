@@ -413,17 +413,13 @@ export function runWorksTopAnimation(): void {
     invalidateOnRefresh: true,
   });
 
-  // ScrollTrigger が存在する間は手動横スクロールをブロックし、縦スクロールを促す
-  scroller.style.overflowX = "hidden";
+  // 横スクロールを試みたときにヒントを表示する（スクロール可能なコンテンツがあるときのみ）
   scroller.addEventListener(
     "wheel",
     (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) > 10) {
-        e.preventDefault();
-        showHScrollHint();
-      }
+      if (getMaxScrollLeft(scroller) > 0 && Math.abs(e.deltaX) > 10) showHScrollHint();
     },
-    { passive: false },
+    { passive: true },
   );
 
   scrollPinFromPin(

@@ -170,34 +170,21 @@ export function useHorizontalScrollTrigger(
     stRef.current = null;
     scroller.scrollLeft = 0;
 
-    // ST 生成時にセットし、破棄時に復元するクリーンアップを保持する
-    let cleanupScrollBlock: (() => void) | null = null;
+    // 横スクロールを試みたときにヒントを表示する（ST が有効なときのみ）
+    const onWheelHint = (e: WheelEvent) => {
+      if (stRef.current && Math.abs(e.deltaX) > 10) showHScrollHint();
+    };
+    scroller.addEventListener("wheel", onWheelHint, { passive: true });
+    const cleanupScrollBlock = () => {
+      scroller.removeEventListener("wheel", onWheelHint);
+    };
 
     const buildST = (): boolean => {
-      // overflow-x: hidden にしてからサイズを計測することでスクロールバー幅の誤差をなくす
-      scroller.style.overflowX = "hidden";
       const currentMax = scroller.scrollWidth - scroller.clientWidth;
-      if (currentMax <= 0) {
-        scroller.style.overflowX = ""; // コンテンツが収まる場合は即座に戻す
-        return false;
-      }
+      if (currentMax <= 0) return false;
 
       stRef.current?.kill();
       maxScrollLeftRef.current = currentMax;
-
-      // 手動横スクロールを検知してトーストを表示する
-      const onWheelHint = (e: WheelEvent) => {
-        if (Math.abs(e.deltaX) > 10) {
-          e.preventDefault();
-          showHScrollHint();
-        }
-      };
-      scroller.addEventListener("wheel", onWheelHint, { passive: false });
-
-      cleanupScrollBlock = () => {
-        scroller.style.overflowX = "";
-        scroller.removeEventListener("wheel", onWheelHint);
-      };
 
       const tl = gsap.timeline();
       // fromTo でスタートを 0 に固定（to() だと invalidateOnRefresh 後に start=max になるバグを防ぐ）
@@ -205,9 +192,7 @@ export function useHorizontalScrollTrigger(
         scroller,
         { scrollLeft: 0 },
         {
-          // +30 で意図的にオーバーシュート → ブラウザが実際の max にクランプするため
-          // サブピクセル差異や scrollbar 出現による clientWidth 変化で末尾が見切れるのを防ぐ
-          scrollLeft: () => scroller.scrollWidth - scroller.clientWidth + 30,
+          scrollLeft: () => scroller.scrollWidth - scroller.clientWidth,
           ease: "none",
           duration: 1,
         },
@@ -239,28 +224,51 @@ export function useHorizontalScrollTrigger(
       const unloaded = imgs.filter((img) => !img.complete);
       if (unloaded.length === 0) return () => {};
 
-      const handleLoad = () => ScrollTrigger.refresh();
+      // 複数画像が連続でロードされても同一フレームで 1 回だけ refresh する
+      let rafId: number | null = null;
+      const handleLoad = () => {
+        if (rafId !== null) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          rafId = null;
+        });
+      };
       unloaded.forEach((img) => img.addEventListener("load", handleLoad, { once: true }));
 
       return () => {
+        if (rafId !== null) cancelAnimationFrame(rafId);
         unloaded.forEach((img) => img.removeEventListener("load", handleLoad));
       };
     };
 
     if (!buildST()) {
       let cleanUpImageLoad = () => {};
-      const retryObserver = new ResizeObserver(() => {
+      let builtOnRetry = false;
+
+      const tryBuildOnRetry = () => {
+        if (builtOnRetry) return;
         if (buildST()) {
+          builtOnRetry = true;
           retryObserver.disconnect();
+          unloadedOnRetry.forEach((img) => img.removeEventListener("load", tryBuildOnRetry));
           cleanUpImageLoad = setUpImageLoadRefresh();
         }
-      });
+      };
+
+      const retryObserver = new ResizeObserver(tryBuildOnRetry);
       retryObserver.observe(observeTarget);
+
+      // ResizeObserver だけでは検知されないケース（画像に予約サイズがある等）の補助リトライ
+      const unloadedOnRetry = Array.from(
+        scroller.querySelectorAll<HTMLImageElement>("img"),
+      ).filter((img) => !img.complete);
+      unloadedOnRetry.forEach((img) => img.addEventListener("load", tryBuildOnRetry));
 
       return () => {
         retryObserver.disconnect();
+        unloadedOnRetry.forEach((img) => img.removeEventListener("load", tryBuildOnRetry));
         cleanUpImageLoad();
-        cleanupScrollBlock?.();
+        cleanupScrollBlock();
         stRef.current?.kill();
         stRef.current = null;
       };
