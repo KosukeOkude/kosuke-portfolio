@@ -86,27 +86,27 @@ const nextItem = allNews[currentIndex + 1];
           <!-- A案④ 本文・詳細ブロック -->
           <section class="space-y-10 text-sm md:text-base leading-relaxed">
             {newsItem.body && (
-              <LabeledSection label="本文">
+              <LabeledSection label="Article">
                 <p class="text-[12px] md:text-[14px] text-white/80 whitespace-pre-line">{newsItem.body}</p>
               </LabeledSection>
             )}
             {newsItem.details && (
-              <LabeledSection label="詳細">
+              <LabeledSection label="Details">
                 <p class="text-[12px] md:text-[14px] text-white/80 whitespace-pre-line">{newsItem.details}</p>
               </LabeledSection>
             )}
             {newsItem.venue && (
-              <LabeledSection label="会場">
+              <LabeledSection label="Venue">
                 <p class="text-[12px] md:text-[14px] text-white/80">{newsItem.venue}</p>
               </LabeledSection>
             )}
             {newsItem.eventDate && (
-              <LabeledSection label="日時">
+              <LabeledSection label="Date & Time">
                 <p class="text-[12px] md:text-[14px] text-white/80">{newsItem.eventDate}</p>
               </LabeledSection>
             )}
             {newsItem.relatedLinks && newsItem.relatedLinks.length > 0 && (
-              <LabeledSection label="関連リンク">
+              <LabeledSection label="Related Links">
                 <ul class="text-white/80 space-y-2">
                   {newsItem.relatedLinks.map((link) => (
                     <li>
