@@ -97,12 +97,12 @@ const nextItem = allNews[currentIndex + 1];
             )}
             {newsItem.venue && (
               <LabeledSection label="Venue">
-                <p class="text-[12px] md:text-[14px] text-white/80">{newsItem.venue}</p>
+                <p class="text-[12px] md:text-[14px] text-white/80 whitespace-pre-line">{newsItem.venue}</p>
               </LabeledSection>
             )}
             {newsItem.eventDate && (
               <LabeledSection label="Date & Time">
-                <p class="text-[12px] md:text-[14px] text-white/80">{newsItem.eventDate}</p>
+                <p class="text-[12px] md:text-[14px] text-white/80 whitespace-pre-line">{newsItem.eventDate}</p>
               </LabeledSection>
             )}
             {newsItem.relatedLinks && newsItem.relatedLinks.length > 0 && (
