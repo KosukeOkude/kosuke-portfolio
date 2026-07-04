@@ -65,26 +65,27 @@ export function scrollToHashOnLoad(): void {
   if (!hash) return;
   const lenisInstance = lenis;
   const target = document.querySelector(hash);
-  if (!target || !lenisInstance) return;
+  if (!(target instanceof HTMLElement) || !lenisInstance) return;
 
   waitForScrollTriggerRefresh(() => {
-    lenisInstance.scrollTo(target as HTMLElement);
+    lenisInstance.scrollTo(target);
   });
 }
 
 // アンカークリック時に lenis でスムーズスクロールする
 export function initHashScroll(): void {
   document.addEventListener("click", (e) => {
-    const anchor = (e.target as Element).closest<HTMLAnchorElement>("a[href*='#']");
+    if (!(e.target instanceof Element)) return;
+    const anchor = e.target.closest<HTMLAnchorElement>("a[href*='#']");
     if (!anchor) return;
 
     const url = new URL(anchor.href);
 
     if (url.pathname !== window.location.pathname) return;
     const target = document.querySelector(url.hash);
-    if (!target || !lenis) return;
+    if (!(target instanceof HTMLElement) || !lenis) return;
     e.preventDefault();
-    lenis.scrollTo(target as HTMLElement);
+    lenis.scrollTo(target);
   });
 }
 

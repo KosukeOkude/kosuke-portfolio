@@ -1,3 +1,4 @@
+import { isDateSortOrder } from '@/types';
 import type { DateSortOrder } from '@/types';
 
 interface NewsSortSelectProps {
@@ -12,7 +13,7 @@ export const NewsSortSelect = ({ value, onChange }: NewsSortSelectProps) => {
         <select
             id="works-sort"
             value={value}
-            onChange={(e) => onChange(e.target.value as DateSortOrder)}
+            onChange={(e) => { const v = e.target.value; if (isDateSortOrder(v)) onChange(v); }}
             className="text-xs md:text-sm bg-white/10 border border-white/30 rounded px-3 py-1.5 text-white"
         >
             <option value="date-desc">新着順</option>

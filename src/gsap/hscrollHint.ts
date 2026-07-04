@@ -4,7 +4,8 @@ export function showHScrollHint(): void {
   const SHOW_MS = 2000;
   const FADE_MS = 300;
 
-  let toast = document.getElementById(TOAST_ID) as HTMLDivElement | null;
+  const existingEl = document.getElementById(TOAST_ID);
+  let toast = existingEl instanceof HTMLDivElement ? existingEl : null;
 
   if (toast) {
     clearTimeout(Number(toast.dataset.timerId ?? "0"));

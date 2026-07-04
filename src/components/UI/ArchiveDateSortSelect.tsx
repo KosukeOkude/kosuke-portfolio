@@ -1,3 +1,4 @@
+import { isDateSortOrder } from "@/types";
 import type { DateSortOrder } from "@/types";
 
 export interface ArchiveDateSortSelectProps {
@@ -29,7 +30,7 @@ export const ArchiveDateSortSelect = ({
       id={id}
       value={value}
       name={name}
-      onChange={(e) => onChange(e.target.value as DateSortOrder)}
+      onChange={(e) => { const v = e.target.value; if (isDateSortOrder(v)) onChange(v); }}
       className="cursor-pointer text-[12px] md:text-sm bg-white/10 border border-white/30 rounded px-3 py-1.5 text-white"
     >
       <option value="date-asc">新着順</option>
