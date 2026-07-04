@@ -15,36 +15,6 @@ import ContactSection from '@/components/Contact/ContactSection.astro';
 import AboutAnimationImages from '@/components/About/AboutAnimationImages.astro';
 
 const about = await getAboutPageContent();
-
-const fallback = {
-    name: "KOSUKE OKUDE",
-    tagline: "Photographer based in Fukui",
-    intro: "福井の夏の風景に宿るノスタルジアを軸に、地域の展示や書籍のビジュアル、ウェディングなど、さまざまな現場で写真を届けています。",
-    encounterTitle:"写真との出会い・きっかけ" ,
-    encounterBody: "福井の田舎で過ごすなかで、移ろいゆく光や季節の気配を切り取りたいと思い、カメラを手にするようになりました。日常のなかにひそむ、かけがえのない一瞬を残すことが、いまの活動の原点です。",
-    themeTitle: "テーマ",
-    themeBody: "ノスタルジックな夏の情景、静かな日常のなかの安らぎ、そして人と場所との関係性。見慣れた風景の奥にある、感情の揺れや記憶の残響を、写真というメディアで丁寧に紡いでいきたいと考えています。",
-    achievementsTitle: "具体的な活動・実績",
-    achievementsIntro: "プラネタリウム展示、小説のための撮影、地域の建築や学校関連の記録など、クライアントワークと個人プロジェクトの両方で撮影を行っています。",
-    achievementsList: ["2024年 — プラネタリウム展示用ビジュアルの撮影・提供", "2024年 — 地域クライアント向け建築・空間ドキュメンテーション", "その他 — 書籍・広告・ウェディング等（要相談）"],
-    contactMessage: "撮影のご依頼やご相談など、まずはお気軽にご連絡ください。",
-    contactEmail: "hello@example.com"
-    }
-
-const data = {
-    name: about?.name ?? fallback.name,
-    tagline: about?.tagline ?? fallback.tagline,
-    intro: about?.intro ?? fallback.intro,
-    encounterTitle: about?.encounterTitle ?? fallback.encounterTitle,
-    encounterBody: about?.encounterBody ?? fallback.encounterBody,
-    themeTitle: about?.themeTitle ?? fallback.themeTitle,
-    themeBody: about?.themeBody ?? fallback.themeBody,
-    achievementsTitle: about?.achievementsTitle ?? fallback.achievementsTitle,
-    achievementsIntro: about?.achievementsIntro ?? fallback.achievementsIntro,
-    achievementsList: about?.achievementsList ?? fallback.achievementsList,
-    contactMessage: about?.contactMessage ?? fallback.contactMessage,
-    contactEmail: about?.contactEmail ?? fallback.contactEmail,
-};
 ---
 
 <BaseLayout>
@@ -59,8 +29,8 @@ const data = {
 
   <PageHero
     label="ABOUT"
-    title={data.name}
-    tagline={data.tagline}
+    title={about?.name}
+    tagline={about?.tagline}
   />
   </BackgroundSection>
     <ArchiveLayout extraClass='bg-black' data-about-root>
@@ -68,34 +38,40 @@ const data = {
 
         <AboutAnimationImages/>
 
-        <AboutSection
-            title="ABOUT">
-            {data.intro}
-        </AboutSection>
+        {about?.intro && (
+          <AboutSection title="ABOUT">
+              {about.intro}
+          </AboutSection>
+        )}
 
-        <AboutSection
-            title={data.encounterTitle}>
-            {data.encounterBody}
-        </AboutSection>
+        {about?.encounterTitle && (
+          <AboutSection title={about.encounterTitle}>
+              {about.encounterBody}
+          </AboutSection>
+        )}
 
-        <AboutSection
-            title={data.themeTitle}>
-            {data.themeBody}
-        </AboutSection>
+        {about?.themeTitle && (
+          <AboutSection title={about.themeTitle}>
+              {about.themeBody}
+          </AboutSection>
+        )}
 
-        <AboutSection
-            title={data.achievementsTitle}>
-            {data.achievementsIntro}
-            <ul class="mt-6 space-y-2 pl-4 text-sm leading-relaxed text-white/80 md:text-base">
-                {data.achievementsList.map((item) =>
-                    <li>{item}</li>
-                )}
-            </ul>
-        </AboutSection>
+        {about?.achievementsTitle && (
+          <AboutSection title={about.achievementsTitle}>
+              {about.achievementsIntro}
+              {(about.achievementsList ?? []).length > 0 && (
+                <ul class="mt-6 space-y-2 pl-4 text-sm leading-relaxed text-white/80 md:text-base">
+                    {(about.achievementsList ?? []).map((item) =>
+                        <li>{item}</li>
+                    )}
+                </ul>
+              )}
+          </AboutSection>
+        )}
 
         <ContactSection
-        message={data.contactMessage}
-        email={data.contactEmail}
+        message={about?.contactMessage}
+        email={about?.contactEmail}
         >
         <div class="mt-8">
           <SectionCtaLink href="/contact" label="Contact" hash='contact-form'/>
