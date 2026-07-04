@@ -65,7 +65,7 @@ export async function getAllNews(): Promise<NewsArchive[]> {
         .url() ?? "";
 
     const normalizedSlug = normalizeSlug(item.slug);
-    const normalizeCategory = (item.category ?? "").toLocaleLowerCase();
+    const normalizedCategory = (item.category ?? "").toLocaleLowerCase();
     return {
       id: item._id,
       date: item.date,
@@ -75,7 +75,7 @@ export async function getAllNews(): Promise<NewsArchive[]> {
       thumbnailAlt: item.thumbnailAlt ?? item.title,
       slug: normalizedSlug,
       tags: item.tags ?? [],
-      category: normalizeCategory,
+      category: normalizedCategory,
     } satisfies NewsArchive;
   });
 }
