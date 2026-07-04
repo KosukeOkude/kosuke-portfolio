@@ -12,12 +12,10 @@ export function sortByDate<T>(
   sortOrder: DateSortOrder,
   getDateMs: (item: T) => number,
 ): T[] {
-  const copy = [...items];
-  if (sortOrder === "date-desc") {
-    return copy.sort((a, b) => getDateMs(b) - getDateMs(a));
-  } else {
-    return copy.sort((a, b) => getDateMs(a) - getDateMs(b));
-  }
+  // 日付を O(n) で先に計算してからソート（比較関数内での繰り返し生成を避ける）
+  const withMs = items.map((item) => ({ item, ms: getDateMs(item) }));
+  withMs.sort((a, b) => (sortOrder === "date-desc" ? b.ms - a.ms : a.ms - b.ms));
+  return withMs.map(({ item }) => item);
 }
 
 // スラッグを小文字・トリムで統一し、全体で一貫した形式に保つ

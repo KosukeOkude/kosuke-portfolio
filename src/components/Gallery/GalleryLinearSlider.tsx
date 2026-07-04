@@ -9,7 +9,11 @@ import { ArchiveDateSortSelect } from "@/components/UI/ArchiveDateSortSelect";
 import type { DateSortOrder } from "@/types";
 import { filterByCategory } from "@/utils";
 import { useRevealDispatch } from "@/gsap/core";
-import { useRevealRefreshOnChange, useHorizontalScrollTrigger, useScrollToPinStart } from "@/hooks";
+import {
+  useRevealRefreshOnChange,
+  useHorizontalScrollTrigger,
+  useScrollToPinStart,
+} from "@/hooks";
 
 type GalleryLinearSliderProps = {
   items: GalleryLinearSliderItem[];
@@ -27,37 +31,27 @@ export const GalleryLinearSlider = ({
   categories,
   initialCategory,
 }: GalleryLinearSliderProps) => {
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory ?? categories[0]?.slug ?? "");
-  const [sortOrder, setSortOrder] = useState<DateSortOrder>("date-asc");
-
-  const filteredItems = filterByCategory(
-    items,
-    selectedCategory,
-    (g) => g.categorySlug,
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialCategory ?? categories[0]?.slug ?? "",
   );
-
+  const [sortOrder, setSortOrder] = useState<DateSortOrder>("date-asc");
+  const listKey = `${selectedCategory}-${sortOrder}`;
+  const filteredItems = useMemo(
+    () => filterByCategory(items, selectedCategory, (g) => g.categorySlug),
+    [items, selectedCategory],
+  );
   const displayItems = useMemo(
-    () => sortOrder === "date-desc" ? [...filteredItems].reverse() : filteredItems,
+    () => (sortOrder === "date-desc" ? [...filteredItems].reverse() : filteredItems),
     [filteredItems, sortOrder],
   );
-
-  const listKey = `${selectedCategory}-${sortOrder}`;
-
-  const lightboxBridge = useGalleryLightboxScrollBridge(displayItems);
-
-  useRevealDispatch();
-  useRevealRefreshOnChange([listKey]);
-
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-
   const { maxScrollLeft, pinSt } = useHorizontalScrollTrigger(
     scrollerRef,
     listKey,
     "[data-gallery-section]",
     "[data-gallery-slug-root]",
   );
-
-  useScrollToPinStart(pinSt, [selectedCategory, sortOrder], "#archive-main");
+  const lightboxBridge = useGalleryLightboxScrollBridge(displayItems);
 
   const handleCategorySelect = useCallback(
     (cat: string) => {
@@ -74,9 +68,14 @@ export const GalleryLinearSlider = ({
     },
     [lightboxBridge],
   );
-
+  useRevealDispatch();
+  useRevealRefreshOnChange([listKey]);
+  useScrollToPinStart(pinSt, [selectedCategory, sortOrder], "#archive-main");
   return (
-    <section className="w-full" data-gallery-section>
+    <section
+      className="w-full"
+      data-gallery-section
+    >
       <ArchiveCategoryChips
         categories={categories}
         selectedCategory={selectedCategory}
@@ -109,7 +108,6 @@ export const GalleryLinearSlider = ({
         onClose={lightboxBridge.closeAt}
         returnTargetId={lightboxBridge.returnTargetId}
       />
-      
     </section>
   );
 };
