@@ -2,7 +2,7 @@ import { sanityClient } from '@/sanity/client';
 
 const aboutPageQuery = `*[_type == "aboutPage"][0]{
     name,
-    tagLine,
+    tagline,
     intro,
     encounterTitle,
     encounterBody,
