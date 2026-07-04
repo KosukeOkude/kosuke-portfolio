@@ -38,9 +38,10 @@ export const GalleryTrack = ({
         <div
           ref={scrollerRef}
           data-gallery-scroller
-          className="h-full flex items-center gap-10 pl-6 overflow-x-auto overflow-y-hidden [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20"
+          className="h-full flex items-center overflow-x-auto overflow-y-hidden [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20"
         >
-          <div className="h-full flex items-center gap-10 pl-6 w-max">
+          <div className="h-full flex items-center gap-10 w-max">
+            <div className="shrink-0 w-6" aria-hidden="true" />
             {items.map((item, index) => (
               <article
                 className="shrink-0"
@@ -61,10 +62,7 @@ export const GalleryTrack = ({
                 </button>
               </article>
             ))}
-            <div
-              className="shrink-0 w-6"
-              aria-hidden="true"
-            />
+            <div className="shrink-0 w-6" aria-hidden="true" />
           </div>
         </div>
       </div>

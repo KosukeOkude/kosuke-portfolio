@@ -304,7 +304,6 @@ export function animationHeroIntro(): void {
   const content = root.querySelector<HTMLElement>("[data-hero-profile-content]");
   const nameEl = root.querySelector<HTMLElement>("[data-hero-name]");
   const titleEl = root.querySelector<HTMLElement>("[data-hero-title]");
-  const next = root.nextElementSibling as HTMLElement | null;
 
   if (!profileWrap || !nameEl || !titleEl) return;
 
@@ -314,8 +313,18 @@ export function animationHeroIntro(): void {
   }
 
   const tl = gsap.timeline();
-  if (content) tl.fromTo(content, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" });
-  tl.fromTo(profileWrap, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "<");
+  if (content)
+    tl.fromTo(
+      content,
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+    );
+  tl.fromTo(
+    profileWrap,
+    { opacity: 0, y: 16 },
+    { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+    "<",
+  );
   tl.fromTo(
     [nameEl, titleEl],
     { opacity: 0, y: 16 },
@@ -450,33 +459,35 @@ function attachTooltipOnHover(hoverEls: HTMLElement[], tip: HTMLElement): void {
 }
 
 // タイトル（中央）の周り固定6ポジション（xRatio/yRatio はコンテナに対する割合）
-const FIXED_FILM_POSITIONS: Array<{ xRatio: number; yRatio: number; rotation: number }> = [
-  { xRatio: 0.07, yRatio: 0.09, rotation: -12 }, // 左上
-  { xRatio: 0.63, yRatio: 0.06, rotation:   8 }, // 右上
-  { xRatio: 0.03, yRatio: 0.46, rotation:  15 }, // 左中
-  { xRatio: 0.80, yRatio: 0.42, rotation: -10 }, // 右中
-  { xRatio: 0.14, yRatio: 0.68, rotation:  -7 }, // 左下
-  { xRatio: 0.63, yRatio: 0.67, rotation:  11 }, // 右下
-];
+const FIXED_FILM_POSITIONS: Array<{ xRatio: number; yRatio: number; rotation: number }> =
+  [
+    { xRatio: 0.07, yRatio: 0.09, rotation: -12 }, // 左上
+    { xRatio: 0.63, yRatio: 0.06, rotation: 8 }, // 右上
+    { xRatio: 0.03, yRatio: 0.46, rotation: 15 }, // 左中
+    { xRatio: 0.8, yRatio: 0.42, rotation: -10 }, // 右中
+    { xRatio: 0.14, yRatio: 0.68, rotation: -7 }, // 左下
+    { xRatio: 0.63, yRatio: 0.67, rotation: 11 }, // 右下
+  ];
 
 // スマホ用（左中を上・右中を下に広げる）
-const FIXED_FILM_POSITIONS_SP: Array<{ xRatio: number; yRatio: number; rotation: number }> = [
+const FIXED_FILM_POSITIONS_SP: Array<{
+  xRatio: number;
+  yRatio: number;
+  rotation: number;
+}> = [
   { xRatio: 0.07, yRatio: 0.09, rotation: -12 }, // 左上
-  { xRatio: 0.63, yRatio: 0.06, rotation:   8 }, // 右上
-  { xRatio: 0.03, yRatio: 0.30, rotation:  15 }, // 左中（上へ）
-  { xRatio: 0.80, yRatio: 0.50, rotation: -10 }, // 右中（下へ）
-  { xRatio: 0.14, yRatio: 0.68, rotation:  -7 }, // 左下
-  { xRatio: 0.63, yRatio: 0.67, rotation:  11 }, // 右下
+  { xRatio: 0.63, yRatio: 0.06, rotation: 8 }, // 右上
+  { xRatio: 0.03, yRatio: 0.3, rotation: 15 }, // 左中（上へ）
+  { xRatio: 0.8, yRatio: 0.5, rotation: -10 }, // 右中（下へ）
+  { xRatio: 0.14, yRatio: 0.68, rotation: -7 }, // 左下
+  { xRatio: 0.63, yRatio: 0.67, rotation: 11 }, // 右下
 ];
 
-function placeImageAtFixedPosition(
-  layer: HTMLElement,
-  el: HTMLElement,
-  index: number,
-) {
-  const positions = window.innerWidth < 768 ? FIXED_FILM_POSITIONS_SP : FIXED_FILM_POSITIONS;
+function placeImageAtFixedPosition(layer: HTMLElement, el: HTMLElement, index: number) {
+  const positions =
+    window.innerWidth < 768 ? FIXED_FILM_POSITIONS_SP : FIXED_FILM_POSITIONS;
   const pos = positions[index % positions.length];
-  const x = layer.clientWidth  * pos.xRatio;
+  const x = layer.clientWidth * pos.xRatio;
   const y = layer.clientHeight * pos.yRatio;
   gsap.set(el, { position: "absolute", left: x, top: y, rotation: pos.rotation });
 }
