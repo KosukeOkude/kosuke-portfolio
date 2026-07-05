@@ -6,7 +6,7 @@ import {
   registerScrollTriggerRefreshOnResize,
   registerScrollTriggerRefreshOnLoad,
 } from "@/gsap/core";
-import { animationHeroIntro, runWorksTopAnimation } from "@/gsap/preset";
+import { runWorksTopAnimation } from "@/gsap/preset";
 import "@/gsap/preset";
 
 // Reveal アニメーション（hydrate 前は astro-island 外のみ、refresh 後に全文スキャン）

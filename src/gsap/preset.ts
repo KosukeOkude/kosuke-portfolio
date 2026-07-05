@@ -18,7 +18,7 @@ const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
 const revealStart = () => (isTouchDevice() ? "top 75%" : "top 90%");
 
 export function playRevealEach(container: HTMLElement) {
-  const children = Array.from(container.children) as HTMLElement[];
+  const children = Array.from(container.children).filter((el): el is HTMLElement => el instanceof HTMLElement);
   if (children.length === 0) return;
   gsap.set(container, { opacity: 1, y: 0 });
   gsap.set(children, { opacity: 0, y: 16 });
@@ -262,7 +262,8 @@ export function initScrollPin(): void {
   if (window.matchMedia("(pointer: coarse)").matches) return;
   const root = document.querySelector<HTMLElement>("[data-scroll-pin]");
   if (!root) return;
-  const next = root.nextElementSibling as HTMLElement | null;
+  const nextSibling = root.nextElementSibling;
+  const next = nextSibling instanceof HTMLElement ? nextSibling : null;
   if (prefersReducedMotion()) return;
   scrollPinFromTo(root, next);
   ScrollTrigger.refresh();
@@ -358,7 +359,7 @@ export function runWorksTopAnimation(): void {
 
   const bgWrapper = root.querySelector<HTMLElement>("[data-background-wrapper]");
   const overlay = root.querySelector<HTMLElement>("[data-animation-overlay]");
-  const next = root.nextElementSibling as HTMLElement;
+  const next = root.nextElementSibling instanceof HTMLElement ? root.nextElementSibling : null;
 
   if (!cardSlider || !bgWrapper || !next) return;
   if (prefersReducedMotion()) {

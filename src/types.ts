@@ -1,5 +1,10 @@
 export type DateSortOrder = "date-desc" | "date-asc";
 
+const DATE_SORT_ORDERS = ["date-desc", "date-asc"] as const;
+export function isDateSortOrder(value: string): value is DateSortOrder {
+  return (DATE_SORT_ORDERS as readonly string[]).includes(value);
+}
+
 export type LightboxItem = {
   src: string;
   alt?: string;
