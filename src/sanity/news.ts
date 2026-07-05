@@ -1,6 +1,7 @@
-import { sanityClient, urlFor } from "@/sanity/client";
+import { sanityClient } from "@/sanity/client";
 import type { NewsArchive, NewsPage } from "@/data/news";
 import { normalizeSlug } from "@/utils";
+import { buildImageUrl, normalizeCategory, buildSubImages, filterYoutubeVideos } from "@/sanity/transform";
 
 export const newsListQuery = `*[_type == "news"] | order(date desc) {
   _id,
@@ -57,27 +58,17 @@ export async function getAllNews(): Promise<NewsArchive[]> {
   >(newsListQuery);
 
   //返却側
-  return list.map((item) => {
-    const thumbnailUrl =
-      urlFor(item.thumbnailUrl ?? undefined)
-        ?.width(560)
-        .auto("format")
-        .url() ?? "";
-
-    const normalizedSlug = normalizeSlug(item.slug);
-    const normalizedCategory = (item.category ?? "").toLocaleLowerCase();
-    return {
-      id: item._id,
-      date: item.date,
-      title: item.title,
-      summary: item.summary,
-      thumbnailUrl,
-      thumbnailAlt: item.thumbnailAlt ?? item.title,
-      slug: normalizedSlug,
-      tags: item.tags ?? [],
-      category: normalizedCategory,
-    } satisfies NewsArchive;
-  });
+  return list.map((item) => ({
+    id: item._id,
+    date: item.date,
+    title: item.title,
+    summary: item.summary,
+    thumbnailUrl: buildImageUrl(item.thumbnailUrl, 560),
+    thumbnailAlt: item.thumbnailAlt ?? item.title,
+    slug: normalizeSlug(item.slug),
+    tags: item.tags ?? [],
+    category: normalizeCategory(item.category),
+  } satisfies NewsArchive));
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsPage> {
@@ -104,43 +95,12 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
   }>(newsBySlugQuery, { slug });
 
   //返却側
-  const thumbnailUrl =
-    urlFor(doc.thumbnailUrl ?? undefined)
-      ?.width(1200)
-      .auto("format")
-      .url() ?? "";
-
-  const thumbnailLightboxUrl =
-    urlFor(doc.thumbnailUrl ?? undefined)
-      ?.width(2000)
-      .auto("format")
-      .url() ?? "";
-
+  const thumbnailUrl = buildImageUrl(doc.thumbnailUrl, 1200);
+  const thumbnailLightboxUrl = buildImageUrl(doc.thumbnailUrl, 2000);
   const normalizedSlug = normalizeSlug(doc.slug);
-  const normalizeCategory = (doc.category ?? "").toLocaleLowerCase();
-
-  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (
-    doc.subImage ?? []
-  )
-    .filter(
-      (s): s is { asset: { _ref?: string; _id?: string }; alt: string | null } =>
-        !!s.asset,
-    )
-    .map((s, i) => ({
-      src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
-      lightboxSrc: urlFor(s.asset)?.width(2000).auto("format").url() ?? "",
-      alt: s.alt ?? `${doc.title}-${1 + i}`,
-    }));
-
-  // 追加：YouTubeだけ拾って WorkVideo に寄せる
-  const videos = (doc.videos ?? [])
-    .filter(
-      (v): v is { type: "youtube"; youtubeUrl: string } =>
-        v.type === "youtube" &&
-        typeof v.youtubeUrl === "string" &&
-        v.youtubeUrl.length > 0,
-    )
-    .map((v) => ({ type: v.type, youtubeUrl: v.youtubeUrl }));
+  const normalizedCategory = normalizeCategory(doc.category);
+  const subImage = buildSubImages(doc.subImage, doc.title);
+  const videos = filterYoutubeVideos(doc.videos);
 
   return {
     id: doc._id,
@@ -153,7 +113,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsPage> {
     videos: videos.length > 0 ? videos : undefined,
     slug: normalizedSlug,
     tags: doc.tags ?? [],
-    category: normalizeCategory,
+    category: normalizedCategory,
     description: doc.description,
     body: doc.body ?? undefined, // 本文（Works の concept 相当）
     details: doc.details ?? undefined, // 詳細・補足

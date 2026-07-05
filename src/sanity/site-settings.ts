@@ -1,4 +1,5 @@
-import { urlFor, sanityClient } from "@/sanity/client";
+import { sanityClient } from "@/sanity/client";
+import { buildImageUrl, normalizeCategory } from "@/sanity/transform";
 import { normalizeSlug } from "@/utils";
 import { getYouTubeVideoId } from "@/utils/youtube";
 import type { GalleryCategory } from "@/data/gallery";
@@ -42,14 +43,9 @@ export async function displayTopWorks(): Promise<WorkForClient[]> {
     title: w.title,
     date: w.date,
     tags: w.tags ?? [],
-    thumbnailUrl:
-      urlFor(w.thumbnailUrl ?? undefined)
-        ?.width(560)
-        .height(640)
-        .auto("format")
-        .url() ?? "",
+    thumbnailUrl: buildImageUrl(w.thumbnailUrl, 560, 640),
     thumbnailAlt: w.thumbnailAlt ?? "",
-    category: (w.category ?? "").toLocaleLowerCase(),
+    category: normalizeCategory(w.category),
   }));
 }
 
@@ -78,11 +74,7 @@ export async function displayTopGalleryCategories(): Promise<GalleryCategory[]> 
   return refs.map((g) => ({
     slug: normalizeSlug(g.slug),
     title: g.title,
-    imageUrl:
-      urlFor(g.coverImage ?? undefined)
-        ?.width(1200)
-        .auto("format")
-        .url() ?? "",
+    imageUrl: buildImageUrl(g.coverImage, 1200),
     imageAlt: g.imageAlt ?? "",
   }));
 }
@@ -215,12 +207,7 @@ export async function displayTopNews(): Promise<NewsArchive[]> {
     date: n.date,
     title: n.title,
     summary: n.summary,
-    thumbnailUrl:
-      urlFor(n.thumbnailUrl ?? undefined)
-        ?.width(560)
-        .height(640)
-        .auto("format")
-        .url() ?? "",
+    thumbnailUrl: buildImageUrl(n.thumbnailUrl, 560, 640),
     thumbnailAlt: n.thumbnailAlt ?? "",
     slug: n.slug,
     tags: n.tags ?? [],
@@ -246,7 +233,7 @@ export async function displayAboutAnimationImages(): Promise<{ url: string; size
   const doc = await sanityClient.fetch<SiteSettingsAboutAnimationImagesDoc | null>(siteSettingsAboutAnimationImagesQuery);
   return (doc?.aboutAnimationImages ?? [])
     .map((f) => ({
-      url: urlFor(f.asset ?? undefined)?.width(1200).auto('format').url() ?? '',
+      url: buildImageUrl(f.asset, 1200),
       size: f.size ?? 'md',
     }))
     .filter((f) => f.url);
@@ -283,16 +270,8 @@ export async function displayHeroVideo(): Promise<{
   return {
     videoUrl: block?.videoUrl ?? "",
     mobileVideoUrl: block?.mobileVideoUrl ?? "",
-    posterUrl:
-      urlFor(block?.posterAsset ?? undefined)
-        ?.width(1920)
-        .auto("format")
-        .url() ?? "",
-    mobilePosterUrl:
-      urlFor(block?.mobilePosterAsset ?? undefined)
-        ?.width(1280)
-        .auto("format")
-        .url() ?? "",
+    posterUrl: buildImageUrl(block?.posterAsset, 1920),
+    mobilePosterUrl: buildImageUrl(block?.mobilePosterAsset, 1280),
   };
 }
 
@@ -315,11 +294,7 @@ export async function displayEntranceFilms(): Promise<{ id: string; url: string 
   return (doc?.entranceFilms ?? [])
     .map((f) => ({
       id: f.asset?._id ?? "",
-      url:
-        urlFor(f.asset ?? undefined)
-          ?.width(400)
-          .auto("format")
-          .url() ?? "",
+      url: buildImageUrl(f.asset, 400),
     }))
     .filter((f) => f.url);
 }

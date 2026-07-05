@@ -1,6 +1,7 @@
 import type { Work, WorkForClient } from "@/data/works";
-import { sanityClient, urlFor } from "@/sanity/client";
+import { sanityClient } from "@/sanity/client";
 import { normalizeSlug } from "@/utils";
+import { buildImageUrl, normalizeCategory, buildSubImages, filterYoutubeVideos } from "@/sanity/transform";
 //一覧用ワーク全フィールド
 export const worksListQuery = `*[_type == "work"] | order(date desc) {
     _id,
@@ -56,22 +57,15 @@ export async function getAllWorks(): Promise<WorkForClient[]> {
     }[]
   >(worksListQuery);
   // auto('format') を使う AVIF → WebP → PNG/JPEG
-  return list.map((item) => {
-    const thumbnailUrl =
-      urlFor(item.thumbnailUrl ?? undefined)
-        ?.width(560)
-        .auto("format")
-        .url() ?? "";
-    return {
-      slug: normalizeSlug(item.slug),
-      title: item.title,
-      date: item.date,
-      tags: item.tags ?? [],
-      thumbnailUrl,
-      thumbnailAlt: item.thumbnailAlt ?? item.title,
-      category: (item.category ?? "").toLocaleLowerCase(),
-    } satisfies WorkForClient;
-  });
+  return list.map((item) => ({
+    slug: normalizeSlug(item.slug),
+    title: item.title,
+    date: item.date,
+    tags: item.tags ?? [],
+    thumbnailUrl: buildImageUrl(item.thumbnailUrl, 560),
+    thumbnailAlt: item.thumbnailAlt ?? item.title,
+    category: normalizeCategory(item.category),
+  } satisfies WorkForClient));
 }
 
 export async function getWorkBySlug(slug: string): Promise<Work | null> {
@@ -96,44 +90,17 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
 
   if (!doc) return null;
 
-  const thumbnailUrl =
-    urlFor(doc.thumbnailUrl ?? undefined)
-      ?.width(1200)
-      .auto("format")
-      .url() ?? "";
-
-  const thumbnailLightboxUrl =
-    urlFor(doc.thumbnailUrl ?? undefined)
-      ?.width(2000)
-      .auto("format")
-      .url() ?? "";
-
-  const subImage: { src: string; lightboxSrc: string; alt: string }[] = (
-    doc.subImages ?? []
-  )
-    .filter((s): s is { asset: { _ref: string }; alt: string | null } => !!s.asset)
-    .map((s, i) => ({
-      src: urlFor(s.asset)?.width(1200).auto("format").url() ?? "",
-      lightboxSrc: urlFor(s.asset)?.width(2000).auto("format").url() ?? "",
-      alt: s.alt ?? `${doc.title}-${i + 1}`,
-    }));
-
-  // 追加：YouTubeだけ拾って WorkVideo に寄せる
-  const videos = (doc.videos ?? [])
-    .filter(
-      (v): v is { type: "youtube"; youtubeUrl: string } =>
-        v.type === "youtube" &&
-        typeof v.youtubeUrl === "string" &&
-        v.youtubeUrl.length > 0,
-    )
-    .map((v) => ({ type: v.type, youtubeUrl: v.youtubeUrl }));
+  const thumbnailUrl = buildImageUrl(doc.thumbnailUrl, 1200);
+  const thumbnailLightboxUrl = buildImageUrl(doc.thumbnailUrl, 2000);
+  const subImage = buildSubImages(doc.subImages, doc.title);
+  const videos = filterYoutubeVideos(doc.videos);
 
   return {
     slug: normalizeSlug(doc.slug),
     title: doc.title,
     date: doc.date,
     tags: doc.tags ?? [],
-    thumbnailUrl: thumbnailUrl,
+    thumbnailUrl,
     thumbnailLightboxUrl,
     thumbnailAlt: doc.thumbnailAlt ?? doc.title,
     videos: videos.length > 0 ? videos : undefined,
