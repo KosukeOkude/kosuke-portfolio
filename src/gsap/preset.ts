@@ -15,9 +15,7 @@ import type { RunGlobalRevealOptions } from "@/types";
 
 // 子要素を順番にフェードインする
 const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
-const revealStart = () => (isTouchDevice() ? "top 75%" : "top 90%");
-// モバイルは一度表示したら消さない、デスクトップは従来通りスクロールアウトで消す
-const revealToggleActions = () => (isTouchDevice() ? "play none none none" : "play reverse play reverse");
+const revealStart = () => "top 90%";
 
 export function playRevealEach(container: HTMLElement) {
   const children = Array.from(container.children).filter((el): el is HTMLElement => el instanceof HTMLElement);
@@ -35,7 +33,7 @@ export function playRevealEach(container: HTMLElement) {
         trigger: item,
         start: revealStart(),
         end: "bottom top",
-        toggleActions: revealToggleActions(),
+        toggleActions: "play reverse play reverse",
         invalidateOnRefresh: true,
       },
     });
@@ -43,7 +41,12 @@ export function playRevealEach(container: HTMLElement) {
 }
 
 // 単体要素をスクロールでフェードイン/アウトする
+// モバイルは playRevealOnce と同じ挙動（一度表示したら消さない）
 export function playRevealSingle(target: HTMLElement) {
+  if (isTouchDevice()) {
+    playRevealOnce(target);
+    return;
+  }
   gsap.set(target, { opacity: 0, y: 16 });
   gsap.to(target, {
     opacity: 1,
@@ -53,7 +56,7 @@ export function playRevealSingle(target: HTMLElement) {
     scrollTrigger: {
       trigger: target,
       start: revealStart(),
-      toggleActions: revealToggleActions(),
+      toggleActions: "play reverse play reverse",
       invalidateOnRefresh: true,
     },
   });
