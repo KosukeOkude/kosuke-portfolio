@@ -218,11 +218,11 @@ export function initImageReveal(): void {
 // Pin アニメーション
 // ============================================================
 
-// 要素をスクロールに合わせて y+=100vh スライドさせる
+// 要素をスクロールに合わせて y+=100dvh スライドさせる
 export function scrollPinTo(pinEl: HTMLElement, endTriggerEl: HTMLElement | null): void {
   if (window.matchMedia("(pointer: coarse)").matches) return;
   gsap.to(pinEl, {
-    y: "+=100vh",
+    y: () => "+=" + window.innerHeight,
     ease: "none",
     scrollTrigger: {
       trigger: pinEl,
@@ -244,7 +244,7 @@ export function scrollPinFromTo(
     pinEl,
     { y: 0 },
     {
-      y: "+=100vh",
+      y: () => "+=" + window.innerHeight,
       ease: "none",
       scrollTrigger: {
         trigger: pinEl,
@@ -269,7 +269,7 @@ export function initScrollPin(): void {
   ScrollTrigger.refresh();
 }
 
-// ピン終了位置から次セクションまで y+=100vh でスライドさせる
+// ピン終了位置から次セクションまで y+=100dvh でスライドさせる
 export function scrollPinFromPin(
   wrapperEls: ReadonlyArray<HTMLElement | null | undefined>,
   endTriggerEl: HTMLElement | null,
@@ -281,7 +281,7 @@ export function scrollPinFromPin(
   );
   if (elements.length === 0) return;
   gsap.to(elements, {
-    y: "+=100vh",
+    y: () => "+=" + window.innerHeight,
     ease: "none",
     scrollTrigger: {
       trigger: elements[0]!,
