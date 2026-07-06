@@ -311,7 +311,7 @@ body.lightbox-open [data-screen-overlay] {
 }
 
 .min-h-svh {
-  min-height: var(--actual-vh, 100svh);
+  min-height: 100svh;
 }
 
 /* 幅375px以下でフィルムのスプロケット（穴）を縮小 */
