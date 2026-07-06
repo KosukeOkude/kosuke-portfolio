@@ -20,6 +20,10 @@ const revealStart = () => "top 90%";
 export function playRevealEach(container: HTMLElement) {
   const children = Array.from(container.children).filter((el): el is HTMLElement => el instanceof HTMLElement);
   if (children.length === 0) return;
+  if (isTouchDevice()) {
+    children.forEach((item) => playRevealOnce(item));
+    return;
+  }
   gsap.set(container, { opacity: 1, y: 0 });
   gsap.set(children, { opacity: 0, y: 16 });
   children.forEach((item) => {
