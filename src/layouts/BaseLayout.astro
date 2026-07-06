@@ -25,3 +25,21 @@ import Footer from '@/components/Layout/Footer.astro';
   import "@/client";
   import "@/gsap/initGsapClient";
 </script>
+
+<script is:inline>
+  // インアプリブラウザ（Instagram/LINE）対応:
+  // window.innerHeight をCSS変数に固定し、ツールバー出現によるレイアウトシフトを防ぐ
+  (function () {
+    var h = window.innerHeight;
+    document.documentElement.style.setProperty("--actual-vh", h + "px");
+
+    window.addEventListener("resize", function () {
+      var newH = window.innerHeight;
+      // ツールバー出入り（小さい変化）は無視し、向き変更（大きい変化）のみ更新
+      if (Math.abs(newH - h) > 100) {
+        h = newH;
+        document.documentElement.style.setProperty("--actual-vh", h + "px");
+      }
+    });
+  })();
+</script>
