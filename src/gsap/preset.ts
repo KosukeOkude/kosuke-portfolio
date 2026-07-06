@@ -16,8 +16,6 @@ import type { RunGlobalRevealOptions } from "@/types";
 // 子要素を順番にフェードインする
 const isTouchDevice = () => window.matchMedia("(pointer: coarse)").matches;
 const revealStart = () => (isTouchDevice() ? "top 75%" : "top 90%");
-// モバイルは一度表示したら消さない（上スクロール中に消えるのを防ぐ）
-const revealToggleActions = () => (isTouchDevice() ? "play none none none" : "play reverse play reverse");
 
 export function playRevealEach(container: HTMLElement) {
   const children = Array.from(container.children).filter((el): el is HTMLElement => el instanceof HTMLElement);
@@ -35,7 +33,7 @@ export function playRevealEach(container: HTMLElement) {
         trigger: item,
         start: revealStart(),
         end: "bottom top",
-        toggleActions: revealToggleActions(),
+        toggleActions: "play reverse play reverse",
         invalidateOnRefresh: true,
       },
     });
@@ -53,7 +51,7 @@ export function playRevealSingle(target: HTMLElement) {
     scrollTrigger: {
       trigger: target,
       start: revealStart(),
-      toggleActions: revealToggleActions(),
+      toggleActions: "play reverse play reverse",
       invalidateOnRefresh: true,
     },
   });
