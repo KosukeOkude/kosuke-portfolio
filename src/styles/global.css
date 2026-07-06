@@ -310,8 +310,8 @@ body.lightbox-open [data-screen-overlay] {
   visibility: visible;
 }
 
-.min-h-dvh {
-  min-height: 100dvh;
+.min-h-svh {
+  min-height: 100svh;
 }
 
 /* 幅375px以下でフィルムのスプロケット（穴）を縮小 */
