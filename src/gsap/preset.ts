@@ -33,7 +33,7 @@ export function playRevealEach(container: HTMLElement) {
         trigger: item,
         start: revealStart(),
         end: "bottom top",
-        toggleActions: "play reverse play reverse",
+        toggleActions: "play reverse play none",
         invalidateOnRefresh: true,
       },
     });
@@ -51,7 +51,8 @@ export function playRevealSingle(target: HTMLElement) {
     scrollTrigger: {
       trigger: target,
       start: revealStart(),
-      toggleActions: "play reverse play reverse",
+      end: "top top",
+      toggleActions: "play reverse play none",
       invalidateOnRefresh: true,
     },
   });
