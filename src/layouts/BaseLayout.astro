@@ -21,6 +21,30 @@ import Footer from '@/components/Layout/Footer.astro';
   </body>
 </html>
 
+<script is:inline>
+  // Instagram in-app ブラウザのみ: visualViewport.height を --vh に固定
+  // svh が dvh のように振る舞う Instagram WebView の固有バグへの対処
+  // is:inline = 同期実行なので GSAP（module script）より先に走る
+  (function () {
+    if (!/Instagram/i.test(navigator.userAgent)) return;
+
+    var vv = window.visualViewport;
+    var lastH = vv ? vv.height : window.innerHeight;
+    document.documentElement.style.setProperty("--vh", lastH + "px");
+
+    var target = vv || window;
+    var eventName = vv ? "resize" : "resize";
+    target.addEventListener(eventName, function () {
+      var newH = vv ? vv.height : window.innerHeight;
+      // ツールバーの出入り（小さい変化）は無視し、向き変更（100px 超）のみ更新
+      if (Math.abs(newH - lastH) > 100) {
+        lastH = newH;
+        document.documentElement.style.setProperty("--vh", lastH + "px");
+      }
+    });
+  })();
+</script>
+
 <script>
   import "@/client";
   import "@/gsap/initGsapClient";
