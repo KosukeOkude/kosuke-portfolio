@@ -314,6 +314,15 @@ body.lightbox-open [data-screen-overlay] {
   min-height: 100svh;
 }
 
+/* Instagram / LINE in-app browser: svh が dvh 相当になりツールバー変化でガクつくため固定値で上書き */
+html.in-app-browser .min-h-svh {
+  min-height: var(--locked-viewport-height, 100svh);
+}
+
+html.in-app-browser .fixed-bg-mobile {
+  position: absolute;
+}
+
 /* 幅375px以下でフィルムのスプロケット（穴）を縮小 */
 @media (max-width: 375px) {
   [data-film-frame] {
