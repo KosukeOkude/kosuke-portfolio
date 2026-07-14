@@ -11,6 +11,17 @@ import Footer from '@/components/Layout/Footer.astro';
     <link rel="icon" href="/favicon-png.ico" />
     <meta name="viewport" content="width=device-width" />
     <title>Kosuke's Photo Portfolio</title>
+    <script is:inline>
+      (function () {
+        if (/Instagram|Line/i.test(navigator.userAgent)) {
+          document.documentElement.classList.add('in-app-browser');
+          document.documentElement.style.setProperty(
+            '--locked-viewport-height',
+            window.innerHeight + 'px'
+          );
+        }
+      })();
+    </script>
   </head>
   <body class="bg-black">
     <Header />
