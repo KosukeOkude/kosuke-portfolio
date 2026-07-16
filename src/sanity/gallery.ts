@@ -8,7 +8,15 @@ export const galleryQuery = `*[_type == "gallery"] | order(title asc) {
     "coverImage": coverImage.asset->,
     imageAlt,
     images[]{
-        "asset": asset->
+        "asset": asset->{
+            _id,
+            metadata {
+                dimensions {
+                    width,
+                    height
+                }
+            }
+        }
     }
 }`;
 
@@ -18,7 +26,15 @@ type GalleryDoc = {
   coverImage: { _ref?: string; _id?: string } | null;
   imageAlt: string | null;
   images?: {
-    asset?: { _ref?: string; _id?: string } | null;
+    asset?: {
+      _id?: string;
+      metadata?: {
+        dimensions?: {
+          width?: number;
+          height?: number;
+        };
+      };
+    } | null;
   }[];
 };
 
@@ -49,6 +65,8 @@ async function fetchGalleryData() {
             .auto("format")
             .url() ?? "",
         imageAlt: `${gallery.title} - ${i + 1}`,
+        imageWidth: img.asset?.metadata?.dimensions?.width ?? null,
+        imageHeight: img.asset?.metadata?.dimensions?.height ?? null,
       });
     }
   }

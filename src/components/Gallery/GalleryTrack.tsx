@@ -1,4 +1,4 @@
-import { type RefObject, useState, useEffect, useCallback } from "react";
+import { type RefObject, useState, useEffect, useCallback, useMemo } from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
 import { useGalleryTrackScrollToItem } from "@/hooks";
 import type { ScrollTrigger } from "@/gsap/core";
@@ -12,6 +12,36 @@ interface GalleryTrackProps {
   scrollerRef: RefObject<HTMLDivElement | null>;
   maxScrollLeft: RefObject<number | null>;
   pinSt: RefObject<ScrollTrigger | null>;
+}
+
+// CSS で指定している画像高さをブレークポイントごとに返す
+function getTargetImageHeight(): number {
+  if (window.matchMedia("(min-width: 768px)").matches) {
+    return Math.min(600, window.innerHeight * 0.55);
+  }
+  if (window.matchMedia("(min-width: 390px)").matches) {
+    return 320;
+  }
+  return 250;
+}
+
+// 全画像のアスペクト比からスクロール幅を推定する
+function estimateScrollWidth(
+  items: GalleryLinearSliderItem[],
+  targetImageHeight: number,
+): number {
+  const GAP = 40; // gap-10 = 2.5rem = 40px
+  const RIGHT_SPACER = 24; // w-6 = 1.5rem = 24px
+  let total = RIGHT_SPACER;
+  for (const item of items) {
+    const aspectRatio =
+      item.imageWidth && item.imageHeight
+        ? item.imageWidth / item.imageHeight
+        : 1;
+    total += targetImageHeight * aspectRatio;
+  }
+  total += GAP * Math.max(0, items.length - 1);
+  return total;
 }
 
 export const GalleryTrack = ({
@@ -31,6 +61,12 @@ export const GalleryTrack = ({
     pinSt,
   });
 
+  // 画像ロード前でも正確なサム幅を出すための推定スクロール幅
+  const estimatedScrollWidth = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    return estimateScrollWidth(items, getTargetImageHeight());
+  }, [items]);
+
   const [thumbStyle, setThumbStyle] = useState<{ left: string; width: string }>({
     left: "0%",
     width: "20%",
@@ -39,7 +75,9 @@ export const GalleryTrack = ({
   const syncThumb = useCallback(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scroller;
+    const { scrollLeft, clientWidth } = scroller;
+    // 実際の scrollWidth と推定値の大きい方を使う（ロード前は推定値が正確）
+    const scrollWidth = Math.max(scroller.scrollWidth, estimatedScrollWidth ?? 0);
     const maxScroll = scrollWidth - clientWidth;
     if (maxScroll <= 0) {
       setThumbStyle({ left: "0%", width: "100%" });
@@ -51,7 +89,7 @@ export const GalleryTrack = ({
       left: `${leftPct.toFixed(2)}%`,
       width: `${widthPct.toFixed(2)}%`,
     });
-  }, [scrollerRef]);
+  }, [scrollerRef, estimatedScrollWidth]);
 
   useEffect(() => {
     const scroller = scrollerRef.current;

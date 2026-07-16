@@ -19,6 +19,8 @@ export interface GalleryLinearSliderItem {
   categorySlug: GalleryCategorySlug;
   imageUrl: string;
   imageAlt: string;
+  imageWidth: number | null;
+  imageHeight: number | null;
 }
 
 export {
