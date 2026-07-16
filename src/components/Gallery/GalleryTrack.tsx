@@ -1,4 +1,4 @@
-import { type RefObject } from "react";
+import { type RefObject, useState, useEffect, useCallback } from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
 import { useGalleryTrackScrollToItem } from "@/hooks";
 import type { ScrollTrigger } from "@/gsap/core";
@@ -23,7 +23,6 @@ export const GalleryTrack = ({
   maxScrollLeft,
   pinSt,
 }: GalleryTrackProps) => {
-  // 指定IDの要素を「可能な範囲で中央」へスクロール
   useGalleryTrackScrollToItem({
     scrollerRef,
     scrollToId,
@@ -32,16 +31,56 @@ export const GalleryTrack = ({
     pinSt,
   });
 
+  const [thumbStyle, setThumbStyle] = useState<{ left: string; width: string }>({
+    left: "0%",
+    width: "20%",
+  });
+
+  const syncThumb = useCallback(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scroller;
+    const maxScroll = scrollWidth - clientWidth;
+    if (maxScroll <= 0) {
+      setThumbStyle({ left: "0%", width: "100%" });
+      return;
+    }
+    const widthPct = (clientWidth / scrollWidth) * 100;
+    const leftPct = (scrollLeft / maxScroll) * (100 - widthPct);
+    setThumbStyle({
+      left: `${leftPct.toFixed(2)}%`,
+      width: `${widthPct.toFixed(2)}%`,
+    });
+  }, [scrollerRef]);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    scroller.addEventListener("scroll", syncThumb, { passive: true });
+
+    const ro = new ResizeObserver(syncThumb);
+    ro.observe(scroller);
+    const inner = scroller.firstElementChild as HTMLElement | null;
+    if (inner) ro.observe(inner);
+
+    syncThumb();
+
+    return () => {
+      scroller.removeEventListener("scroll", syncThumb);
+      ro.disconnect();
+    };
+  }, [scrollerRef, syncThumb]);
+
   return (
     <>
       <div className="relative w-full mt-5 md:mt-10 h-[290px] min-[390px]:h-[360px] md:h-[60vh]">
         <div
           ref={scrollerRef}
           data-gallery-scroller
-          className="h-full flex items-center overflow-x-auto overflow-y-hidden [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20"
+          className="h-full flex items-center overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           <div className="h-full flex items-center gap-10 w-max">
-            <div className="shrink-0 w-6" aria-hidden="true" />
             {items.map((item, index) => (
               <article
                 className="shrink-0"
@@ -66,15 +105,13 @@ export const GalleryTrack = ({
           </div>
         </div>
       </div>
-      <div className="flex md:hidden justify-center py-4 pointer-events-none">
-        <span className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-white font-bold">
-          Scroll →
-        </span>
-      </div>
-      <div className="hidden md:flex justify-center py-4 pointer-events-none">
-        <span className="font-body text-[0.6rem] tracking-[0.3em] uppercase text-white font-bold">
-          ↑ Scroll ↓
-        </span>
+
+      {/* カスタムスクロールバー */}
+      <div className="mt-4 relative h-[2px] rounded-full bg-white/15">
+        <div
+          className="absolute top-0 h-full rounded-full bg-white"
+          style={thumbStyle}
+        />
       </div>
     </>
   );
