@@ -134,6 +134,8 @@ export const GalleryTrack = ({
                     src={item.imageUrl}
                     alt={item.imageAlt}
                     loading={index < 3 ? "eager" : "lazy"}
+                    width={item.imageWidth ?? undefined}
+                    height={item.imageHeight ?? undefined}
                     className="h-[250px] min-[390px]:h-[320px] md:h-[min(600px,55vh)] w-auto rounded-md object-cover shadow-xl"
                   />
                 </button>
