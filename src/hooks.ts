@@ -12,6 +12,9 @@ import { gsap, ScrollTrigger, REVEAL_REFRESH_EVENT } from "@/gsap/core";
 import { showHScrollHint } from "@/gsap/hscrollHint";
 import { ARCHIVE_MAIN_ANCHOR_ID, normalizeSlug } from "@/utils";
 
+// ギャラリー横スクロールの末尾余白（最終画像が見切れないよう確保する px）
+const GALLERY_SCROLL_BUFFER = 120;
+
 // --- アーカイブ ---
 
 // アイテムからカテゴリ一覧を生成し、先頭に "All" を追加する
@@ -183,11 +186,8 @@ export function useHorizontalScrollTrigger(
       const currentMax = scroller.scrollWidth - scroller.clientWidth;
       if (currentMax <= 0) return false;
 
-      // 最後の画像が見切れないよう余裕を持たせる
-      const SCROLL_BUFFER = 120;
-
       stRef.current?.kill();
-      maxScrollLeftRef.current = currentMax + SCROLL_BUFFER;
+      maxScrollLeftRef.current = currentMax + GALLERY_SCROLL_BUFFER;
 
       const tl = gsap.timeline();
       // fromTo でスタートを 0 に固定（to() だと invalidateOnRefresh 後に start=max になるバグを防ぐ）
@@ -195,7 +195,7 @@ export function useHorizontalScrollTrigger(
         scroller,
         { scrollLeft: 0 },
         {
-          scrollLeft: () => scroller.scrollWidth - scroller.clientWidth + SCROLL_BUFFER,
+          scrollLeft: () => scroller.scrollWidth - scroller.clientWidth + GALLERY_SCROLL_BUFFER,
           ease: "none",
           duration: 1,
         },
@@ -206,14 +206,14 @@ export function useHorizontalScrollTrigger(
       stRef.current = ScrollTrigger.create({
         trigger: triggerEl,
         start,
-        end: () => `+=${scroller.scrollWidth - scroller.clientWidth + SCROLL_BUFFER}`,
+        end: () => `+=${scroller.scrollWidth - scroller.clientWidth + GALLERY_SCROLL_BUFFER}`,
         pin: root,
         scrub: true,
         animation: tl,
         invalidateOnRefresh: true,
         onRefresh() {
           maxScrollLeftRef.current =
-            scroller.scrollWidth - scroller.clientWidth + SCROLL_BUFFER;
+            scroller.scrollWidth - scroller.clientWidth + GALLERY_SCROLL_BUFFER;
         },
       });
 
