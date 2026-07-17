@@ -25,6 +25,21 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+/* ギャラリー画像の幅をアスペクト比から明示計算（lazy load 前でも 0px にならないようにする） */
+[data-gallery-scroller] img {
+  width: calc(250px * var(--img-ratio, 1.333));
+}
+@media (min-width: 390px) {
+  [data-gallery-scroller] img {
+    width: calc(320px * var(--img-ratio, 1.333));
+  }
+}
+@media (min-width: 768px) {
+  [data-gallery-scroller] img {
+    width: calc(min(600px, 55vh) * var(--img-ratio, 1.333));
+  }
+}
+
 /* 画像のドラッグ・選択を無効化 */
 img {
   pointer-events: none;

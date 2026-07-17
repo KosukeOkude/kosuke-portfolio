@@ -31,16 +31,15 @@ function estimateScrollWidth(
   targetImageHeight: number,
 ): number {
   const GAP = 40; // gap-10 = 2.5rem = 40px
-  const RIGHT_SPACER = 24; // w-6 = 1.5rem = 24px
+  const RIGHT_SPACER = 96; // w-24 = 6rem = 96px
   let total = RIGHT_SPACER;
   for (const item of items) {
     const aspectRatio =
-      item.imageWidth && item.imageHeight
-        ? item.imageWidth / item.imageHeight
-        : 1;
+      item.imageWidth && item.imageHeight ? item.imageWidth / item.imageHeight : 4 / 3;
     total += targetImageHeight * aspectRatio;
   }
-  total += GAP * Math.max(0, items.length - 1);
+  // gap は画像間 + 最後の画像とスペーサーの間 = items.length 個
+  total += GAP * items.length;
   return total;
 }
 
@@ -136,12 +135,20 @@ export const GalleryTrack = ({
                     loading={index < 3 ? "eager" : "lazy"}
                     width={item.imageWidth ?? undefined}
                     height={item.imageHeight ?? undefined}
+                    style={
+                      {
+                        "--img-ratio": String(
+                          item.imageWidth && item.imageHeight
+                            ? item.imageWidth / item.imageHeight
+                            : 4 / 3,
+                        ),
+                      } as React.CSSProperties
+                    }
                     className="h-[250px] min-[390px]:h-[320px] md:h-[min(600px,55vh)] w-auto rounded-md object-cover shadow-xl"
                   />
                 </button>
               </article>
             ))}
-            <div className="shrink-0 w-6" aria-hidden="true" />
           </div>
         </div>
       </div>

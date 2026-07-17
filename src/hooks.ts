@@ -183,8 +183,11 @@ export function useHorizontalScrollTrigger(
       const currentMax = scroller.scrollWidth - scroller.clientWidth;
       if (currentMax <= 0) return false;
 
+      // 最後の画像が見切れないよう余裕を持たせる
+      const SCROLL_BUFFER = 120;
+
       stRef.current?.kill();
-      maxScrollLeftRef.current = currentMax;
+      maxScrollLeftRef.current = currentMax + SCROLL_BUFFER;
 
       const tl = gsap.timeline();
       // fromTo でスタートを 0 に固定（to() だと invalidateOnRefresh 後に start=max になるバグを防ぐ）
@@ -192,7 +195,7 @@ export function useHorizontalScrollTrigger(
         scroller,
         { scrollLeft: 0 },
         {
-          scrollLeft: () => scroller.scrollWidth - scroller.clientWidth,
+          scrollLeft: () => scroller.scrollWidth - scroller.clientWidth + SCROLL_BUFFER,
           ease: "none",
           duration: 1,
         },
@@ -203,13 +206,14 @@ export function useHorizontalScrollTrigger(
       stRef.current = ScrollTrigger.create({
         trigger: triggerEl,
         start,
-        end: () => `+=${scroller.scrollWidth - scroller.clientWidth}`,
+        end: () => `+=${scroller.scrollWidth - scroller.clientWidth + SCROLL_BUFFER}`,
         pin: root,
         scrub: true,
         animation: tl,
         invalidateOnRefresh: true,
         onRefresh() {
-          maxScrollLeftRef.current = scroller.scrollWidth - scroller.clientWidth;
+          maxScrollLeftRef.current =
+            scroller.scrollWidth - scroller.clientWidth + SCROLL_BUFFER;
         },
       });
 
@@ -250,7 +254,9 @@ export function useHorizontalScrollTrigger(
         if (buildST()) {
           builtOnRetry = true;
           retryObserver.disconnect();
-          unloadedOnRetry.forEach((img) => img.removeEventListener("load", tryBuildOnRetry));
+          unloadedOnRetry.forEach((img) =>
+            img.removeEventListener("load", tryBuildOnRetry),
+          );
           cleanUpImageLoad = setUpImageLoadRefresh();
         }
       };
@@ -266,7 +272,9 @@ export function useHorizontalScrollTrigger(
 
       return () => {
         retryObserver.disconnect();
-        unloadedOnRetry.forEach((img) => img.removeEventListener("load", tryBuildOnRetry));
+        unloadedOnRetry.forEach((img) =>
+          img.removeEventListener("load", tryBuildOnRetry),
+        );
         cleanUpImageLoad();
         cleanupScrollBlock();
         stRef.current?.kill();
