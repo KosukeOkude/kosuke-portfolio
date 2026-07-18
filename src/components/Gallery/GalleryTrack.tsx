@@ -1,4 +1,4 @@
-import { type RefObject, useState, useEffect, useCallback } from "react";
+import { type RefObject, useState, useEffect, useRef, useCallback } from "react";
 import type { GalleryLinearSliderItem } from "@/data/gallery";
 import { useGalleryTrackScrollToItem } from "@/hooks";
 import type { ScrollTrigger } from "@/gsap/core";
@@ -38,6 +38,16 @@ export const GalleryTrack = ({
     width: "20%",
   });
 
+  const trackRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lenisRef = useRef<any>(null);
+
+  useEffect(() => {
+    import("@/client").then(({ lenis }) => {
+      lenisRef.current = lenis;
+    });
+  }, []);
+
   const syncThumb = useCallback(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
@@ -54,6 +64,33 @@ export const GalleryTrack = ({
       width: `${widthPct.toFixed(2)}%`,
     });
   }, [scrollerRef]);
+
+  // スクロール比率 (0–1) に対応する位置へジャンプ
+  const scrollToRatio = useCallback(
+    (ratio: number) => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+      const clamped = Math.max(0, Math.min(1, ratio));
+
+      const st = pinSt.current;
+      const max = maxScrollLeft.current;
+
+      if (st && max && max > 0) {
+        // デスクトップ: GSAP が縦スクロールで横スクロールを制御しているため、縦方向へ飛ぶ
+        const targetY = st.start + clamped * (st.end - st.start);
+        const lenis = lenisRef.current;
+        if (lenis) {
+          lenis.scrollTo(targetY, { duration: 0 });
+        } else {
+          window.scrollTo({ top: targetY, behavior: "instant" });
+        }
+      } else {
+        // モバイル: 直接 scrollLeft を操作
+        scroller.scrollLeft = clamped * (scroller.scrollWidth - scroller.clientWidth);
+      }
+    },
+    [scrollerRef, pinSt, maxScrollLeft],
+  );
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -73,6 +110,54 @@ export const GalleryTrack = ({
       ro.disconnect();
     };
   }, [scrollerRef, syncThumb]);
+
+  // スクロールバーのドラッグ操作
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const onPointerDown = (e: PointerEvent) => {
+      const thumb = track.querySelector<HTMLElement>("[data-scrollbar-thumb]");
+      const isOnThumb = !!thumb && (e.target === thumb || thumb.contains(e.target as Node));
+      const trackRect = track.getBoundingClientRect();
+
+      if (!isOnThumb) {
+        // トラック上のクリック → その位置へジャンプ
+        scrollToRatio((e.clientX - trackRect.left) / trackRect.width);
+        return;
+      }
+
+      // サム上のポインターダウン → ドラッグ開始
+      e.preventDefault();
+      track.setPointerCapture(e.pointerId);
+
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+
+      const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+      const startRatio = maxScroll > 0 ? scroller.scrollLeft / maxScroll : 0;
+      const startX = e.clientX;
+
+      const onPointerMove = (moveEvent: PointerEvent) => {
+        const currentRect = track.getBoundingClientRect();
+        const ratioChange = (moveEvent.clientX - startX) / currentRect.width;
+        scrollToRatio(startRatio + ratioChange);
+      };
+
+      const onPointerUp = () => {
+        track.removeEventListener("pointermove", onPointerMove);
+        track.removeEventListener("pointerup", onPointerUp);
+        track.removeEventListener("pointercancel", onPointerUp);
+      };
+
+      track.addEventListener("pointermove", onPointerMove);
+      track.addEventListener("pointerup", onPointerUp);
+      track.addEventListener("pointercancel", onPointerUp);
+    };
+
+    track.addEventListener("pointerdown", onPointerDown, { passive: false });
+    return () => track.removeEventListener("pointerdown", onPointerDown);
+  }, [scrollToRatio, scrollerRef]);
 
   return (
     <>
@@ -118,12 +203,19 @@ export const GalleryTrack = ({
         </div>
       </div>
 
-      {/* カスタムスクロールバー */}
-      <div className="mt-4 relative h-[2px] rounded-full bg-white/15">
-        <div
-          className="absolute top-0 h-full rounded-full bg-white"
-          style={thumbStyle}
-        />
+      {/* カスタムスクロールバー（ドラッグ・クリックで操作可能） */}
+      <div
+        ref={trackRef}
+        className="mt-4 py-2 relative cursor-pointer select-none"
+        style={{ touchAction: "none" }}
+      >
+        <div className="relative h-[2px] rounded-full bg-white/15">
+          <div
+            data-scrollbar-thumb
+            className="absolute top-0 h-full rounded-full bg-white cursor-grab active:cursor-grabbing"
+            style={thumbStyle}
+          />
+        </div>
       </div>
     </>
   );
